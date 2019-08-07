@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/06 20:02:49 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/07 15:58:52 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,23 @@
 ** Create an init function
 ** If you're gonna do it, do it right.
 */
-void	plot_pixel(t_fdf *f, double x, double y, int rgb)
+void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
 {
-	mlx_pixel_put(f->mlx, f->win, x, y, rgb);
+	int i;
+
+	printf("(%d, %d) @ rgb: %d\n", x, y, rgb);
+	if (x < WIN_W && y >= 0 && y < WIN_H)
+	{
+	i = (x * frame->bits_per_pix / 8) + (y  * frame->size_line);
+//	printf("i: %d rgb: %d\n", i, rgb);
+	frame->data_addr[i++] = rgb;
+	frame->data_addr[i++] = rgb >> 8;
+	frame->data_addr[i] = rgb >> 16;
+	}
 }
 int		fdf_rgb(t_fdf fdf, double c)
 {
+	printf("c value: %f\n", c);
 	fdf.color.r *= c;
 	fdf.color.g *= c;
 	fdf.color.b *= c;
@@ -66,6 +77,7 @@ double rfpart(double x)
 void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 {
 	bool steep = fabs(p1.y - p0.y) > fabs(p1.x - p0.x);
+//	printf("color before cal: %d\n", fdf->color.rgb);
 	if (steep)
 	{
 		ft_swap_double(&p0.x, &p0.y);
@@ -94,7 +106,7 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 	if (steep)
 	{
 		plot_pixel(fdf, ypxl1, xpxl1, fdf_rgb(*fdf, rfpart(yend) * xgap));
-		plot_pixel(fdf, ypxl1 + 1, xpxl1, fdf_rgb(*fdf, fpart(yend) * xgap));	
+		plot_pixel(fdf, ypxl1 + 1, xpxl1,fdf_rgb(*fdf, fpart(yend) * xgap));	
 	}
 	else
 	{
@@ -124,6 +136,7 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 
 	double x;
 	x = 0.0;
+//	printf("color before main: %d\n", fdf->color.rgb);
 	if (steep)
 	{
 		x = xpxl1;
@@ -149,17 +162,18 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 void	fdf_color(t_fdf **fdf)
 {
 	(*fdf)->color.r = 255;
-	(*fdf)->color.g = 0;
-	(*fdf)->color.b = 120;
+	(*fdf)->color.g = 255;
+	(*fdf)->color.b = 255;
 //	(*fdf)->color.r *= (*fdf)->color.c;
 //	(*fdf)->color.g *= (*fdf)->color.c;
 //	(*fdf)->color.b *= (*fdf)->color.c;
-//	(*fdf)->color.rgb = (*fdf)->color.r;
-//	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.g;
-//	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.b;
+	(*fdf)->color.rgb = (*fdf)->color.r;
+	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.g;
+	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.b;
+//	printf("color set at: %d\n", (*fdf)->color.rgb);
 }
 
-void	fdf_rot_x(double *y , double *z, double alpha)
+void	fdf_rot_x(double *y , int *z, double alpha)
 {
 	double prev_y;
 
@@ -168,7 +182,7 @@ void	fdf_rot_x(double *y , double *z, double alpha)
 	*z = -prev_y * sin(alpha) + *z * cos(alpha);
 }
 
-void	fdf_rot_y(double *x, double *z, double beta)
+void	fdf_rot_y(double *x, int *z, double beta)
 {
 	double prev_x;
 
@@ -210,43 +224,49 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 		fdf_iso(&p.x, &p.y, p.z);
 	p.x += (WIN_W / 2);
 	p.y += (WIN_H / 2);
+	printf("(%f, %f)\n", p.x, p.y);
 	return (p);
 }
 
-t_pt	gen_point(double x, double y, int *coord, int width)
+t_pt	gen_point(double x, double y, t_map *data)
 {
 	t_pt p;
 	int idx;
 
-	idx = y * width + x;
+	idx = y * data->map_w + x;
 	p.x = x;
 	p.y = y;
-	p.z = coord[idx];
+	p.z = data->map[idx];
 	return (p);
 }
 
-void	draw(t_fdf *fdf, int *map)
+void	clear_bg(t_fdf *fdf)
+{
+	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+}
+void	draw(t_fdf *fdf, t_map *data)
 {
 	int x;
-	int y = 0;
-	int width = fdf->map_w;
-	int height = fdf->map_h; 
-	mlx_clear_window(fdf->mlx, fdf->win);
-	while (y < height)
+	int y;
+	
+	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	y = 0;
+	while (y < data->map_h)
 	{
 		x = 0;
-		while (x < width)
+		while (x < data->map_w)
 		{
-			if (x != width - 1)
-  			plot_line(fdf, get_point(gen_point(x, y, map, width), fdf),
-  					get_point(gen_point(x + 1, y, map, width), fdf));
-			if (y != height - 1)
-  			plot_line(fdf, get_point(gen_point(x, y, map, width), fdf),
-  				get_point(gen_point(x, y + 1, map, width), fdf));
+			if (x != data->map_w - 1)
+  			plot_line(fdf, get_point(gen_point(x, y, data), fdf),
+  					get_point(gen_point(x + 1, y, data), fdf));
+			if (y != data->map_h - 1)
+  			plot_line(fdf, get_point(gen_point(x, y, data), fdf),
+  				get_point(gen_point(x, y + 1, data), fdf));
 			x++;
 		}
 		y++;
 	}
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 }	
 
 void	print_map(int *coord, int size, int mod);
@@ -292,7 +312,7 @@ int	key_control(int key, void *param)
 		fdf->cam.eta += 0.05;
 	else if (key == KEY_NUM_9)
 		fdf->cam.eta -= 0.05;*/
-	draw(fdf, fdf->map);
+	draw(fdf, fdf->data);
 	return (0);
 }
 
@@ -360,12 +380,24 @@ int		abort_fdf(void)
 	return (1);
 }
 
+t_map	*init_data_struct(void)
+{
+	t_map *data;
+
+	(!(data = ft_memalloc(sizeof(t_map)))) && abort_fdf();
+	data->map = NULL;
+	data->map_w = 0;
+	data->map_h = 0;
+
+	return (data);
+}
+
 t_fdf	*init_fdf(void)
 {
 	t_fdf *frame;
 
 	frame = NULL;
-	(!(frame = malloc(sizeof(t_fdf)))) && abort_fdf();
+	(!(frame = ft_memalloc(sizeof(t_fdf)))) && abort_fdf();
 	(!(frame->mlx = mlx_init())) && abort_fdf();
 	(!(frame->win = mlx_new_window(frame->mlx, WIN_W, WIN_H, "42 FDF"))) &&
 	   abort_fdf();
@@ -373,6 +405,7 @@ t_fdf	*init_fdf(void)
 	(!(frame->data_addr =
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
+	frame->data = init_data_struct();
 	return (frame);
 }
 
@@ -383,7 +416,7 @@ int main(int argc, char *argv[])
 	int i = 0;
 	i = 0;
 	
-/*	int coord[] = 
+	int coord[] = 
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -391,28 +424,43 @@ int main(int argc, char *argv[])
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0, 0, 0, 0, 0,10,10, 0, 0,
 		0, 0,10,10,10,10,10,10, 0, 0, 0, 5,10,10,10,10,10, 0, 0,
-		0, 0, 0,10,10,10,10,10, 0, 0, 0,10,10, 0, 0, 0, 0, 0, 45,
-		0, 0, 0, 0, 0, 0,10,10, 0, 0, 0,10,10, 5, 5, 5,10, 0, 60,
+		0, 0, 0,10,10,10,10,10, 0, 0, 0,10,10, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0,10,10, 0, 0, 0,10,10, 5, 5, 5,10, 0, 0,
 		0, 0, 0, 0, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	};
-*/
+
 	t_fdf *fdf;
 	fdf = init_fdf();
+	t_pt p0;
+	t_pt p1;
+
+	p0.x = 50;
+	p0.y = 50;
+	p1.x = 120;
+	p1.y = 150;
 	char *path;
+	projection = ISO;
 	path = argv[argc-1];
 	path = NULL;
+	fdf->data->map = coord;
+	fdf->data->map_w = 19;
+	fdf->data->map_h = 11;
+	fdf->cam.zoom = 50;
+	fdf->cam.z_zoom = 1;
+	fdf_color(&fdf);
+	draw(fdf, fdf->data);
+//	plot_line(fdf, p0, p1);
+//	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 //	fdf->data = malloc(sizeof(t_map));
 //	t_map *data;
 	
 //	data = fdf_map(r);
 //	fdf->data = fdf_map(r);
-//	fdf_color(&fdf);
 //	int *map;
 //	map = dup_coord(fdf->data->map, fdf_total(r));
 //	print_map(map, fdf_total(r), fdf->data->width);
-//	draw(fdf, coord);
 //	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_loop(fdf->mlx);
 //	//fdf->test = coord;
