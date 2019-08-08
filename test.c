@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/07 19:59:49 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/08 15:58:59 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@
 ** Reduce parameters in plot function
 ** Create a parser
 ** Create an init function
-** Create a color ramp
+** Create a color ramp ✓
+** Create theme for color ramp
+** Clean up color ramp function
 ** If you're gonna do it, do it right.
 */
 void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
@@ -439,32 +441,56 @@ void	append_ramp_node(t_ramp **ramp, t_rgb rgb)
 		cursor = cursor->next;
 	cursor->next = create_ramp_node(rgb);
 }
+
+int	get_color_index(int z, int size)
+{
+	int idx_steps;
+	int mid_idx;
+
+	//using 1000 as arbitrary range
+	idx_steps = 1000 / size;
+	mid_idx = size/2;
+	mid_idx += (z / idx_steps);
+	if (mid_idx < 0)
+		mid_idx = 0;
+	else if (mid_idx > size)
+		mid_idx = size;
+	printf("idx: %d\n", mid_idx);
+	return (mid_idx);
+}
+
+void	color_node(t_rgb start, int steps, t_rgb end, t_rgb *rgb)
+{
+	int diff;
 	
+	diff = abs(start.r - end.r) / (steps); 
+	rgb->r += (start.r <= end.r) ? diff : -diff;
+	diff = abs(start.g - end.g) / (steps); 
+	rgb->g += (start.g <= end.g) ? diff : -diff;
+	diff = abs(start.b - end.b) / (steps); 
+	rgb->b += (start.b <= end.b) ? diff : -diff;
+}
+
 void	color_ramp(t_ramp **ramp, int c_start, int steps, int c_end)
 {
-	t_rgb start;
-	t_rgb end;
-	int diff;
-	int	temp;
-	t_rgb rgb;
+	t_rgb	start;
+	t_rgb	end;
+	t_rgb	rgb;
+	int		temp;
 
 	temp = steps - 1;
 	int_to_rgb(&start, c_start);
-	if (!*ramp)
-		*ramp = create_ramp_node(start);
 	int_to_rgb(&end, c_end);
-	rgb.r = start.r, rgb.g = start.g, rgb.b = start.b;
+	rgb.r = start.r;
+	rgb.g = start.g;
+	rgb.b = start.b;
+	*ramp = (!*ramp) ? create_ramp_node(start) : *ramp;
 //	printf("start r: %d g: %d b: %d\n", start.r, start.g, start.b);
 //	printf("end r: %d g: %d b: %d\n", end.r, end.g, end.b);
 	while (temp--)
 	{
-		diff = abs(start.r - end.r) / (steps); 
-		rgb.r += (start.r <= end.r) ? diff : -diff;
-		diff = abs(start.g - end.g) / (steps); 
-		rgb.g += (start.g <= end.g) ? diff : -diff;
-		diff = abs(start.b - end.b) / (steps); 
-		rgb.b += (start.b <= end.b) ? diff : -diff;
-	//	printf("r: %d g: %d b: %d\n", rgb.r, rgb.g, rgb.b);
+		color_node(start, steps, end, &rgb);
+//		printf("r: %d g: %d b: %d\n", rgb.r, rgb.g, rgb.b);
 		append_ramp_node(ramp, rgb);
 	}
 	append_ramp_node(ramp, end);
@@ -475,8 +501,18 @@ t_ramp *gen_fdf_color_ramp(void)
 	t_ramp *ramp;
 
 	ramp = NULL;
-	color_ramp(&ramp, FDF_BLACK, 10, FDF_YELLOW);
-	color_ramp(&ramp, FDF_YELLOW, 10, FDF_RED);
+	color_ramp(&ramp, FDF_MIDNIGHT_BLUE, 10, FDF_MEDIUM_BLUE);
+//	puts("append ramp");
+	color_ramp(&ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
+	color_ramp(&ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE); 
+	color_ramp(&ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE); 
+	color_ramp(&ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
+	color_ramp(&ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
+	color_ramp(&ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
+	color_ramp(&ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
+	color_ramp(&ramp, FDF_MAROON, 10, FDF_SIENNA);
+	color_ramp(&ramp, FDF_SIENNA, 10, FDF_SNOW);
+	color_ramp(&ramp, FDF_SNOW, 10, FDF_BLACK);
 	return (ramp);
 }
 void	print_ramp(t_ramp *ramp)
@@ -486,6 +522,21 @@ void	print_ramp(t_ramp *ramp)
 		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
 		ramp=ramp->next;
 	}
+}
+
+int		count_ramp(t_ramp *ramp)
+{
+	int c;
+
+	c = 0;
+	if (!ramp)
+		return (0);
+	while (ramp)
+	{
+		c++;
+		ramp = ramp->next;
+	}
+	return (c);
 }
 int main(int argc, char *argv[])
 {
@@ -507,11 +558,19 @@ int main(int argc, char *argv[])
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	};
+	int size;
+	size = sizeof(coord)/sizeof(int);
 	t_ramp *ramp;
 
 	ramp = gen_fdf_color_ramp();
 	puts("print ramp");
 	print_ramp(ramp);
+	int ramp_size = count_ramp(ramp);
+	for (int i = 0; i < size; i++)
+	{
+		get_color_index(coord[i], ramp_size);
+	}
+	printf("size: %d\n", ramp_size);
 	t_fdf *fdf;
 	fdf = init_fdf();
 	t_pt p0;
