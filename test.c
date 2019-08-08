@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/07 15:58:52 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/07 19:59:49 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 ** Reduce parameters in plot function
 ** Create a parser
 ** Create an init function
+** Create a color ramp
 ** If you're gonna do it, do it right.
 */
 void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
@@ -409,7 +410,83 @@ t_fdf	*init_fdf(void)
 	return (frame);
 }
 
+void	int_to_rgb(t_rgb *ret, int color)
+{
+	ret->r = color/(256 * 256);
+	ret->g = (color / 256) % 256;
+	ret->b = color % 256;
+	ret->rgb = color;
+}
+
+t_ramp	*create_ramp_node(t_rgb rgb)
+{
+	t_ramp *ramp;
 	
+	ramp = ft_memalloc(sizeof(t_ramp));
+	ramp->r = rgb.r;
+	ramp->g = rgb.g;
+	ramp->b = rgb.b;
+	ramp->next = NULL;
+	return (ramp);
+}
+
+void	append_ramp_node(t_ramp **ramp, t_rgb rgb)
+{
+	t_ramp *cursor;
+
+	cursor = *ramp;
+	while (cursor->next)
+		cursor = cursor->next;
+	cursor->next = create_ramp_node(rgb);
+}
+	
+void	color_ramp(t_ramp **ramp, int c_start, int steps, int c_end)
+{
+	t_rgb start;
+	t_rgb end;
+	int diff;
+	int	temp;
+	t_rgb rgb;
+
+	temp = steps - 1;
+	int_to_rgb(&start, c_start);
+	if (!*ramp)
+		*ramp = create_ramp_node(start);
+	int_to_rgb(&end, c_end);
+	rgb.r = start.r, rgb.g = start.g, rgb.b = start.b;
+//	printf("start r: %d g: %d b: %d\n", start.r, start.g, start.b);
+//	printf("end r: %d g: %d b: %d\n", end.r, end.g, end.b);
+	while (temp--)
+	{
+		diff = abs(start.r - end.r) / (steps); 
+		rgb.r += (start.r <= end.r) ? diff : -diff;
+		diff = abs(start.g - end.g) / (steps); 
+		rgb.g += (start.g <= end.g) ? diff : -diff;
+		diff = abs(start.b - end.b) / (steps); 
+		rgb.b += (start.b <= end.b) ? diff : -diff;
+	//	printf("r: %d g: %d b: %d\n", rgb.r, rgb.g, rgb.b);
+		append_ramp_node(ramp, rgb);
+	}
+	append_ramp_node(ramp, end);
+}
+
+t_ramp *gen_fdf_color_ramp(void)
+{
+	t_ramp *ramp;
+
+	ramp = NULL;
+	color_ramp(&ramp, FDF_BLACK, 10, FDF_YELLOW);
+	color_ramp(&ramp, FDF_YELLOW, 10, FDF_RED);
+	return (ramp);
+}
+void	print_ramp(t_ramp *ramp)
+{
+	while(ramp)
+	{
+		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
+		ramp=ramp->next;
+	}
+}
 int main(int argc, char *argv[])
 {
 //	print_map(map_data->map, 209);
@@ -430,7 +507,11 @@ int main(int argc, char *argv[])
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	};
+	t_ramp *ramp;
 
+	ramp = gen_fdf_color_ramp();
+	puts("print ramp");
+	print_ramp(ramp);
 	t_fdf *fdf;
 	fdf = init_fdf();
 	t_pt p0;
@@ -450,7 +531,8 @@ int main(int argc, char *argv[])
 	fdf->cam.zoom = 50;
 	fdf->cam.z_zoom = 1;
 	fdf_color(&fdf);
-	draw(fdf, fdf->data);
+
+//	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
 //	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 //	fdf->data = malloc(sizeof(t_map));
@@ -462,7 +544,7 @@ int main(int argc, char *argv[])
 //	map = dup_coord(fdf->data->map, fdf_total(r));
 //	print_map(map, fdf_total(r), fdf->data->width);
 //	mlx_hook(fdf->win, 2, 0, key_control, fdf);
-	mlx_loop(fdf->mlx);
+//	mlx_loop(fdf->mlx);
 //	//fdf->test = coord;
 	return (0);
 }
