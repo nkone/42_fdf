@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/08 15:58:59 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/09 17:16:36 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,7 +383,7 @@ int		abort_fdf(void)
 	return (1);
 }
 
-t_map	*init_data_struct(void)
+t_map	*fdf_init_data_struct(void)
 {
 	t_map *data;
 
@@ -395,22 +395,7 @@ t_map	*init_data_struct(void)
 	return (data);
 }
 
-t_fdf	*init_fdf(void)
-{
-	t_fdf *frame;
 
-	frame = NULL;
-	(!(frame = ft_memalloc(sizeof(t_fdf)))) && abort_fdf();
-	(!(frame->mlx = mlx_init())) && abort_fdf();
-	(!(frame->win = mlx_new_window(frame->mlx, WIN_W, WIN_H, "42 FDF"))) &&
-	   abort_fdf();
-	(!(frame->img = mlx_new_image(frame->mlx, WIN_W, WIN_H))) && abort_fdf();
-	(!(frame->data_addr =
-				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
-				&(frame->size_line), &(frame->endian)))) && abort_fdf();
-	frame->data = init_data_struct();
-	return (frame);
-}
 
 void	int_to_rgb(t_rgb *ret, int color)
 {
@@ -419,6 +404,7 @@ void	int_to_rgb(t_rgb *ret, int color)
 	ret->b = color % 256;
 	ret->rgb = color;
 }
+
 
 t_ramp	*create_ramp_node(t_rgb rgb)
 {
@@ -496,11 +482,12 @@ void	color_ramp(t_ramp **ramp, int c_start, int steps, int c_end)
 	append_ramp_node(ramp, end);
 }
 
-t_ramp *gen_fdf_color_ramp(void)
+t_ramp *fdf_gen_color_ramp(void)
 {
 	t_ramp *ramp;
 
 	ramp = NULL;
+	color_ramp(&ramp, FDF_BLACK, 10, FDF_MIDNIGHT_BLUE);
 	color_ramp(&ramp, FDF_MIDNIGHT_BLUE, 10, FDF_MEDIUM_BLUE);
 //	puts("append ramp");
 	color_ramp(&ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
@@ -517,9 +504,11 @@ t_ramp *gen_fdf_color_ramp(void)
 }
 void	print_ramp(t_ramp *ramp)
 {
+	int i = 0;
+
 	while(ramp)
 	{
-		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
+		printf("i: %d r: %d g: %d b: %d\n", i++, ramp->r, ramp->g, ramp->b);
 		ramp=ramp->next;
 	}
 }
@@ -538,6 +527,43 @@ int		count_ramp(t_ramp *ramp)
 	}
 	return (c);
 }
+
+void	**fdf_index_color_ramp(t_ramp *ramp)
+{
+	void	**map;
+	int		size;
+	int		i;
+
+	i = 0;
+	size = count_ramp(ramp);
+	(!(map = ft_memalloc(sizeof(t_ramp) * size))) && abort_fdf();
+	while(ramp)
+	{
+		map[i++] = ramp;
+		ramp = ramp->next;
+	}
+	map[i] = NULL;
+	return (map);
+}
+	
+t_fdf	*fdf_init(void)
+{
+	t_fdf *frame;
+
+	frame = NULL;
+	(!(frame = ft_memalloc(sizeof(t_fdf)))) && abort_fdf();
+	(!(frame->mlx = mlx_init())) && abort_fdf();
+	(!(frame->win = mlx_new_window(frame->mlx, WIN_W, WIN_H, "42 FDF"))) &&
+	   abort_fdf();
+	(!(frame->img = mlx_new_image(frame->mlx, WIN_W, WIN_H))) && abort_fdf();
+	(!(frame->data_addr =
+				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
+				&(frame->size_line), &(frame->endian)))) && abort_fdf();
+	frame->data = fdf_init_data_struct();
+	frame->ramp = fdf_index_color_ramp(fdf_gen_color_ramp());
+	return (frame);
+}
+
 int main(int argc, char *argv[])
 {
 //	print_map(map_data->map, 209);
@@ -546,7 +572,7 @@ int main(int argc, char *argv[])
 	
 	int coord[] = 
 	{
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10, 5, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
@@ -562,7 +588,7 @@ int main(int argc, char *argv[])
 	size = sizeof(coord)/sizeof(int);
 	t_ramp *ramp;
 
-	ramp = gen_fdf_color_ramp();
+	ramp = fdf_gen_color_ramp();
 	puts("print ramp");
 	print_ramp(ramp);
 	int ramp_size = count_ramp(ramp);
@@ -572,9 +598,16 @@ int main(int argc, char *argv[])
 	}
 	printf("size: %d\n", ramp_size);
 	t_fdf *fdf;
-	fdf = init_fdf();
+	fdf = fdf_init();
 	t_pt p0;
 	t_pt p1;
+
+	puts("printing void pointer");
+	for (int i = 0; fdf->ramp[i]; i++)
+	{
+		ramp = fdf->ramp[i];
+		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
+	}
 
 	p0.x = 50;
 	p0.y = 50;
@@ -589,7 +622,6 @@ int main(int argc, char *argv[])
 	fdf->data->map_h = 11;
 	fdf->cam.zoom = 50;
 	fdf->cam.z_zoom = 1;
-	fdf_color(&fdf);
 
 //	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
