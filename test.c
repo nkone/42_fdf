@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/12 14:07:56 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/12 15:29:19 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
 	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
-	if (projection == ISO)
+	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
 	p.x += (WIN_W / 2);
 	p.y += (WIN_H / 2);
@@ -544,18 +544,18 @@ void	fdf_theme_custom(t_ramp **ramp)
 	color_ramp(ramp, FDF_BLACK, 200, FDF_WHITE);
 }
 
-t_ramp *fdf_gen_color_ramp(void)
+t_ramp *fdf_gen_color_ramp(t_fdf *fdf)
 {
 	t_ramp *ramp;
 
 	ramp = NULL;
-	if (theme == DEFAULT)
+	if (fdf->theme == DEFAULT)
 		fdf_theme_default(&ramp);
-	else if (theme == HOT)
+	else if (fdf->theme == HOT)
 		fdf_theme_hot(&ramp);
-	else if (theme == COLD)
+	else if (fdf->theme == COLD)
 		fdf_theme_cold(&ramp);
-	else if (theme == CUSTOM)
+	else if (fdf->theme == CUSTOM)
 		fdf_theme_custom(&ramp);
 	return (ramp);
 }
@@ -625,7 +625,7 @@ t_cam	fdf_cam_init(void)
 	cam.alpha = 0.0;
 	cam.beta = 0.0;
 	cam.eta = 0.0;
-
+	cam.projection = PARALLEL;
 	return (cam);
 }
 
@@ -644,7 +644,8 @@ t_fdf	*fdf_init(void)
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->ramp_list = fdf_gen_color_ramp();
+	frame->theme = DEFAULT;
+	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	return (frame);
 }
@@ -658,6 +659,13 @@ void	print_camera_settings(t_fdf *fdf)
 	printf("ALPHA: %.1f\n", fdf->cam.alpha);
 	printf("BETA: %.1f\n", fdf->cam.beta);
 	printf("ETA: %.1f\n", fdf->cam.eta);
+	switch (fdf->cam.projection) {
+		case (ISO):
+			printf("PROJECTION: ISO\n"); break;
+		case (PARALLEL):
+			printf("PROJECTION: PARALLEL\n"); break;
+		default: printf("PROJECTION: DEFAULT\n"); break;
+	}
 }
 int main(int argc, char *argv[])
 {
@@ -667,7 +675,7 @@ int main(int argc, char *argv[])
 	
 	int coord[] = 
 	{
-		0, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0,-5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10, 5, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
@@ -682,21 +690,19 @@ int main(int argc, char *argv[])
 	int size;
 	size = sizeof(coord)/sizeof(int);
 	t_ramp *ramp;
-
-	theme = COLD;
-	printf("theme: %d\n", theme);
-	ramp = fdf_gen_color_ramp();
-	puts("print ramp");
+	ramp = NULL;
 //	print_ramp(ramp);
-	int ramp_size = count_ramp(ramp);
+	int ramp_size;
+	ramp_size = 0;
 //	for (int i = 0; i < size; i++)
 //		get_color_index(coord[i], ramp_size);
-	printf("size: %d\n", ramp_size);
 	t_fdf *fdf;
 	fdf = fdf_init();
 	t_pt p0;
 	t_pt p1;
 	print_camera_settings(fdf);
+	ramp_size = count_ramp(fdf->ramp_list);
+	printf("ramp size: %d\n", ramp_size);
 
 
 /*	puts("printing void pointer");
@@ -712,7 +718,6 @@ int main(int argc, char *argv[])
 	p1.x = 120;
 	p1.y = 150;
 	char *path;
-	projection = ISO;
 	path = argv[argc-1];
 	path = NULL;
 	fdf->data->map = coord;
