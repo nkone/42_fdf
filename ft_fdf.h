@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 13:24:01 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/12 13:44:03 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/12 15:13:26 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,24 +201,20 @@
 # define FDF_DARK_SLATE_GRAY		0x2F4F4F
 # define FDF_BLACK					0x000000
 
-enum			e_projection
+typedef enum		e_projection
 {
 	ISO,
 	PARALLEL
-};
+} 					t_projection;
 
-enum e_projection projection;
 
-enum			e_theme
+typedef enum		e_theme
 {
 	DEFAULT,
 	COLD,
 	HOT,
 	CUSTOM	
-};
-
-enum e_theme theme;
-
+}					t_theme;
 
 typedef struct	s_rgb
 {
@@ -237,20 +233,22 @@ typedef struct	s_pt
 
 typedef struct	s_cam
 {
-	double		zoom;
-	double		z_zoom;
-	double		alpha;
-	double		beta;
-	double		eta;
+	double			zoom;
+	double			z_zoom;
+	double			alpha;
+	double			beta;
+	double			eta;
+	t_projection	projection;
 }				t_cam;
 
 typedef struct s_ramp
 {
-	int r;
-	int g;
-	int b;
-	struct s_ramp *next;
+	int 			r;
+	int 			g;
+	int 			b;
+	struct s_ramp	*next;
 }				t_ramp;
+
 typedef struct	s_map
 {
 	int		*map;
@@ -258,7 +256,7 @@ typedef struct	s_map
 	int		map_w;
 }				t_map;
 
-typedef struct	s_fdf
+typedef struct		s_fdf
 {
 	t_rgb		color;
 	t_cam		cam;
@@ -273,7 +271,8 @@ typedef struct	s_fdf
 	int			bits_per_pix;
 	int			size_line;
 	int			endian;
-}				t_fdf;
+	t_theme		theme;
+}					t_fdf;
 
 typedef struct		s_read
 {
