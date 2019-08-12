@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/09 17:16:36 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/12 14:07:56 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,24 +482,81 @@ void	color_ramp(t_ramp **ramp, int c_start, int steps, int c_end)
 	append_ramp_node(ramp, end);
 }
 
+
+/*
+** Middle color is lemon chiffon
+*/
+
+void	fdf_theme_default(t_ramp **ramp)
+{
+	color_ramp(ramp, FDF_BLACK, 10, FDF_MIDNIGHT_BLUE);
+	color_ramp(ramp, FDF_MIDNIGHT_BLUE, 10, FDF_MEDIUM_BLUE);
+	color_ramp(ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
+	color_ramp(ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE); 
+	color_ramp(ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE); 
+	color_ramp(ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
+	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
+	color_ramp(ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
+	color_ramp(ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
+	color_ramp(ramp, FDF_MAROON, 10, FDF_SIENNA);
+	color_ramp(ramp, FDF_SIENNA, 10, FDF_SNOW);
+	color_ramp(ramp, FDF_SNOW, 10, FDF_BLACK);
+}
+
+/*
+** Middle color is wheat
+*/
+
+void	fdf_theme_hot(t_ramp **ramp)
+{
+	color_ramp(ramp, FDF_DARK_RED, 10, FDF_CRIMSON);
+	color_ramp(ramp, FDF_CRIMSON, 10, FDF_LIGHT_SALMON);
+	color_ramp(ramp, FDF_LIGHT_SALMON, 10, FDF_CORAL);
+	color_ramp(ramp, FDF_CORAL, 10, FDF_ORANGE);
+	color_ramp(ramp, FDF_ORANGE, 10, FDF_GOLD);
+	color_ramp(ramp, FDF_GOLD, 10, FDF_WHEAT);
+	color_ramp(ramp, FDF_WHEAT, 10, FDF_LEMON_CHIFFON);
+	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_LIGHT_PINK);
+	color_ramp(ramp, FDF_LIGHT_PINK, 10, FDF_PINK);
+	color_ramp(ramp, FDF_PINK, 10, FDF_HOT_PINK);
+	color_ramp(ramp, FDF_HOT_PINK, 10, FDF_DEEP_PINK);
+	color_ramp(ramp, FDF_DEEP_PINK, 10, FDF_MEDIUM_VIOLET_RED);
+}
+
+void	fdf_theme_cold(t_ramp **ramp)
+{
+	color_ramp(ramp, FDF_BLACK, 10, FDF_DARK_SLATE_GRAY);
+	color_ramp(ramp, FDF_DARK_SLATE_GRAY, 10, FDF_SLATE_GRAY);
+	color_ramp(ramp, FDF_SLATE_GRAY, 10, FDF_LIGHT_STEEL_BLUE);
+	color_ramp(ramp, FDF_LIGHT_STEEL_BLUE, 10, FDF_LIGHT_SKY_BLUE);
+	color_ramp(ramp, FDF_LIGHT_SKY_BLUE, 10, FDF_LIGHT_BLUE);
+	color_ramp(ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE);
+	color_ramp(ramp, FDF_AZURE, 10, FDF_HONEYDEW);
+	color_ramp(ramp, FDF_HONEYDEW, 10, FDF_PALE_GREEN);
+	color_ramp(ramp, FDF_PALE_GREEN, 10, FDF_LAWN_GREEN);
+	color_ramp(ramp, FDF_LAWN_GREEN, 10, FDF_LIME_GREEN);
+	color_ramp(ramp, FDF_LIME_GREEN, 10, FDF_OLIVE_DRAB);
+	color_ramp(ramp, FDF_OLIVE_DRAB, 10, FDF_DARK_OLIVE_GREEN);
+}
+
+void	fdf_theme_custom(t_ramp **ramp)
+{
+	color_ramp(ramp, FDF_BLACK, 200, FDF_WHITE);
+}
+
 t_ramp *fdf_gen_color_ramp(void)
 {
 	t_ramp *ramp;
 
 	ramp = NULL;
-	color_ramp(&ramp, FDF_BLACK, 10, FDF_MIDNIGHT_BLUE);
-	color_ramp(&ramp, FDF_MIDNIGHT_BLUE, 10, FDF_MEDIUM_BLUE);
-//	puts("append ramp");
-	color_ramp(&ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
-	color_ramp(&ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE); 
-	color_ramp(&ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE); 
-	color_ramp(&ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
-	color_ramp(&ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
-	color_ramp(&ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
-	color_ramp(&ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
-	color_ramp(&ramp, FDF_MAROON, 10, FDF_SIENNA);
-	color_ramp(&ramp, FDF_SIENNA, 10, FDF_SNOW);
-	color_ramp(&ramp, FDF_SNOW, 10, FDF_BLACK);
+	if (theme == DEFAULT)
+		fdf_theme_default(&ramp);
+	else if (theme == HOT)
+		fdf_theme_hot(&ramp);
+	else if (theme == COLD)
+		fdf_theme_cold(&ramp);
+	else if (theme == CUSTOM)
+		fdf_theme_custom(&ramp);
 	return (ramp);
 }
 void	print_ramp(t_ramp *ramp)
@@ -545,13 +602,40 @@ void	**fdf_index_color_ramp(t_ramp *ramp)
 	map[i] = NULL;
 	return (map);
 }
-	
+
+void	free_color_ramp(t_ramp *ramp)
+{
+	t_ramp *temp;
+
+	temp = ramp;
+	while (ramp)
+	{
+		temp = ramp->next;
+		free(ramp);
+		ramp = temp;
+	}
+}
+
+t_cam	fdf_cam_init(void)
+{
+	t_cam cam;
+
+	cam.zoom = 50.0;
+	cam.z_zoom = 1.0;
+	cam.alpha = 0.0;
+	cam.beta = 0.0;
+	cam.eta = 0.0;
+
+	return (cam);
+}
+
 t_fdf	*fdf_init(void)
 {
 	t_fdf *frame;
 
 	frame = NULL;
 	(!(frame = ft_memalloc(sizeof(t_fdf)))) && abort_fdf();
+	frame->cam = fdf_cam_init();
 	(!(frame->mlx = mlx_init())) && abort_fdf();
 	(!(frame->win = mlx_new_window(frame->mlx, WIN_W, WIN_H, "42 FDF"))) &&
 	   abort_fdf();
@@ -560,10 +644,21 @@ t_fdf	*fdf_init(void)
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->ramp = fdf_index_color_ramp(fdf_gen_color_ramp());
+	frame->ramp_list = fdf_gen_color_ramp();
+	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	return (frame);
 }
 
+void	print_camera_settings(t_fdf *fdf)
+{
+
+	printf("CAMERA'S SETTINGS:\n");
+	printf("ZOOM: %.1f\n", fdf->cam.zoom);
+	printf("Z_ZOOM: %.1f\n", fdf->cam.z_zoom);
+	printf("ALPHA: %.1f\n", fdf->cam.alpha);
+	printf("BETA: %.1f\n", fdf->cam.beta);
+	printf("ETA: %.1f\n", fdf->cam.eta);
+}
 int main(int argc, char *argv[])
 {
 //	print_map(map_data->map, 209);
@@ -588,27 +683,30 @@ int main(int argc, char *argv[])
 	size = sizeof(coord)/sizeof(int);
 	t_ramp *ramp;
 
+	theme = COLD;
+	printf("theme: %d\n", theme);
 	ramp = fdf_gen_color_ramp();
 	puts("print ramp");
-	print_ramp(ramp);
+//	print_ramp(ramp);
 	int ramp_size = count_ramp(ramp);
-	for (int i = 0; i < size; i++)
-	{
-		get_color_index(coord[i], ramp_size);
-	}
+//	for (int i = 0; i < size; i++)
+//		get_color_index(coord[i], ramp_size);
 	printf("size: %d\n", ramp_size);
 	t_fdf *fdf;
 	fdf = fdf_init();
 	t_pt p0;
 	t_pt p1;
+	print_camera_settings(fdf);
 
-	puts("printing void pointer");
+
+/*	puts("printing void pointer");
 	for (int i = 0; fdf->ramp[i]; i++)
 	{
 		ramp = fdf->ramp[i];
 		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
 	}
-
+*/
+	
 	p0.x = 50;
 	p0.y = 50;
 	p1.x = 120;
@@ -620,8 +718,6 @@ int main(int argc, char *argv[])
 	fdf->data->map = coord;
 	fdf->data->map_w = 19;
 	fdf->data->map_h = 11;
-	fdf->cam.zoom = 50;
-	fdf->cam.z_zoom = 1;
 
 //	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
