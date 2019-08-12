@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 13:24:01 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/08 14:42:26 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/12 13:44:03 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@
 */
 
 /*
+** Pink Colors
+*/
+
+# define FDF_PINK					0xFFC0CB
+# define FDF_LIGHT_PINK				0xFFB6C1
+# define FDF_HOT_PINK				0xFF69B4
+# define FDF_DEEP_PINK				0xFF1493
+# define FDF_PALE_VIOLET_RED		0xDB7093
+# define FDF_MEDIUM_VIOLET_RED		0xC71585
+
+/*
 ** Red Colors
 ** Proof read check: [✓]
 */
@@ -54,6 +65,15 @@
 # define FDF_DARK_RED				0x8B0000
 # define FDF_RED					0xFF0000
 
+/*
+** Orange Colors
+*/
+
+# define FDF_ORANGE_RED				0xFF4500
+# define FDF_TOMATO					0xFF6347
+# define FDF_CORAL					0xFF7F50
+# define FDF_DARK_ORANGE			0xFF8C00
+# define FDF_ORANGE					0xFFA500
 /*
 ** Green Colors
 ** Proof read check: [✓]
@@ -189,6 +209,17 @@ enum			e_projection
 
 enum e_projection projection;
 
+enum			e_theme
+{
+	DEFAULT,
+	COLD,
+	HOT,
+	CUSTOM	
+};
+
+enum e_theme theme;
+
+
 typedef struct	s_rgb
 {
 	int		r;
@@ -213,6 +244,13 @@ typedef struct	s_cam
 	double		eta;
 }				t_cam;
 
+typedef struct s_ramp
+{
+	int r;
+	int g;
+	int b;
+	struct s_ramp *next;
+}				t_ramp;
 typedef struct	s_map
 {
 	int		*map;
@@ -226,22 +264,17 @@ typedef struct	s_fdf
 	t_cam		cam;
 	t_pt		pt;
 	t_map		*data;
+	t_ramp		*ramp_list;
 	void		*mlx;
 	void		*win;
 	void		*img;
 	char		*data_addr;
+	void		**ramp;
 	int			bits_per_pix;
 	int			size_line;
 	int			endian;
 }				t_fdf;
 
-typedef struct s_ramp
-{
-	int r;
-	int g;
-	int b;
-	struct s_ramp *next;
-}				t_ramp;
 typedef struct		s_read
 {
 	struct s_read	*next;
