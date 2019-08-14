@@ -6,12 +6,14 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 13:24:01 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/12 15:13:26 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/13 18:54:52 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_FDF_H
 # define FT_FDF_H
+
+#include <stdbool.h>
 
 # define WIN_H		1080
 # define WIN_W		1920
@@ -255,6 +257,22 @@ typedef struct	s_map
 	int		map_h;
 	int		map_w;
 }				t_map;
+
+typedef struct	s_var
+{
+	bool	steep;
+	double	dx;
+	double	dy;
+	double	gradient;
+	double	xend;
+	double	yend;
+	double	xgap;
+	double	xpxl1;
+	double	ypxl1;
+	double	intery;
+	double 	xpxl2;
+	double	ypxl2;
+}				t_var;
 
 typedef struct		s_fdf
 {
