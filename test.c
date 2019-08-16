@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/13 18:30:20 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/16 15:40:17 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
 {
 	int i;
 
-	printf("(%d, %d) @ rgb: %d\n", x, y, rgb);
+//	printf("(%d, %d) @ rgb: %d\n", x, y, rgb);
 	if (x < WIN_W && y >= 0 && y < WIN_H)
 	{
 	i = (x * frame->bits_per_pix / 8) + (y  * frame->size_line);
@@ -78,6 +78,33 @@ double rfpart(double x)
 	return 1 - fpart(x);
 }
 
+double curr_percent(double start, double curr, double end)
+{
+	double here;
+	double distance;
+	double where;
+	
+	distance = end - start;
+	where = curr - start;
+	here = (distance == 0.0) ? 1.0: (where / distance);
+
+	return (here);
+}
+
+int	get_color(t_rgb start, t_rgb end, double percent, double brightness)
+{
+	t_rgb ret;
+	
+	ret.r = (start.r * (1.0 - percent) + end.r * percent) * brightness;
+	ret.g = (start.g * (1.0 - percent) + end.g * percent) * brightness;
+	ret.b = (start.b * (1.0 - percent) + end.b * percent) * brightness;
+	ret.rgb = ret.r;
+	ret.rgb = (ret.rgb << 8) + ret.g;
+	ret.rgb = (ret.rgb << 8) + ret.b;
+	return (ret.rgb);
+}
+	
+	
 void	plot_line_init(t_pt *p0, t_pt *p1, t_var *var)
 {
 	var->steep = fabs(p1->y - p0->y) > fabs(p1->x - p0->x);
@@ -105,13 +132,17 @@ void	plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0)
 	var->ypxl1 = ipart(var->yend);
 	if (var->steep)
 	{
-		plot_pixel(fdf, var->ypxl1, var->xpxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+	//	plot_pixel(fdf, var->ypxl1, var->xpxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
+	//	plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0,fpart(var->yend) * var->xgap));
 	}
 	else
 	{
-		plot_pixel(fdf, var->xpxl1, var->ypxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl1, var->ypxl1 + 1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+//		plot_pixel(fdf, var->xpxl1, var->ypxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
+//		plot_pixel(fdf, var->xpxl1, var->ypxl1 + 1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl1 + 1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0,fpart(var->yend) * var->xgap));
 	}
 }
 
@@ -125,33 +156,48 @@ void	plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1)
 	var->ypxl2 = ipart(var->yend);
 	if (var->steep)
 	{
-		plot_pixel(fdf, var->ypxl2, var->xpxl2, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl2 + 1, var->xpxl2, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl2, var->xpxl2, get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl2 + 1, var->xpxl2, get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 	else
 	{
-		plot_pixel(fdf, var->xpxl2, var->ypxl2, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl2, var->ypxl2 + 1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl2, var->ypxl2, get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl2, var->ypxl2 + 1, get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 }
 
-void	plot_line_main(t_fdf *fdf, t_var var)
+void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 {
+	double start;
+	double percent;
+
+	start = var.xpxl1;
 	if (var.steep)
 	{
+		puts("steep");
+		printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			plot_pixel(fdf, ipart(var.intery), var.xpxl1, fdf_rgb(*fdf, rfpart(var.intery)));
-			plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, fdf_rgb(*fdf, fpart(var.intery)));
+			percent = curr_percent(start, var.xpxl1, var.xpxl2);
+	//		plot_pixel(fdf, ipart(var.intery), var.xpxl1, fdf_rgb(*fdf, rfpart(var.intery)));
+	//		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, fdf_rgb(*fdf, fpart(var.intery)));
+			plot_pixel(fdf, ipart(var.intery), var.xpxl1, get_color(p0, p1, percent, rfpart(var.intery)));
+			plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, get_color(p0, p1, percent, fpart(var.intery)));
 			var.intery += var.gradient;
 		}
 	}
 	else
 	{
+		puts("not steep");
+		printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			plot_pixel(fdf, var.xpxl1, ipart(var.intery), fdf_rgb(*fdf, rfpart(var.intery)));
-			plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, fdf_rgb(*fdf, fpart(var.intery)));
+			percent = curr_percent(start, var.xpxl1, var.xpxl2);
+	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery), fdf_rgb(*fdf, rfpart(var.intery)));
+	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, fdf_rgb(*fdf, fpart(var.intery)));
+		
+			plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, rfpart(var.intery)));
+			plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, get_color(p0, p1, percent, fpart(var.intery)));
 			var.intery += var.gradient;
 		}
 	}
@@ -224,7 +270,7 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 	}
 */
 	plot_line_second_pt(fdf, &var, p1);
-	plot_line_main(fdf, var);
+	plot_line_main(fdf, var, p0.rgb, p1.rgb);
 	//double x;
 	//x = 0.0;
 //	printf("color before main: %d\n", fdf->color.rgb);
@@ -766,6 +812,65 @@ void	print_camera_settings(t_fdf *fdf)
 	}
 }
 
+void gradient_test(t_fdf *fdf)
+{
+	t_pt p0;
+	t_pt p1;
+	int gaps = 50;
+	int length = 300;
+	
+	p0.x = 50;
+	p0.y = 50;
+	p1.x = p0.x + length;
+	p1.y = 50;
+	int_to_rgb(&p0.rgb, FDF_BLACK);
+	int_to_rgb(&p1.rgb, FDF_MIDNIGHT_BLUE);
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_MIDNIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_MEDIUM_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_MEDIUM_BLUE);
+	int_to_rgb(&p1.rgb, FDF_DEEP_SKY_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_DEEP_SKY_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_AZURE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_AZURE);
+	int_to_rgb(&p1.rgb, FDF_LEMON_CHIFFON);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LEMON_CHIFFON);
+	int_to_rgb(&p1.rgb, FDF_YELLOW_GREEN);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_YELLOW_GREEN);
+	int_to_rgb(&p1.rgb, FDF_FOREST_GREEN);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_FOREST_GREEN);
+	int_to_rgb(&p1.rgb, FDF_MAROON);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_MAROON);
+	int_to_rgb(&p1.rgb, FDF_SIENNA);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_SIENNA);
+	int_to_rgb(&p1.rgb, FDF_SNOW);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_SNOW);
+	int_to_rgb(&p1.rgb, FDF_BLACK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+};
 
 int main(int argc, char *argv[])
 {
@@ -798,8 +903,6 @@ int main(int argc, char *argv[])
 //		get_color_index(coord[i], ramp_size);
 	t_fdf *fdf;
 	fdf = fdf_init();
-	t_pt p0;
-	t_pt p1;
 	print_camera_settings(fdf);
 	switch_camera_settings(fdf);
 	print_camera_settings(fdf);
@@ -815,19 +918,13 @@ int main(int argc, char *argv[])
 		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
 	}
 */
-	
-	p0.x = 50;
-	p0.y = 50;
-	p1.x = 120;
-	p1.y = 150;
 	char *path;
 	path = argv[argc-1];
 	path = NULL;
 	fdf->data->map = coord;
 	fdf->data->map_w = 19;
 	fdf->data->map_h = 11;
-	fdf_color(&fdf);
-	plot_line(fdf, p0, p1);
+	gradient_test(fdf);
 //	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
