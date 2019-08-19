@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/16 15:40:17 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/19 16:32:12 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@
 ** Create a parser
 ** Create an init function
 ** Create a color ramp ✓
-** Create theme for color ramp
-** Clean up color ramp function
-** How to draw with linear gradent?
+** Create theme for color ramp✓
+** Clean up color ramp function✓
+** How to draw with linear gradent?✓
 ** If you're gonna do it, do it right.
 */
 void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
@@ -174,8 +174,8 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	start = var.xpxl1;
 	if (var.steep)
 	{
-		puts("steep");
-		printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
+	//	puts("steep");
+	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
 			percent = curr_percent(start, var.xpxl1, var.xpxl2);
@@ -188,8 +188,8 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	}
 	else
 	{
-		puts("not steep");
-		printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
+	//	puts("not steep");
+	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
 			percent = curr_percent(start, var.xpxl1, var.xpxl2);
@@ -645,8 +645,8 @@ void	fdf_theme_default(t_ramp **ramp)
 void	fdf_theme_hot(t_ramp **ramp)
 {
 	color_ramp(ramp, FDF_DARK_RED, 10, FDF_CRIMSON);
-	color_ramp(ramp, FDF_CRIMSON, 10, FDF_LIGHT_SALMON);
-	color_ramp(ramp, FDF_LIGHT_SALMON, 10, FDF_CORAL);
+	color_ramp(ramp, FDF_CRIMSON, 10, FDF_CORAL);
+	color_ramp(ramp, FDF_CORAL, 10, FDF_LIGHT_SALMON);
 	color_ramp(ramp, FDF_CORAL, 10, FDF_ORANGE);
 	color_ramp(ramp, FDF_ORANGE, 10, FDF_GOLD);
 	color_ramp(ramp, FDF_GOLD, 10, FDF_WHEAT);
@@ -823,6 +823,7 @@ void gradient_test(t_fdf *fdf)
 	p0.y = 50;
 	p1.x = p0.x + length;
 	p1.y = 50;
+	// Default theme
 	int_to_rgb(&p0.rgb, FDF_BLACK);
 	int_to_rgb(&p1.rgb, FDF_MIDNIGHT_BLUE);
 	plot_line(fdf, p0, p1);
@@ -868,6 +869,123 @@ void gradient_test(t_fdf *fdf)
 	plot_line(fdf, p0, p1);
 	int_to_rgb(&p0.rgb, FDF_SNOW);
 	int_to_rgb(&p1.rgb, FDF_BLACK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	
+	// Single linear
+	p0.y = 700, p1.y = 700;
+	p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_BLACK);
+	int_to_rgb(&p1.rgb, FDF_MIDNIGHT_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_MIDNIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_MEDIUM_BLUE);
+	plot_line(fdf, p0, p1);
+
+	// Hot Theme
+	p0.x = 400;
+	p0.y = 50;
+	p1.x = p0.x + length;
+	p1.y = 50;
+	int_to_rgb(&p0.rgb, FDF_DARK_RED);
+	int_to_rgb(&p1.rgb, FDF_CRIMSON);
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_CRIMSON);
+	int_to_rgb(&p1.rgb, FDF_CORAL);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_CORAL);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_SALMON);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);	
+	int_to_rgb(&p0.rgb, FDF_LIGHT_SALMON);
+	int_to_rgb(&p1.rgb, FDF_ORANGE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);	
+	int_to_rgb(&p0.rgb, FDF_ORANGE);
+	int_to_rgb(&p1.rgb, FDF_GOLD);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_GOLD);
+	int_to_rgb(&p1.rgb, FDF_WHEAT);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_WHEAT);
+	int_to_rgb(&p1.rgb, FDF_LEMON_CHIFFON);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LEMON_CHIFFON);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_PINK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIGHT_PINK);
+	int_to_rgb(&p1.rgb, FDF_PINK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_PINK);
+	int_to_rgb(&p1.rgb, FDF_HOT_PINK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_HOT_PINK);
+	int_to_rgb(&p1.rgb, FDF_DEEP_PINK);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_DEEP_PINK);
+	int_to_rgb(&p1.rgb, FDF_MEDIUM_VIOLET_RED);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+
+	// Cold theme
+	p0.x = 750;
+	p0.y = 50;
+	p1.x = p0.x + length;
+	p1.y = 50;	
+	int_to_rgb(&p0.rgb, FDF_BLACK);
+	int_to_rgb(&p1.rgb, FDF_DARK_SLATE_GRAY);
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_DARK_SLATE_GRAY);
+	int_to_rgb(&p1.rgb, FDF_SLATE_GRAY);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_SLATE_GRAY);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_STEEL_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIGHT_STEEL_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_SKY_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIGHT_SKY_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_BLUE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_AZURE);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_AZURE);
+	int_to_rgb(&p1.rgb, FDF_HONEYDEW);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_HONEYDEW);
+	int_to_rgb(&p1.rgb, FDF_PALE_GREEN);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_PALE_GREEN);
+	int_to_rgb(&p1.rgb, FDF_LAWN_GREEN);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LAWN_GREEN);
+	int_to_rgb(&p1.rgb, FDF_LIME_GREEN);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_LIME_GREEN);
+	int_to_rgb(&p1.rgb, FDF_OLIVE_DRAB);
+	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+	int_to_rgb(&p0.rgb, FDF_OLIVE_DRAB);
+	int_to_rgb(&p1.rgb, FDF_DARK_OLIVE_GREEN);
 	p0.y += gaps, p1.y += gaps;
 	plot_line(fdf, p0, p1);
 };
