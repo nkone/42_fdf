@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/19 16:32:12 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/19 18:44:01 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -882,9 +882,50 @@ void gradient_test(t_fdf *fdf)
 	int_to_rgb(&p0.rgb, FDF_MIDNIGHT_BLUE);
 	int_to_rgb(&p1.rgb, FDF_MEDIUM_BLUE);
 	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_MEDIUM_BLUE);
+	int_to_rgb(&p1.rgb, FDF_DEEP_SKY_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_DEEP_SKY_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_AZURE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_AZURE);
+	int_to_rgb(&p1.rgb, FDF_LEMON_CHIFFON);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LEMON_CHIFFON);
+	int_to_rgb(&p1.rgb, FDF_YELLOW_GREEN);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_YELLOW_GREEN);
+	int_to_rgb(&p1.rgb, FDF_FOREST_GREEN);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_FOREST_GREEN);
+	int_to_rgb(&p1.rgb, FDF_MAROON);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_MAROON);
+	int_to_rgb(&p1.rgb, FDF_SIENNA);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_SIENNA);
+	int_to_rgb(&p1.rgb, FDF_SNOW);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_SNOW);
+	int_to_rgb(&p1.rgb, FDF_BLACK);
+	plot_line(fdf, p0, p1);
+
 
 	// Hot Theme
-	p0.x = 400;
+	p0.x = 800;
 	p0.y = 50;
 	p1.x = p0.x + length;
 	p1.y = 50;
@@ -936,8 +977,60 @@ void gradient_test(t_fdf *fdf)
 	p0.y += gaps, p1.y += gaps;
 	plot_line(fdf, p0, p1);
 
+	// Single linear	
+	p0.y = 800, p1.y = 800;
+	p0.x = 50;
+	p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_DARK_RED);
+	int_to_rgb(&p1.rgb, FDF_CRIMSON);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_CRIMSON);
+	int_to_rgb(&p1.rgb, FDF_CORAL);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_CORAL);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_SALMON);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_SALMON);
+	int_to_rgb(&p1.rgb, FDF_ORANGE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_ORANGE);
+	int_to_rgb(&p1.rgb, FDF_GOLD);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_GOLD);
+	int_to_rgb(&p1.rgb, FDF_WHEAT);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_WHEAT);
+	int_to_rgb(&p1.rgb, FDF_LEMON_CHIFFON);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LEMON_CHIFFON);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_PINK);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_PINK);
+	int_to_rgb(&p1.rgb, FDF_PINK);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_PINK);
+	int_to_rgb(&p1.rgb, FDF_HOT_PINK);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_HOT_PINK);
+	int_to_rgb(&p1.rgb, FDF_DEEP_PINK);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_DEEP_PINK);
+	int_to_rgb(&p1.rgb, FDF_MEDIUM_VIOLET_RED);
+	plot_line(fdf, p0, p1);
+
 	// Cold theme
-	p0.x = 750;
+	p0.x = 1550;
 	p0.y = 50;
 	p1.x = p0.x + length;
 	p1.y = 50;	
@@ -987,6 +1080,58 @@ void gradient_test(t_fdf *fdf)
 	int_to_rgb(&p0.rgb, FDF_OLIVE_DRAB);
 	int_to_rgb(&p1.rgb, FDF_DARK_OLIVE_GREEN);
 	p0.y += gaps, p1.y += gaps;
+	plot_line(fdf, p0, p1);
+
+	// Single Linear
+	p0.y = 900, p1.y = 900;
+	p0.x = 50;
+	p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_BLACK);
+	int_to_rgb(&p1.rgb, FDF_DARK_SLATE_GRAY);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_DARK_SLATE_GRAY);
+	int_to_rgb(&p1.rgb, FDF_SLATE_GRAY);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_SLATE_GRAY);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_STEEL_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_STEEL_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_SKY_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_SKY_BLUE);
+	int_to_rgb(&p1.rgb, FDF_LIGHT_BLUE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIGHT_BLUE);
+	int_to_rgb(&p1.rgb, FDF_AZURE);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_AZURE);
+	int_to_rgb(&p1.rgb, FDF_HONEYDEW);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_HONEYDEW);
+	int_to_rgb(&p1.rgb, FDF_PALE_GREEN);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_PALE_GREEN);
+	int_to_rgb(&p1.rgb, FDF_LAWN_GREEN);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LAWN_GREEN);
+	int_to_rgb(&p1.rgb, FDF_LIME_GREEN);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_LIME_GREEN);
+	int_to_rgb(&p1.rgb, FDF_OLIVE_DRAB);
+	plot_line(fdf, p0, p1);
+	p0.x = p1.x, p1.x = p0.x + length / 2;
+	int_to_rgb(&p0.rgb, FDF_OLIVE_DRAB);
+	int_to_rgb(&p1.rgb, FDF_DARK_OLIVE_GREEN);
 	plot_line(fdf, p0, p1);
 };
 
@@ -1046,6 +1191,9 @@ int main(int argc, char *argv[])
 //	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+	mlx_string_put(fdf->mlx, fdf->win, 50, 620, FDF_WHITE, "DEFAULT");
+	mlx_string_put(fdf->mlx, fdf->win, 800, 620, FDF_WHITE, "HOT");
+	mlx_string_put(fdf->mlx, fdf->win, 1550, 620, FDF_WHITE, "COLD");
 //	fdf->data = malloc(sizeof(t_map));
 //	t_map *data;
 	
