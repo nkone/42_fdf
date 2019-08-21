@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/19 18:44:01 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/20 17:37:49 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,16 @@
 ** Create a struct to store plotting points ✓
 ** Reduce parameters in plot function
 ** Create a parser
-** Create an init function
+** Create an init function ✓
 ** Create a color ramp ✓
 ** Create theme for color ramp✓
 ** Clean up color ramp function✓
 ** How to draw with linear gradent?✓
+** Test out the color ramp with 42 map ✓
+** Find a way to centralize the map with any size
 ** If you're gonna do it, do it right.
 */
+
 void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
 {
 	int i;
@@ -135,14 +138,14 @@ void	plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0)
 	//	plot_pixel(fdf, var->ypxl1, var->xpxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
 	//	plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
 		plot_pixel(fdf, var->ypxl1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0,fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 	else
 	{
 //		plot_pixel(fdf, var->xpxl1, var->ypxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
 //		plot_pixel(fdf, var->xpxl1, var->ypxl1 + 1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
 		plot_pixel(fdf, var->xpxl1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl1 + 1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0,fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl1 + 1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 }
 
@@ -354,7 +357,7 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 {
 	p.x *= fdf->cam.zoom;
 	p.y *= fdf->cam.zoom;
-	p.z *= fdf->cam.z_zoom;
+//	p.z *= fdf->cam.z_zoom;
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
 	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
@@ -362,32 +365,52 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 		fdf_iso(&p.x, &p.y, p.z);
 	p.x += (WIN_W / 2);
 	p.y += (WIN_H / 2);
-	printf("(%f, %f)\n", p.x, p.y);
+//	printf("(%f, %f)\n", p.x, p.y);
 	return (p);
 }
 
-t_pt	gen_point(double x, double y, t_map *data)
+int get_color_index(int z, int size);
+int count_ramp(t_ramp *ramp);
+t_pt	gen_point(double x, double y, t_fdf *fdf)
 {
 	t_pt p;
+	t_rgb *rgb;
 	int idx;
 
-	idx = y * data->map_w + x;
+	idx = y * fdf->data->map_w + x;
 	p.x = x;
 	p.y = y;
-	p.z = data->map[idx];
+	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
+//	printf("zoom: %f\n", fdf->cam.z_zoom);
+	
+	rgb = fdf->ramp[get_color_index(p.z, fdf->ramp_size)];
+	p.rgb = *rgb; 
 	return (p);
 }
 
-void	clear_bg(t_fdf *fdf)
+void	draw_bg(t_fdf *fdf)
 {
 	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	int x;
+	int *image;
+	int y;
+
+	image = (int *)fdf->data_addr;
+	y = 50;
+	while (y++ < 75)
+	{
+		x = 40;
+		while (x++ < 90)
+			plot_pixel(fdf, x, y, FDF_GRAY);
+	}
 }
 void	draw(t_fdf *fdf, t_map *data)
 {
 	int x;
 	int y;
 	
-	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	//ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	draw_bg(fdf);
 	y = 0;
 	while (y < data->map_h)
 	{
@@ -395,16 +418,17 @@ void	draw(t_fdf *fdf, t_map *data)
 		while (x < data->map_w)
 		{
 			if (x != data->map_w - 1)
-  			plot_line(fdf, get_point(gen_point(x, y, data), fdf),
-  					get_point(gen_point(x + 1, y, data), fdf));
+  			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
+  					get_point(gen_point(x + 1, y, fdf), fdf));
 			if (y != data->map_h - 1)
-  			plot_line(fdf, get_point(gen_point(x, y, data), fdf),
-  				get_point(gen_point(x, y + 1, data), fdf));
+  			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
+  				get_point(gen_point(x, y + 1, fdf), fdf));
 			x++;
 		}
 		y++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
 }	
 
 void	print_map(int *coord, int size, int mod);
@@ -421,10 +445,10 @@ int	key_control(int key, void *param)
 		fdf->cam.zoom += (key == KEY_I) ? 1 : -1;
 		if (fdf->cam.zoom < 10)
 			fdf->cam.zoom = 10;
-	}
+	}*/
 	else if (key == KEY_PLUS || key == KEY_MINUS)
-		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.1 : -0.1;
-	else if (key == KEY_L_SQ_BRKT)
+		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.2 : -0.2;
+/*	else if (key == KEY_L_SQ_BRKT)
 	{
 		fdf->cam.beta = 0;
 		fdf->cam.alpha = 0;
@@ -454,6 +478,17 @@ int	key_control(int key, void *param)
 	return (0);
 }
 
+int		mouse_press(int button, int x, int y, void *param)
+{
+	t_fdf *fdf;
+
+	fdf = (t_fdf *)param;
+	if (button == 1)
+		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
+			exit(0);
+	draw(fdf, fdf->data);
+	return (0);
+}
 int		fdf_read(const char *path)
 {
 	int ret;
@@ -571,12 +606,14 @@ int	get_color_index(int z, int size)
 	//using 1000 as arbitrary range
 	idx_steps = 1000 / size;
 	mid_idx = size/2;
+	if (!idx_steps)
+		idx_steps = 1;
 	mid_idx += (z / idx_steps);
 	if (mid_idx < 0)
 		mid_idx = 0;
-	else if (mid_idx > size)
-		mid_idx = size;
-	printf("idx: %d\n", mid_idx);
+	if (mid_idx >= size)
+		mid_idx = size - 1;
+//	printf("mid_idx: %d, size: %d z: %d\n", mid_idx, size, z);
 	return (mid_idx);
 }
 
@@ -760,7 +797,7 @@ t_cam	fdf_cam_init(void)
 	cam.alpha = 0.0;
 	cam.beta = 0.0;
 	cam.eta = 0.0;
-	cam.projection = PARALLEL;
+	cam.projection = ISO;
 	return (cam);
 }
 t_fdf	*fdf_init(void)
@@ -781,6 +818,7 @@ t_fdf	*fdf_init(void)
 	frame->theme = DEFAULT;
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
+	frame->ramp_size = count_ramp(frame->ramp_list);
 	return (frame);
 }
 
@@ -1143,7 +1181,7 @@ int main(int argc, char *argv[])
 	
 	int coord[] = 
 	{
-		0, 0,-5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10, 5, 0, 0,
 		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
@@ -1167,12 +1205,12 @@ int main(int argc, char *argv[])
 	t_fdf *fdf;
 	fdf = fdf_init();
 	print_camera_settings(fdf);
-	switch_camera_settings(fdf);
-	print_camera_settings(fdf);
+//	switch_camera_settings(fdf);
+//	print_camera_settings(fdf);
 	
 	ramp_size = count_ramp(fdf->ramp_list);
 	printf("ramp size: %d\n", ramp_size);
-
+	
 
 /*	puts("printing void pointer");
 	for (int i = 0; fdf->ramp[i]; i++)
@@ -1187,13 +1225,13 @@ int main(int argc, char *argv[])
 	fdf->data->map = coord;
 	fdf->data->map_w = 19;
 	fdf->data->map_h = 11;
-	gradient_test(fdf);
-//	draw(fdf, fdf->data);
+//	gradient_test(fdf);
+	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, 50, 620, FDF_WHITE, "DEFAULT");
-	mlx_string_put(fdf->mlx, fdf->win, 800, 620, FDF_WHITE, "HOT");
-	mlx_string_put(fdf->mlx, fdf->win, 1550, 620, FDF_WHITE, "COLD");
+//	mlx_string_put(fdf->mlx, fdf->win, 50, 620, FDF_WHITE, "DEFAULT");
+//	mlx_string_put(fdf->mlx, fdf->win, 800, 620, FDF_WHITE, "HOT");
+//	mlx_string_put(fdf->mlx, fdf->win, 1550, 620, FDF_WHITE, "COLD");
 //	fdf->data = malloc(sizeof(t_map));
 //	t_map *data;
 	
@@ -1202,7 +1240,10 @@ int main(int argc, char *argv[])
 //	int *map;
 //	map = dup_coord(fdf->data->map, fdf_total(r));
 //	print_map(map, fdf_total(r), fdf->data->width);
-//	mlx_hook(fdf->win, 2, 0, key_control, fdf);
+
+	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
+	mlx_hook(fdf->win, 2, 0, key_control, fdf);
+	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_loop(fdf->mlx);
 //	//fdf->test = coord;
 	return (0);
