@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/20 17:37:49 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/20 19:47:16 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ int	get_color(t_rgb start, t_rgb end, double percent, double brightness)
 {
 	t_rgb ret;
 	
-	ret.r = (start.r * (1.0 - percent) + end.r * percent) * brightness;
-	ret.g = (start.g * (1.0 - percent) + end.g * percent) * brightness;
-	ret.b = (start.b * (1.0 - percent) + end.b * percent) * brightness;
+	ret.r = ((start.r * (1.0 - percent)) + (end.r * percent)) * brightness;
+	ret.g = ((start.g * (1.0 - percent)) + (end.g * percent)) * brightness;
+	ret.b = ((start.b * (1.0 - percent)) + (end.b * percent)) * brightness;
 	ret.rgb = ret.r;
 	ret.rgb = (ret.rgb << 8) + ret.g;
 	ret.rgb = (ret.rgb << 8) + ret.b;
@@ -111,6 +111,7 @@ int	get_color(t_rgb start, t_rgb end, double percent, double brightness)
 void	plot_line_init(t_pt *p0, t_pt *p1, t_var *var)
 {
 	var->steep = fabs(p1->y - p0->y) > fabs(p1->x - p0->x);
+	var->swap = (p0->y > p1->y) ? true : false;
 	if (var->steep)
 	{
 		ft_swap_double(&(p0->x), &(p0->y));
@@ -181,7 +182,8 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			percent = curr_percent(start, var.xpxl1, var.xpxl2);
+			percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
+				curr_percent(start, var.xpxl1, var.xpxl2);
 	//		plot_pixel(fdf, ipart(var.intery), var.xpxl1, fdf_rgb(*fdf, rfpart(var.intery)));
 	//		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, fdf_rgb(*fdf, fpart(var.intery)));
 			plot_pixel(fdf, ipart(var.intery), var.xpxl1, get_color(p0, p1, percent, rfpart(var.intery)));
@@ -195,7 +197,8 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			percent = curr_percent(start, var.xpxl1, var.xpxl2);
+			percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
+				curr_percent(start, var.xpxl1, var.xpxl2);
 	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery), fdf_rgb(*fdf, rfpart(var.intery)));
 	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, fdf_rgb(*fdf, fpart(var.intery)));
 		
@@ -273,6 +276,8 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 	}
 */
 	plot_line_second_pt(fdf, &var, p1);
+//	printf("point 1: r: %d g: %d b: %d\n", p0.rgb.r, p0.rgb.g, p0.rgb.b);
+//	printf("point 2: r: %d g: %d b: %d\n", p1.rgb.r, p1.rgb.g, p1.rgb.b);
 	plot_line_main(fdf, var, p0.rgb, p1.rgb);
 	//double x;
 	//x = 0.0;
@@ -381,10 +386,10 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 	p.x = x;
 	p.y = y;
 	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
-//	printf("zoom: %f\n", fdf->cam.z_zoom);
 	
 	rgb = fdf->ramp[get_color_index(p.z, fdf->ramp_size)];
 	p.rgb = *rgb; 
+//	printf("z: %d idx: %d r: %d g: %d b: %d\n", p.z, idx, p.rgb.r, p.rgb.g, p.rgb.b);
 	return (p);
 }
 
@@ -417,18 +422,22 @@ void	draw(t_fdf *fdf, t_map *data)
 		x = 0;
 		while (x < data->map_w)
 		{
+//			puts("plot x:");
 			if (x != data->map_w - 1)
   			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
-  					get_point(gen_point(x + 1, y, fdf), fdf));
+  					get_point(gen_point(x+1, y, fdf), fdf));
+//			puts("plot y");
 			if (y != data->map_h - 1)
   			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
-  				get_point(gen_point(x, y + 1, fdf), fdf));
+  				get_point(gen_point(x, y+1, fdf), fdf));
 			x++;
 		}
 		y++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
+	mlx_string_put(fdf->mlx, fdf->win, 300, 300, FDF_WHITE, "PARALLEL");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 300, FDF_WHITE, "ISO");
 }	
 
 void	print_map(int *coord, int size, int mod);
@@ -484,8 +493,24 @@ int		mouse_press(int button, int x, int y, void *param)
 
 	fdf = (t_fdf *)param;
 	if (button == 1)
+	{
 		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
 			exit(0);
+		else if (x >= 300 && x <= 400 && y >= 300 && y <= 400)
+		{
+			puts("View switched to: PARALLEL");
+			fdf->cam.projection = PARALLEL;
+		}
+		else if (x >= 150 && x <= 200 && y >= 300 && y <= 400)
+		{
+			puts("View switched to: ISO");
+			fdf->cam.projection = ISO;
+		}
+	}
+	if (button == 4)
+		fdf->cam.z_zoom += 0.2;
+	if (button == 5)
+		fdf->cam.z_zoom -= 0.2;
 	draw(fdf, fdf->data);
 	return (0);
 }
@@ -1178,7 +1203,14 @@ int main(int argc, char *argv[])
 //	print_map(map_data->map, 209);
 	int i = 0;
 	i = 0;
-	
+
+	int coord_small[] = 
+	{
+		0, -20, 0,
+		0,10, 0,
+		0,0,0
+	};
+	(void)coord_small;
 	int coord[] = 
 	{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -1242,6 +1274,8 @@ int main(int argc, char *argv[])
 //	print_map(map, fdf_total(r), fdf->data->width);
 
 	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
+	mlx_string_put(fdf->mlx, fdf->win, 300, 300, FDF_WHITE, "PARALLEL");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 300, FDF_WHITE, "ISO");
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_loop(fdf->mlx);
