@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/20 19:47:16 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/21 21:02:26 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -368,8 +368,8 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
-	p.x += (WIN_W / 2);
-	p.y += (WIN_H / 2);
+	p.x += (WIN_W / 2) + (WIN_H / 10);
+	p.y += (WIN_H / 2) - (WIN_W / 10);
 //	printf("(%f, %f)\n", p.x, p.y);
 	return (p);
 }
@@ -438,6 +438,9 @@ void	draw(t_fdf *fdf, t_map *data)
 	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
 	mlx_string_put(fdf->mlx, fdf->win, 300, 300, FDF_WHITE, "PARALLEL");
 	mlx_string_put(fdf->mlx, fdf->win, 150, 300, FDF_WHITE, "ISO");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 500, FDF_WHITE, "DEFAULT");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 550, FDF_WHITE, "HOT");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 600, FDF_WHITE, "COLD");
 }	
 
 void	print_map(int *coord, int size, int mod);
@@ -449,12 +452,12 @@ int	key_control(int key, void *param)
 	fdf = (t_fdf *)param;
 	if (key == KEY_ESC)
 		exit(0);
-/*	else if (key == KEY_I || key == KEY_K)
+	else if (key == KEY_I || key == KEY_K)
 	{
-		fdf->cam.zoom += (key == KEY_I) ? 1 : -1;
-		if (fdf->cam.zoom < 10)
-			fdf->cam.zoom = 10;
-	}*/
+		fdf->cam.zoom += (key == KEY_I) ? 0.3 : -0.3;
+		if (fdf->cam.zoom < 3.0)
+			fdf->cam.zoom = 3.0;
+	}
 	else if (key == KEY_PLUS || key == KEY_MINUS)
 		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.2 : -0.2;
 /*	else if (key == KEY_L_SQ_BRKT)
@@ -470,7 +473,7 @@ int	key_control(int key, void *param)
 		fdf->cam.alpha = 0;
 		fdf->cam.eta = 0;
 		projection = PARALLEL;
-	}
+	}*/
 	else if (key == KEY_L_ARROW)
 		fdf->cam.beta += 0.05;
 	else if (key == KEY_R_ARROW)
@@ -482,11 +485,34 @@ int	key_control(int key, void *param)
 	else if (key == KEY_NUM_7)
 		fdf->cam.eta += 0.05;
 	else if (key == KEY_NUM_9)
-		fdf->cam.eta -= 0.05;*/
+		fdf->cam.eta -= 0.05;
 	draw(fdf, fdf->data);
 	return (0);
 }
 
+t_ramp *fdf_gen_color_ramp(t_fdf *fdf);
+void	**fdf_index_color_ramp(t_ramp *ramp);
+void	switch_fdf_theme(t_fdf *fdf, int theme)
+{
+	int i;
+//	t_ramp *pt;
+
+	i = 0;
+	fdf->theme = theme;
+//	while (fdf->ramp_list)
+//	{
+//		pt = fdf->ramp_list;
+//		free(fdf->ramp_list);
+//		fdf->ramp_list = pt->next;
+//	}
+	while (fdf->ramp[i])
+		free(fdf->ramp[i++]);
+	free(fdf->ramp);
+	fdf->ramp_list = fdf_gen_color_ramp(fdf);
+	fdf->ramp = fdf_index_color_ramp(fdf->ramp_list);
+	fdf->ramp_size = count_ramp(fdf->ramp_list);
+}
+		
 int		mouse_press(int button, int x, int y, void *param)
 {
 	t_fdf *fdf;
@@ -506,6 +532,12 @@ int		mouse_press(int button, int x, int y, void *param)
 			puts("View switched to: ISO");
 			fdf->cam.projection = ISO;
 		}
+		else if (x >= 50 && x <= 100 && y >= 500 && y <= 540)
+			switch_fdf_theme(fdf, DEFAULT);
+		else if (x >= 50 && x <= 100 && y >= 550 && y <= 590)
+			switch_fdf_theme(fdf, HOT);	
+		else if (x >= 50 && x <= 100 && y >= 600 && y <= 640)
+			switch_fdf_theme(fdf, COLD);
 	}
 	if (button == 4)
 		fdf->cam.z_zoom += 0.2;
@@ -629,7 +661,7 @@ int	get_color_index(int z, int size)
 	int mid_idx;
 
 	//using 1000 as arbitrary range
-	idx_steps = 1000 / size;
+	idx_steps = 750 / size;
 	mid_idx = size/2;
 	if (!idx_steps)
 		idx_steps = 1;
@@ -638,7 +670,7 @@ int	get_color_index(int z, int size)
 		mid_idx = 0;
 	if (mid_idx >= size)
 		mid_idx = size - 1;
-//	printf("mid_idx: %d, size: %d z: %d\n", mid_idx, size, z);
+	//printf("mid_idx: %d, size: %d z: %d\n", mid_idx, size, z);
 	return (mid_idx);
 }
 
@@ -840,7 +872,7 @@ t_fdf	*fdf_init(void)
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->theme = DEFAULT;
+	frame->theme = HOT;
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
@@ -1198,6 +1230,149 @@ void gradient_test(t_fdf *fdf)
 	plot_line(fdf, p0, p1);
 };
 
+void	print_arr(char **arr)
+{
+	int i;
+
+	for (i = 0; arr[i]; i++)
+	{
+		printf("%s ", arr[i]);
+		free(arr[i]);
+	}
+	free(arr);
+	printf("total: %d", i);
+	puts("");
+}
+
+int	count_arr_width(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}
+
+int	check_map_width(t_read *read)
+{
+	int w;
+	int prev_w;
+
+	w = 0;
+	prev_w = w;
+	while (read)
+	{
+		w = count_arr_width(read->arr);
+		if (!w || (prev_w && w != prev_w))
+			return (0);
+		prev_w = w;
+		read = read->next;
+	}
+	return (w);
+}
+
+int	check_map_height (t_read *read)
+{
+	int map_h;
+
+	map_h = 0;
+	while (read)
+	{
+		map_h++;
+		read = read->next;
+	}
+	return (map_h);
+}
+
+int		get_map_size(t_read *read, t_fdf *fdf)
+{
+	int map_w;
+	int map_h;
+
+	map_h = check_map_height(read);
+	map_w = check_map_width(read);
+	if (!map_h || !map_w)
+		abort_fdf();
+	fdf->data->map_w = map_w;
+	fdf->data->map_h = map_h;
+	return (map_w * map_h);
+}
+
+int		*map_coord(t_read *read, t_fdf *fdf)
+{
+	int *map;
+	int i;
+	int j;
+
+	i = 0;
+	map = malloc(sizeof(int) * get_map_size(read, fdf));
+	while (read)
+	{
+		j = 0;
+		while (read->arr[j])
+			map[i++] = ft_atoi(read->arr[j++]);
+		read = read->next;
+	}
+	return (map);
+}
+		
+void	print_link_arr(t_read *read)
+{
+	t_read *temp;
+
+	while (read)
+	{
+		temp = read;
+		print_arr(read->arr);
+		read = read->next;
+		free(temp);
+	}
+}
+void create_arr_node(t_read **head, char **block)
+{
+	*head = malloc(sizeof(t_read));
+	(*head)->arr = block;
+	(*head)->next = NULL;
+}
+
+void link_arr_node(t_read **head, char **block)
+{
+	t_read *cursor;
+
+	if (!*head)
+		create_arr_node(head, block);
+	else
+	{
+		cursor = *head;
+		while (cursor->next)
+			cursor = cursor->next;
+		create_arr_node(&(cursor->next), block);
+	}
+}
+		
+int  *parse_1(int fd, t_fdf *fdf)
+{
+	char *line;
+	char **arr;
+	int	 *map;
+	t_read *read;
+	line = NULL;
+	arr = NULL;
+	read = NULL;
+	map = NULL;
+	while (get_next_line(fd, &line))
+	{
+		arr = ft_strsplit(line, ' ');
+		link_arr_node(&read, arr);
+		free(line);
+	}
+	map = map_coord(read, fdf);
+	//(void)fdf;
+	//print_link_arr(read);
+	
+	return (map);
+}
 int main(int argc, char *argv[])
 {
 //	print_map(map_data->map, 209);
@@ -1225,6 +1400,7 @@ int main(int argc, char *argv[])
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	};
+	(void)coord;
 	int size;
 	size = sizeof(coord)/sizeof(int);
 	t_ramp *ramp;
@@ -1253,10 +1429,24 @@ int main(int argc, char *argv[])
 */
 	char *path;
 	path = argv[argc-1];
-	path = NULL;
-	fdf->data->map = coord;
-	fdf->data->map_w = 19;
-	fdf->data->map_h = 11;
+	
+	if (argc == 2)
+	{
+		int fd;
+		fd = open(argv[1], O_RDONLY);
+		if (fd < 0)
+		{
+			perror("Error");
+			return (-1);
+		}
+		fdf->data->map = parse_1(fd, fdf);
+	}
+	fdf->cam.zoom = -12.2123 * log(0.0000627893 * (fdf->data->map_w * fdf->data->map_h));
+	if (fdf->cam.zoom <= 0.0)
+		fdf->cam.zoom = 3.0;
+//	fdf->data->map = coord;
+//	fdf->data->map_w = 19;
+//	fdf->data->map_h = 11;
 //	gradient_test(fdf);
 	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
