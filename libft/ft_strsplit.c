@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/20 09:57:51 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/05 20:29:41 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/21 19:46:26 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,50 +22,49 @@
 ** Array of "fresh" strings result from the split.
 */
 
-/*
-** PSEUDOCODE
-** Initialize pointer array, a pointer to copy s, token, two counters
-** Protect function by checking s for NULL
-** Count tokens in s with helper function ft_strtok_ntokens()
-** Allocate memory before copy s;
-** Copy array pointer and protect return
-** Copy s to pointer
-** Get first token with ft_strtok_r
-** While index is less than no. of tokens and token is not NULL
-** |--> Allocate memory into index array with size of token
-** |--> Copy token into that index
-** |--> Get new token with ft_strtok_r
-** |--> Increment index
-** NULL terminate last index
-** Return pointer array
-*/
-
 #include "libft.h"
 
-char	**ft_strsplit(char const *s, char c)
+static int	wordcount(const char *s, char c)
 {
-	char	**s_array;
-	char	*s_copy;
-	int		w_count;
-	char	*token;
-	int		i;
+	size_t	len;
 
-	if (!s)
-		return (NULL);
-	w_count = ft_strtok_ntokens(s, &c);
-	s_copy = (char *)malloc(ft_strlen(s) * sizeof(char));
-	if (!(s_array = (char **)malloc(w_count * sizeof(char *) + 1)))
-		return (NULL);
-	ft_strcpy(s_copy, s);
-	token = ft_strtok_r(s_copy, &c, &s_copy);
-	i = 0;
-	while (i < w_count && token != NULL)
+	len = 0;
+	while (*s)
 	{
-		s_array[i] = (char *)malloc(ft_strlen(token) * sizeof(char));
-		ft_strcpy(s_array[i], token);
-		token = ft_strtok_r(s_copy, &c, &s_copy);
-		i++;
+		while (*s == c)
+			s++;
+		if (*s && *s != c)
+			len++;
+		while (*s && *s != c)
+			s++;
 	}
-	s_array[i] = NULL;
-	return (s_array);
+	return (len);
+}
+
+char		**ft_strsplit(const char *s, char c)
+{
+	char		**arr;
+	const char	*ps;
+	int			wc;
+	int			i;
+	int			j;
+
+	wc = wordcount(s, c);
+	arr = malloc(sizeof(char *) * (wc + 1));
+	arr[wc] = NULL;
+	i = -1;
+	while (++i < wc)
+	{
+		j = -1;
+		while (*s == c)
+			s++;
+		ps = s;
+		while (*s && *s != c)
+			s++;
+		arr[i] = malloc(sizeof(char) * ((s - ps) + 1));
+		while (++j < (s - ps))
+			arr[i][j] = ps[j];
+		arr[i][j] = '\0';
+	}
+	return (arr);
 }
