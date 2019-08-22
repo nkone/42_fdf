@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/20 15:29:02 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/21 14:42:18 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,7 @@ typedef struct	s_map
 typedef struct	s_var
 {
 	bool	steep;
+	bool	swap;
 	double	dx;
 	double	dy;
 	double	gradient;
@@ -298,8 +299,6 @@ typedef struct		s_read
 {
 	struct s_read	*next;
 	char			**arr;
-	int				width;
-	int				height;
 }					t_read;
 #endif
 
