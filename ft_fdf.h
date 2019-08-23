@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/21 14:42:18 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/22 18:16:07 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@
 # define KEY_D_ARROW 125
 # define KEY_NUM_7	89
 # define KEY_NUM_9	92
+
+# define MOUSE_LEFT_B 1
+# define MOUSE_RIGHT_B 2
+# define MOUSE_SCROLL_UP 4
+# define MOUSE_SCROLL_DOWN 5
 # define ISO_RAD	(30 * M_PI/180)
 
 # define FDF_ABORT_MESSAGE "An unknown error has occured\n"
@@ -206,7 +211,8 @@
 typedef enum		e_projection
 {
 	ISO,
-	PARALLEL
+	PARALLEL,
+	ELEVATION
 } 					t_projection;
 
 
@@ -244,6 +250,15 @@ typedef struct	s_cam
 	t_projection	projection;
 }				t_cam;
 
+typedef struct 	s_mouse
+{
+	int		x;
+	int		y;
+	int		prev_x;
+	int		prev_y;
+	bool	left_b;
+	bool	right_b;
+}				t_mouse;
 typedef struct s_ramp
 {
 	int 			r;
@@ -293,6 +308,7 @@ typedef struct		s_fdf
 	int			size_line;
 	int			endian;
 	t_theme		theme;
+	t_mouse		mouse;
 }					t_fdf;
 
 typedef struct		s_read
