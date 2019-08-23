@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/22 18:40:43 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/22 21:27:30 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 ** Find a way to centralize the map with any size (somewhat lol)
 ** Make a menu
 ** Create a reset button
+** Handle error maps
 ** If you're gonna do it, do it right.
 */
 
@@ -426,6 +427,14 @@ void	draw_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win, 50, 500, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "DEFAULT");
 	mlx_string_put(fdf->mlx, fdf->win, 50, 550, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "HOT");
 	mlx_string_put(fdf->mlx, fdf->win, 50, 600, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "COLD");
+	mlx_string_put(fdf->mlx, fdf->win, 140, 970, FDF_WHITE, "Z ZOOM");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 1000, (fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "x0.05");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 1000, (fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "x0.5");
+	mlx_string_put(fdf->mlx, fdf->win, 250, 1000, (fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "x1.0");
+	mlx_string_put(fdf->mlx, fdf->win, 140, 900, FDF_WHITE, "Z ACCEL +/-");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 930, (fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "0.05");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 930, (fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "0.5");
+	mlx_string_put(fdf->mlx, fdf->win, 250, 930, (fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "1.0");
 }
 
 int	draw(t_fdf *fdf, t_map *data)
@@ -538,7 +547,7 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 		fdf->mouse.left_b = true;
 		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
 			exit(0);
-		else if (x >= 320 && x <= 420 && y >= 300 && y <= 400)
+		else if (x >= 320 && x <= 420 && y >= 300 && y <= 350)
 		{
 			puts("View switched to: PARALLEL");
 			fdf->cam.projection = PARALLEL;
@@ -546,7 +555,7 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.beta = 0.0;
 			fdf->cam.eta = 0.0;
 		}
-		else if (x >= 100 && x <= 150 && y >= 300 && y <= 400)
+		else if (x >= 100 && x <= 150 && y >= 300 && y <= 350)
 		{
 			puts("View switched to: ISO");
 			fdf->cam.projection = ISO;
@@ -554,7 +563,7 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.beta = 0.0;
 			fdf->cam.eta = 0.0;
 		}
-		else if (x >= 220 && x <= 300 && y >= 300 && y <= 400)
+		else if (x >= 220 && x <= 300 && y >= 300 && y <= 350)
 		{
 			puts("View switched to: ELEVATION");
 			fdf->cam.projection = ELEVATION;
@@ -562,19 +571,35 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.beta = 0.0;
 			fdf->cam.eta = 0.0;
 		}
-		else if (x >= 50 && x <= 100 && y >= 500 && y <= 540)
+		else if (x >= 50 && x <= 150 && y >= 500 && y <= 540)
 			switch_fdf_theme(fdf, DEFAULT);
 		else if (x >= 50 && x <= 100 && y >= 550 && y <= 590)
 			switch_fdf_theme(fdf, HOT);	
 		else if (x >= 50 && x <= 100 && y >= 600 && y <= 640)
 			switch_fdf_theme(fdf, COLD);
+		else if (x >= 50 && x <= 100 && y >= 1000 && y <= 1050)
+			fdf->cam.z_zoom = 0.05;
+		else if (x >= 150 && x <= 200 && y >= 1000 && y <= 1050)
+			fdf->cam.z_zoom = 0.5;
+		else if (x >= 250 && x <= 350 && y >= 1000 && y <= 1050)
+			fdf->cam.z_zoom = 1.0;
+		else if (x >= 50 && x <= 100 && y >= 930 && y <= 980)
+			fdf->cam.z_accel = 0.05;
+		else if (x >= 150 && x <= 200 && y >= 930 && y <= 980)
+			fdf->cam.z_accel = 0.5;
+		else if (x >= 250 && x <= 350 && y >= 930 && y <= 980)
+			fdf->cam.z_accel = 1.0;
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
-	if (button == MOUSE_SCROLL_UP)
-		fdf->cam.z_zoom += 0.1;
-	if (button == MOUSE_SCROLL_DOWN)
-		fdf->cam.z_zoom -= 0.1;
+	if (!fdf->mouse.right_b && button == MOUSE_SCROLL_UP)
+		fdf->cam.z_zoom += fdf->cam.z_accel;
+	if (!fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
+		fdf->cam.z_zoom -= fdf->cam.z_accel;
+	if (fdf->mouse.right_b && button ==  MOUSE_SCROLL_UP)
+		fdf->cam.zoom += 0.5;
+	if (fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
+		fdf->cam.zoom -= 0.5;
 	draw(fdf, fdf->data);
 	return (0);
 }
@@ -884,6 +909,7 @@ t_cam	fdf_cam_init(void)
 
 	cam.zoom = 50.0;
 	cam.z_zoom = 1.0;
+	cam.z_accel = 0.05;
 	cam.alpha = 0.0;
 	cam.beta = 0.0;
 	cam.eta = 0.0;
@@ -919,7 +945,7 @@ t_fdf	*fdf_init(void)
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->theme = HOT;
+	frame->theme = DEFAULT;
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
