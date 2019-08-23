@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/21 21:02:26 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/22 18:40:43 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@
 ** Clean up color ramp function✓
 ** How to draw with linear gradent?✓
 ** Test out the color ramp with 42 map ✓
-** Find a way to centralize the map with any size
+** Find a way to centralize the map with any size (somewhat lol)
+** Make a menu
+** Create a reset button
 ** If you're gonna do it, do it right.
 */
 
@@ -40,7 +42,7 @@ void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
 	int i;
 
 //	printf("(%d, %d) @ rgb: %d\n", x, y, rgb);
-	if (x < WIN_W && y >= 0 && y < WIN_H)
+	if (x >= 0 && x < WIN_W && y >= 0 && y < WIN_H)
 	{
 	i = (x * frame->bits_per_pix / 8) + (y  * frame->size_line);
 //	printf("i: %d rgb: %d\n", i, rgb);
@@ -363,13 +365,16 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	p.x *= fdf->cam.zoom;
 	p.y *= fdf->cam.zoom;
 //	p.z *= fdf->cam.z_zoom;
+	
+	p.x -= (fdf->data->map_w * fdf->cam.zoom) / 2;
+	p.y -= (fdf->data->map_h * fdf->cam.zoom) / 2;
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
 	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
-	p.x += (WIN_W / 2) + (WIN_H / 10);
-	p.y += (WIN_H / 2) - (WIN_W / 10);
+	p.x += (WIN_W / 2) ;//+ (WIN_H / 10);
+	p.y += (WIN_H / 2) ;//- (WIN_W / 10);
 //	printf("(%f, %f)\n", p.x, p.y);
 	return (p);
 }
@@ -409,7 +414,21 @@ void	draw_bg(t_fdf *fdf)
 			plot_pixel(fdf, x, y, FDF_GRAY);
 	}
 }
-void	draw(t_fdf *fdf, t_map *data)
+
+void	draw_menu(t_fdf *fdf)
+{
+	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
+	mlx_string_put(fdf->mlx, fdf->win, 225, 250, FDF_WHITE, "VIEW");
+	mlx_string_put(fdf->mlx, fdf->win, 320, 300, (fdf->cam.projection == PARALLEL) ? FDF_RED: FDF_WHITE, "PARALLEL");
+	mlx_string_put(fdf->mlx, fdf->win, 100, 300, (fdf->cam.projection == ISO)? FDF_RED : FDF_WHITE, "ISO");
+	mlx_string_put(fdf->mlx, fdf->win, 200, 300, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "ELEVATION");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 450, FDF_WHITE, "THEME");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 500, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "DEFAULT");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 550, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "HOT");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 600, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "COLD");
+}
+
+int	draw(t_fdf *fdf, t_map *data)
 {
 	int x;
 	int y;
@@ -435,12 +454,8 @@ void	draw(t_fdf *fdf, t_map *data)
 		y++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
-	mlx_string_put(fdf->mlx, fdf->win, 300, 300, FDF_WHITE, "PARALLEL");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 300, FDF_WHITE, "ISO");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 500, FDF_WHITE, "DEFAULT");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 550, FDF_WHITE, "HOT");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 600, FDF_WHITE, "COLD");
+	draw_menu(fdf);
+	return (0);
 }	
 
 void	print_map(int *coord, int size, int mod);
@@ -459,7 +474,7 @@ int	key_control(int key, void *param)
 			fdf->cam.zoom = 3.0;
 	}
 	else if (key == KEY_PLUS || key == KEY_MINUS)
-		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.2 : -0.2;
+		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.05 : -0.05;
 /*	else if (key == KEY_L_SQ_BRKT)
 	{
 		fdf->cam.beta = 0;
@@ -479,14 +494,15 @@ int	key_control(int key, void *param)
 	else if (key == KEY_R_ARROW)
 		fdf->cam.beta -= 0.05;
 	else if (key == KEY_U_ARROW)
-		fdf->cam.alpha += 0.05;
-	else if (key == KEY_D_ARROW)
 		fdf->cam.alpha -= 0.05;
+	else if (key == KEY_D_ARROW)
+		fdf->cam.alpha += 0.05;
 	else if (key == KEY_NUM_7)
 		fdf->cam.eta += 0.05;
 	else if (key == KEY_NUM_9)
 		fdf->cam.eta -= 0.05;
 	draw(fdf, fdf->data);
+//	printf("%.2f\n", fdf->cam.alpha);
 	return (0);
 }
 
@@ -513,24 +529,38 @@ void	switch_fdf_theme(t_fdf *fdf, int theme)
 	fdf->ramp_size = count_ramp(fdf->ramp_list);
 }
 		
-int		mouse_press(int button, int x, int y, void *param)
+int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
-	t_fdf *fdf;
-
-	fdf = (t_fdf *)param;
-	if (button == 1)
+	fdf->mouse.x = x;
+	fdf->mouse.y = y;
+	if (button == MOUSE_LEFT_B)
 	{
+		fdf->mouse.left_b = true;
 		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
 			exit(0);
-		else if (x >= 300 && x <= 400 && y >= 300 && y <= 400)
+		else if (x >= 320 && x <= 420 && y >= 300 && y <= 400)
 		{
 			puts("View switched to: PARALLEL");
 			fdf->cam.projection = PARALLEL;
+			fdf->cam.alpha = 0.0;
+			fdf->cam.beta = 0.0;
+			fdf->cam.eta = 0.0;
 		}
-		else if (x >= 150 && x <= 200 && y >= 300 && y <= 400)
+		else if (x >= 100 && x <= 150 && y >= 300 && y <= 400)
 		{
 			puts("View switched to: ISO");
 			fdf->cam.projection = ISO;
+			fdf->cam.alpha = 0.0;
+			fdf->cam.beta = 0.0;
+			fdf->cam.eta = 0.0;
+		}
+		else if (x >= 220 && x <= 300 && y >= 300 && y <= 400)
+		{
+			puts("View switched to: ELEVATION");
+			fdf->cam.projection = ELEVATION;
+			fdf->cam.alpha = -7.855;
+			fdf->cam.beta = 0.0;
+			fdf->cam.eta = 0.0;
 		}
 		else if (x >= 50 && x <= 100 && y >= 500 && y <= 540)
 			switch_fdf_theme(fdf, DEFAULT);
@@ -539,10 +569,51 @@ int		mouse_press(int button, int x, int y, void *param)
 		else if (x >= 50 && x <= 100 && y >= 600 && y <= 640)
 			switch_fdf_theme(fdf, COLD);
 	}
-	if (button == 4)
-		fdf->cam.z_zoom += 0.2;
-	if (button == 5)
-		fdf->cam.z_zoom -= 0.2;
+	if (button == MOUSE_RIGHT_B)
+		fdf->mouse.right_b = true;
+	if (button == MOUSE_SCROLL_UP)
+		fdf->cam.z_zoom += 0.1;
+	if (button == MOUSE_SCROLL_DOWN)
+		fdf->cam.z_zoom -= 0.1;
+	draw(fdf, fdf->data);
+	return (0);
+}
+
+int		mouse_release(int button, int x, int y, t_fdf *fdf)
+{
+	fdf->mouse.x = x;
+	fdf->mouse.y = y;
+	if (button == MOUSE_LEFT_B)
+		fdf->mouse.left_b = false;
+	if (button == MOUSE_RIGHT_B)
+		fdf->mouse.right_b = false;
+	return (0);
+}
+
+int		mouse_move(int x, int y, t_fdf *fdf)
+{
+//	int dx;
+//	int dy;
+
+	if (fdf->mouse.left_b == false && fdf->mouse.right_b == false)
+		return (0);
+	fdf->mouse.prev_x = fdf->mouse.x;
+	fdf->mouse.prev_y = fdf->mouse.y;
+	fdf->mouse.x = x;
+	fdf->mouse.y = y;
+	if (fdf->mouse.left_b)
+	{
+		fdf->cam.beta += (x - fdf->mouse.prev_x) * 0.002;
+		fdf->cam.alpha += (y - fdf->mouse.prev_y) * 0.002;
+	}
+	if (fdf->mouse.right_b)
+		fdf->cam.eta -= (x - fdf->mouse.prev_x) * 0.002;
+//	dx = x - fdf->mouse.x;
+//	fdf->mouse.x = x;
+//	fdf->cam.beta += (dx > 0) ? 0.02 : -0.02;
+//	dy = y - fdf->mouse.y;
+//	fdf->mouse.y = y;
+//	fdf->cam.alpha += (dy > 0) ? 0.02 : -0.02;
 	draw(fdf, fdf->data);
 	return (0);
 }
@@ -558,46 +629,6 @@ int		fdf_read(const char *path)
 	}
 	printf("ret: %d\n", ret);
 	return (ret);
-}
-
-int		is_space(char c) {
-	return ((c >= 9 && c <= 13) || (c == ' '));
-}
-
-int		count_words(char *s) {
-	int wd = 0;
-	if (!s)
-		return (0);
-	while (*s) {
-		while (is_space(*s)) s++;
-		if (*s && !is_space(*s)) wd++;
-		while (*s && !is_space(*s)) s++;
-		if (!*s)
-			break;
-		s++;
-	}
-	return (wd);
-}
-
-char **ft_split(char *str) {
-	int count = count_words(str);
-	char **arr = (char **)malloc(sizeof(char *)* count + 1);
-	if (!arr)
-		return (NULL);
-	arr[count] = NULL;
-	for (int i = 0; i < count; i++) {
-		while (is_space(*str)) str++;
-		char *pstr = str;
-		while (*str && !is_space(*str)) str++;
-		int len = (int)(str - pstr);
-		arr[i] = (char *)malloc(sizeof(char)*len + 1);
-		if (!arr[i])
-			return (NULL);
-		for (int j = 0; j < len; j++)
-			arr[i][j] = *pstr++;
-		arr[i][len] = '\0';
-	}
-	return (arr);
 }
 
 int		abort_fdf(void)
@@ -661,7 +692,7 @@ int	get_color_index(int z, int size)
 	int mid_idx;
 
 	//using 1000 as arbitrary range
-	idx_steps = 750 / size;
+	idx_steps = 1000 / size;
 	mid_idx = size/2;
 	if (!idx_steps)
 		idx_steps = 1;
@@ -723,8 +754,10 @@ void	fdf_theme_default(t_ramp **ramp)
 	color_ramp(ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
 	color_ramp(ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE); 
 	color_ramp(ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE); 
-	color_ramp(ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
-	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
+	color_ramp(ramp, FDF_AZURE, 10, FDF_POWDER_BLUE); 
+	color_ramp(ramp, FDF_POWDER_BLUE, 10, FDF_YELLOW_GREEN);
+//	color_ramp(ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
+//	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
 	color_ramp(ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
 	color_ramp(ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
 	color_ramp(ramp, FDF_MAROON, 10, FDF_SIENNA);
@@ -857,6 +890,20 @@ t_cam	fdf_cam_init(void)
 	cam.projection = ISO;
 	return (cam);
 }
+
+t_mouse mouse_init(void)
+{
+	t_mouse mouse;
+
+	mouse.x = 0;
+	mouse.y = 0;
+	mouse.prev_x = 0;
+	mouse.prev_y = 0;
+	mouse.left_b = false;
+	mouse.right_b = false;
+
+	return (mouse);
+}
 t_fdf	*fdf_init(void)
 {
 	t_fdf *frame;
@@ -876,6 +923,7 @@ t_fdf	*fdf_init(void)
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
+	frame->mouse = mouse_init();
 	return (frame);
 }
 
@@ -1311,7 +1359,12 @@ int		*map_coord(t_read *read, t_fdf *fdf)
 	{
 		j = 0;
 		while (read->arr[j])
+		{
 			map[i++] = ft_atoi(read->arr[j++]);
+			free(read->arr[j - 1]);
+		}
+		free(read->arr);
+		free(read);
 		read = read->next;
 	}
 	return (map);
@@ -1440,8 +1493,9 @@ int main(int argc, char *argv[])
 			return (-1);
 		}
 		fdf->data->map = parse_1(fd, fdf);
+		close(fd);
 	}
-	fdf->cam.zoom = -12.2123 * log(0.0000627893 * (fdf->data->map_w * fdf->data->map_h));
+	fdf->cam.zoom = -12.2123 * log(0.0000747893 * (fdf->data->map_w * fdf->data->map_h));
 	if (fdf->cam.zoom <= 0.0)
 		fdf->cam.zoom = 3.0;
 //	fdf->data->map = coord;
@@ -1450,7 +1504,7 @@ int main(int argc, char *argv[])
 //	gradient_test(fdf);
 	draw(fdf, fdf->data);
 //	plot_line(fdf, p0, p1);
-	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+//	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 //	mlx_string_put(fdf->mlx, fdf->win, 50, 620, FDF_WHITE, "DEFAULT");
 //	mlx_string_put(fdf->mlx, fdf->win, 800, 620, FDF_WHITE, "HOT");
 //	mlx_string_put(fdf->mlx, fdf->win, 1550, 620, FDF_WHITE, "COLD");
@@ -1463,11 +1517,12 @@ int main(int argc, char *argv[])
 //	map = dup_coord(fdf->data->map, fdf_total(r));
 //	print_map(map, fdf_total(r), fdf->data->width);
 
-	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
-	mlx_string_put(fdf->mlx, fdf->win, 300, 300, FDF_WHITE, "PARALLEL");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 300, FDF_WHITE, "ISO");
+	draw_menu(fdf);
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
+	mlx_hook(fdf->win, 5, 0,mouse_release, fdf);
+	mlx_hook(fdf->win, 6, 0,mouse_move, fdf);
+//	mlx_loop_hook(fdf->mlx, &draw, fdf);
 	mlx_loop(fdf->mlx);
 //	//fdf->test = coord;
 	return (0);
