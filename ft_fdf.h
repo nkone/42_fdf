@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/22 18:16:07 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/25 00:09:40 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,6 +244,7 @@ typedef struct	s_cam
 {
 	double			zoom;
 	double			z_zoom;
+	double			z_accel;
 	double			alpha;
 	double			beta;
 	double			eta;
@@ -272,12 +273,14 @@ typedef struct	s_map
 	int		*map;
 	int		map_h;
 	int		map_w;
+	int		map_size;
 }				t_map;
 
 typedef struct	s_var
 {
 	bool	steep;
 	bool	swap;
+	bool	swap_d;
 	double	dx;
 	double	dy;
 	double	gradient;
@@ -307,6 +310,8 @@ typedef struct		s_fdf
 	int			bits_per_pix;
 	int			size_line;
 	int			endian;
+	double		coef_m;
+	double		coef_b;
 	t_theme		theme;
 	t_mouse		mouse;
 }					t_fdf;
