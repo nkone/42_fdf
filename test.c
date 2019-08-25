@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/22 21:27:30 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/25 00:17:36 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 ** Make a menu
 ** Create a reset button
 ** Handle error maps
+** Create depth
 ** If you're gonna do it, do it right.
 */
 
@@ -114,19 +115,24 @@ int	get_color(t_rgb start, t_rgb end, double percent, double brightness)
 void	plot_line_init(t_pt *p0, t_pt *p1, t_var *var)
 {
 	var->steep = fabs(p1->y - p0->y) > fabs(p1->x - p0->x);
-	var->swap = (p0->y > p1->y) ? true : false;
+	var->swap_d = false;
 	if (var->steep)
 	{
+		var->swap = true;
 		ft_swap_double(&(p0->x), &(p0->y));
 		ft_swap_double(&(p1->x), &(p1->y));
 	}
 	if (p0->x > p1->x)
 	{
+		if (!var->steep)
+			var->swap = true;
+		var->swap_d = true;
 		ft_swap_double(&(p0->x), &(p1->x));
 		ft_swap_double(&(p0->y), &(p1->y));
 	}
 	var->dx = p1->x - p0->x;
 	var->dy = p1->y - p0->y;
+//	var->swap = abs(var->dy > var->dx) ? true : false;
 	var->gradient = (var->dx == 0.0) ? 1.0 : (var->dy / var->dx);
 }
 
@@ -179,14 +185,18 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	double percent;
 
 	start = var.xpxl1;
+	printf("start: %.1f end: %.1f\n", start, var.xpxl2);
 	if (var.steep)
 	{
-	//	puts("steep");
+		puts("steep");
 	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
-				curr_percent(start, var.xpxl1, var.xpxl2);
+			percent = (var.swap) ? curr_percent(start, var.xpxl1, var.xpxl2) :
+				curr_percent(var.xpxl2, var.xpxl1, start);
+			if (var.swap_d)
+				percent = curr_percent(var.xpxl2, var.xpxl1, start);
+	//		percent = curr_percent(var.xpxl2, var.xpxl1, start);
 	//		plot_pixel(fdf, ipart(var.intery), var.xpxl1, fdf_rgb(*fdf, rfpart(var.intery)));
 	//		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, fdf_rgb(*fdf, fpart(var.intery)));
 			plot_pixel(fdf, ipart(var.intery), var.xpxl1, get_color(p0, p1, percent, rfpart(var.intery)));
@@ -196,12 +206,13 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	}
 	else
 	{
-	//	puts("not steep");
+		puts("not steep");
 	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
 			percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
 				curr_percent(start, var.xpxl1, var.xpxl2);
+	//		percent = curr_percent(start, var.xpxl1, var.xpxl2);
 	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery), fdf_rgb(*fdf, rfpart(var.intery)));
 	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, fdf_rgb(*fdf, fpart(var.intery)));
 		
@@ -210,6 +221,21 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 			var.intery += var.gradient;
 		}
 	}
+}
+void	apply_depth(double z, t_rgb *rgb, t_fdf *fdf)
+{
+	double percent;
+
+	percent = fdf->coef_m * z + fdf->coef_b;
+	if (percent >= 1.0)
+		percent = 1.0;
+//	printf("percent: %.1f z: %.f\n", percent, z);
+	rgb->r *= percent;
+	rgb->g *= percent;
+	rgb->b *= percent;
+	rgb->rgb = rgb->r;
+	rgb->rgb = (rgb->rgb << 8) + rgb->g;
+	rgb->rgb = (rgb->rgb << 8) + rgb->b;
 }
 void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 {
@@ -228,8 +254,12 @@ void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 	}
 */
 	t_var var;
-
+//	puts("start");
+	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\n", p0.x, p0.y, p1.x, p1.y);
 	plot_line_init(&p0, &p1, &var);
+	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\nrgb(%d, %d, %d)\trgb(%d,%d,%d)\n", p0.x, p0.y, p1.x, p1.y, p0.rgb.r, p0.rgb.g, p0.rgb.b, p1.rgb.r, p1.rgb.g, p1.rgb.b);
+//	printf("p0 z: %d p1 z: %d", p0.z, p1.z);
+//	apply_depth(p0.z, &p0.rgb, fdf);
 /*	double dx = p1.x - p0.x;
 	double dy = p1.y - p0.y;
 	double gradient;
@@ -369,19 +399,22 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	
 	p.x -= (fdf->data->map_w * fdf->cam.zoom) / 2;
 	p.y -= (fdf->data->map_h * fdf->cam.zoom) / 2;
+	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
-	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
+	//fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
 	p.x += (WIN_W / 2) ;//+ (WIN_H / 10);
 	p.y += (WIN_H / 2) ;//- (WIN_W / 10);
-//	printf("(%f, %f)\n", p.x, p.y);
+//	printf("(%.1f, %.1f, %d)\n", p.x, p.y, p.z);
 	return (p);
 }
 
 int get_color_index(int z, int size);
 int count_ramp(t_ramp *ramp);
+
+
 t_pt	gen_point(double x, double y, t_fdf *fdf)
 {
 	t_pt p;
@@ -394,6 +427,7 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
 	
 	rgb = fdf->ramp[get_color_index(p.z, fdf->ramp_size)];
+	apply_depth(p.z, rgb, fdf);
 	p.rgb = *rgb; 
 //	printf("z: %d idx: %d r: %d g: %d b: %d\n", p.z, idx, p.rgb.r, p.rgb.g, p.rgb.b);
 	return (p);
@@ -408,7 +442,7 @@ void	draw_bg(t_fdf *fdf)
 
 	image = (int *)fdf->data_addr;
 	y = 50;
-	while (y++ < 75)
+	while (y++ < 75) // Plot escape button
 	{
 		x = 40;
 		while (x++ < 90)
@@ -443,6 +477,7 @@ int	draw(t_fdf *fdf, t_map *data)
 	int y;
 	
 	//ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	puts("start");
 	draw_bg(fdf);
 	y = 0;
 	while (y < data->map_h)
@@ -464,6 +499,7 @@ int	draw(t_fdf *fdf, t_map *data)
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 	draw_menu(fdf);
+	puts("done");
 	return (0);
 }	
 
@@ -828,7 +864,7 @@ void	fdf_theme_cold(t_ramp **ramp)
 
 void	fdf_theme_custom(t_ramp **ramp)
 {
-	color_ramp(ramp, FDF_BLACK, 200, FDF_WHITE);
+	color_ramp(ramp, FDF_BLACK, 20, FDF_WHITE);
 }
 
 t_ramp *fdf_gen_color_ramp(t_fdf *fdf)
@@ -1370,7 +1406,8 @@ int		get_map_size(t_read *read, t_fdf *fdf)
 		abort_fdf();
 	fdf->data->map_w = map_w;
 	fdf->data->map_h = map_h;
-	return (map_w * map_h);
+	fdf->data->map_size = map_w * map_h;
+	return (fdf->data->map_size);
 }
 
 int		*map_coord(t_read *read, t_fdf *fdf)
@@ -1452,6 +1489,56 @@ int  *parse_1(int fd, t_fdf *fdf)
 	
 	return (map);
 }
+
+int		get_z_range(int *map, int size)
+{
+	int i;
+	int max;
+	int min;
+	int range;
+
+	i = 0;
+	max = map[i];
+	min = map[i];
+	while (i++ < size - 1)
+	{
+		if (map[i] > max)
+			max = map[i];
+		if (map[i] < min)
+			min = map[i];
+	}
+	printf("i: %d\n", i);
+	range = max - min;
+	return (range);
+}
+
+void	extract_min_max(int *map, int *min, int *max, int size)
+{
+	int i;
+
+	i = 0;
+	*max = map[i];
+	*min = map[i];
+	while (i++ < size - 1)
+	{
+		if (map[i] > *max)
+			*max = map[i];
+		if (map[i] < *min)
+			*min = map[i];
+	}
+}
+
+void	get_coefficient(int *map, t_fdf *fdf)
+{
+	int		max;
+	int		min;
+	
+	extract_min_max(map, &min, &max, fdf->data->map_size);
+	fdf->coef_m = (0.0 - 1.0) / (min - max);
+	fdf->coef_b = 1.0 - (fdf->coef_m * max);
+}
+	
+	
 int main(int argc, char *argv[])
 {
 //	print_map(map_data->map, 209);
@@ -1460,7 +1547,7 @@ int main(int argc, char *argv[])
 
 	int coord_small[] = 
 	{
-		0, -20, 0,
+		0, 0, 0,
 		0,10, 0,
 		0,0,0
 	};
@@ -1482,11 +1569,11 @@ int main(int argc, char *argv[])
 	(void)coord;
 	int size;
 	size = sizeof(coord)/sizeof(int);
-	t_ramp *ramp;
-	ramp = NULL;
+//	t_ramp *ramp;
+//	ramp = NULL;
 //	print_ramp(ramp);
-	int ramp_size;
-	ramp_size = 0;
+//	int ramp_size;
+//	ramp_size = 0;
 //	for (int i = 0; i < size; i++)
 //		get_color_index(coord[i], ramp_size);
 	t_fdf *fdf;
@@ -1495,8 +1582,8 @@ int main(int argc, char *argv[])
 //	switch_camera_settings(fdf);
 //	print_camera_settings(fdf);
 	
-	ramp_size = count_ramp(fdf->ramp_list);
-	printf("ramp size: %d\n", ramp_size);
+//	ramp_size = count_ramp(fdf->ramp_list);
+//	printf("ramp size: %d\n", ramp_size);
 	
 
 /*	puts("printing void pointer");
@@ -1524,6 +1611,7 @@ int main(int argc, char *argv[])
 	fdf->cam.zoom = -12.2123 * log(0.0000747893 * (fdf->data->map_w * fdf->data->map_h));
 	if (fdf->cam.zoom <= 0.0)
 		fdf->cam.zoom = 3.0;
+	get_coefficient(fdf->data->map, fdf);
 //	fdf->data->map = coord;
 //	fdf->data->map_w = 19;
 //	fdf->data->map_h = 11;
