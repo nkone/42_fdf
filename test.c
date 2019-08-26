@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/25 00:17:36 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/25 19:07:42 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@
 ** How to draw with linear gradent?✓
 ** Test out the color ramp with 42 map ✓
 ** Find a way to centralize the map with any size (somewhat lol)
-** Make a menu
+** Make a menu ✓
+** Fix button mapping
+** Create help menu
 ** Create a reset button
 ** Handle error maps
-** Create depth
+** Create depth ✓
 ** If you're gonna do it, do it right.
 */
 
@@ -43,14 +45,12 @@ void	plot_pixel(t_fdf *frame, int x, int y, int rgb)
 {
 	int i;
 
-//	printf("(%d, %d) @ rgb: %d\n", x, y, rgb);
 	if (x >= 0 && x < WIN_W && y >= 0 && y < WIN_H)
 	{
 	i = (x * frame->bits_per_pix / 8) + (y  * frame->size_line);
-//	printf("i: %d rgb: %d\n", i, rgb);
-	frame->data_addr[i++] = rgb;
-	frame->data_addr[i++] = rgb >> 8;
-	frame->data_addr[i] = rgb >> 16;
+		frame->data_addr[i++] = rgb;
+		frame->data_addr[i++] = rgb >> 8;
+		frame->data_addr[i] = rgb >> 16;
 	}
 }
 int		fdf_rgb(t_fdf fdf, double c)
@@ -116,6 +116,7 @@ void	plot_line_init(t_pt *p0, t_pt *p1, t_var *var)
 {
 	var->steep = fabs(p1->y - p0->y) > fabs(p1->x - p0->x);
 	var->swap_d = false;
+	var->swap = false;
 	if (var->steep)
 	{
 		var->swap = true;
@@ -132,7 +133,6 @@ void	plot_line_init(t_pt *p0, t_pt *p1, t_var *var)
 	}
 	var->dx = p1->x - p0->x;
 	var->dy = p1->y - p0->y;
-//	var->swap = abs(var->dy > var->dx) ? true : false;
 	var->gradient = (var->dx == 0.0) ? 1.0 : (var->dy / var->dx);
 }
 
@@ -145,17 +145,17 @@ void	plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0)
 	var->ypxl1 = ipart(var->yend);
 	if (var->steep)
 	{
-	//	plot_pixel(fdf, var->ypxl1, var->xpxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-	//	plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1, get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl1, var->xpxl1,
+				get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl1 + 1, var->xpxl1,
+				get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 	else
 	{
-//		plot_pixel(fdf, var->xpxl1, var->ypxl1, fdf_rgb(*fdf, rfpart(var->yend) * var->xgap));
-//		plot_pixel(fdf, var->xpxl1, var->ypxl1 + 1, fdf_rgb(*fdf, fpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl1 + 1, var->ypxl1, get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl1, var->ypxl1,
+				get_color(p0.rgb, p0.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl1 + 1, var->ypxl1,
+				get_color(p0.rgb, p0.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 }
 
@@ -169,13 +169,17 @@ void	plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1)
 	var->ypxl2 = ipart(var->yend);
 	if (var->steep)
 	{
-		plot_pixel(fdf, var->ypxl2, var->xpxl2, get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->ypxl2 + 1, var->xpxl2, get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl2, var->xpxl2,
+				get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->ypxl2 + 1, var->xpxl2,
+				get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 	else
 	{
-		plot_pixel(fdf, var->xpxl2, var->ypxl2, get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
-		plot_pixel(fdf, var->xpxl2, var->ypxl2 + 1, get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl2, var->ypxl2,
+				get_color(p1.rgb, p1.rgb, 1.0, rfpart(var->yend) * var->xgap));
+		plot_pixel(fdf, var->xpxl2, var->ypxl2 + 1,
+				get_color(p1.rgb, p1.rgb, 1.0, fpart(var->yend) * var->xgap));
 	}
 }
 
@@ -185,172 +189,86 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	double percent;
 
 	start = var.xpxl1;
-	printf("start: %.1f end: %.1f\n", start, var.xpxl2);
 	if (var.steep)
 	{
-		puts("steep");
-	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
-			percent = (var.swap) ? curr_percent(start, var.xpxl1, var.xpxl2) :
-				curr_percent(var.xpxl2, var.xpxl1, start);
-			if (var.swap_d)
-				percent = curr_percent(var.xpxl2, var.xpxl1, start);
-	//		percent = curr_percent(var.xpxl2, var.xpxl1, start);
-	//		plot_pixel(fdf, ipart(var.intery), var.xpxl1, fdf_rgb(*fdf, rfpart(var.intery)));
-	//		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, fdf_rgb(*fdf, fpart(var.intery)));
-			plot_pixel(fdf, ipart(var.intery), var.xpxl1, get_color(p0, p1, percent, rfpart(var.intery)));
-			plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1, get_color(p0, p1, percent, fpart(var.intery)));
+			percent = (var.swap_d) ? curr_percent(var.xpxl2, var.xpxl1, start) :
+				curr_percent(start, var.xpxl1, var.xpxl2);
+			plot_pixel(fdf, ipart(var.intery), var.xpxl1, 
+					get_color(p0, p1, percent, rfpart(var.intery)));
+			plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1,
+					get_color(p0, p1, percent, fpart(var.intery)));
 			var.intery += var.gradient;
 		}
 	}
 	else
 	{
-		puts("not steep");
-	//	printf("xpxl1: %f xpxl2: %f\n", var.xpxl1, var.xpxl2);
 		while (var.xpxl1++ < var.xpxl2)
 		{
 			percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
 				curr_percent(start, var.xpxl1, var.xpxl2);
-	//		percent = curr_percent(start, var.xpxl1, var.xpxl2);
-	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery), fdf_rgb(*fdf, rfpart(var.intery)));
-	//		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, fdf_rgb(*fdf, fpart(var.intery)));
-		
-			plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, rfpart(var.intery)));
-			plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1, get_color(p0, p1, percent, fpart(var.intery)));
+			plot_pixel(fdf, var.xpxl1, ipart(var.intery),
+					get_color(p0, p1, percent, rfpart(var.intery)));
+			plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1,
+					get_color(p0, p1, percent, fpart(var.intery)));
 			var.intery += var.gradient;
 		}
 	}
 }
-void	apply_depth(double z, t_rgb *rgb, t_fdf *fdf)
+t_rgb	apply_depth(double z, t_rgb rgb, t_fdf *fdf)
 {
 	double percent;
 
 	percent = fdf->coef_m * z + fdf->coef_b;
+	percent += fdf->cam.zoom/fabs(fdf->cam.depth_f * 5);
 	if (percent >= 1.0)
 		percent = 1.0;
-//	printf("percent: %.1f z: %.f\n", percent, z);
-	rgb->r *= percent;
-	rgb->g *= percent;
-	rgb->b *= percent;
+	if (percent < 0.0)
+		percent = 0.0;
+	rgb.r *= percent;
+	rgb.g *= percent;
+	rgb.b *= percent;
+	rgb.rgb = rgb.r;
+	rgb.rgb = (rgb.rgb << 8) + rgb.g;
+	rgb.rgb = (rgb.rgb << 8) + rgb.b;
+	return (rgb);
+}
+
+void	apply_brightness(t_rgb *rgb, double brightness)
+{
+	rgb->r += brightness;
+	if (rgb->r > 255)
+		rgb->r = 255;
+	if (rgb->r < 0)
+		rgb->r = 0;
+	rgb->g += brightness;
+	if (rgb->g > 255)
+		rgb->g = 255;
+	if (rgb->g < 0)
+		rgb->g = 0;
+	rgb->b += brightness;
+	if (rgb->b > 255)
+		rgb->b = 255;
+	if (rgb->b < 0)
+		rgb->b = 0;
 	rgb->rgb = rgb->r;
 	rgb->rgb = (rgb->rgb << 8) + rgb->g;
 	rgb->rgb = (rgb->rgb << 8) + rgb->b;
 }
 void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 {
-/* 	Deprecated
-	bool steep = fabs(p1.y - p0.y) > fabs(p1.x - p0.x);
-	printf("color before cal: %d\n", fdf->color.rgb);
-	if (steep)
-	{
-		ft_swap_double(&p0.x, &p0.y);
-		ft_swap_double(&p1.x, &p1.y);
-	}
-	if (p0.x > p1.x)
-	{
-		ft_swap_double(&p0.x, &p1.x);
-		ft_swap_double(&p0.y, &p1.y);
-	}
-*/
 	t_var var;
 //	puts("start");
-	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\n", p0.x, p0.y, p1.x, p1.y);
+//	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\n", p0.x, p0.y, p1.x, p1.y);
 	plot_line_init(&p0, &p1, &var);
-	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\nrgb(%d, %d, %d)\trgb(%d,%d,%d)\n", p0.x, p0.y, p1.x, p1.y, p0.rgb.r, p0.rgb.g, p0.rgb.b, p1.rgb.r, p1.rgb.g, p1.rgb.b);
-//	printf("p0 z: %d p1 z: %d", p0.z, p1.z);
-//	apply_depth(p0.z, &p0.rgb, fdf);
-/*	double dx = p1.x - p0.x;
-	double dy = p1.y - p0.y;
-	double gradient;
-	if (dx == 0.0)
-		gradient = 1.0;
-	else
-		gradient = dy / dx;
-*/
-	// Handle first end point
-	/*
-	double xend = round(p0.x);
-	double yend = p0.y + gradient * (xend - p0.x);
-	double xgap = rfpart(p0.x + 0.5);
-	double xpxl1 = xend;
-	double ypxl1 = ipart(yend);
-	if (steep)
-	{
-		plot_pixel(fdf, ypxl1, xpxl1, fdf_rgb(*fdf, rfpart(yend) * xgap));
-		plot_pixel(fdf, ypxl1 + 1, xpxl1,fdf_rgb(*fdf, fpart(yend) * xgap));	
-	}
-	else
-	{
-		plot_pixel(fdf, xpxl1, ypxl1, fdf_rgb(*fdf, rfpart(yend) * xgap));
-		plot_pixel(fdf, xpxl1, ypxl1 + 1, fdf_rgb(*fdf, fpart(yend) *xgap));
-	}
-*/
+//	printf("p0 (%.1f, %.1f)\tp1(%.1f,%.1f)\nrgb(%d, %d, %d)\trgb(%d,%d,%d)\n", p0.x, p0.y, p1.x, p1.y, p0.rgb.r, p0.rgb.g, p0.rgb.b, p1.rgb.r, p1.rgb.g, p1.rgb.b);
 	
 	plot_line_first_pt(fdf, &var, p0);
-	//Handle second end point
-/*	
-	double intery = yend + gradient; // first y-intersection for the main loop
-	xend = round(p1.x);
-	yend = p1.y + gradient * (xend - p1.x);
-	xgap = fpart(p1.x + 0.5);
-	double xpxl2 = xend;
-	double ypxl2 = ipart(yend);
-
-	if (steep)
-	{
-		plot_pixel(fdf, ypxl2, xpxl2, fdf_rgb(*fdf, rfpart(yend) *xgap));
-		plot_pixel(fdf, ypxl2 + 1, xpxl2, fdf_rgb(*fdf, fpart(yend) * xgap));
-	}
-	else
-	{
-		plot_pixel(fdf, xpxl2, ypxl2, fdf_rgb(*fdf, rfpart(yend) * xgap));
-		plot_pixel(fdf, xpxl2, ypxl2 + 1, fdf_rgb(*fdf, fpart(yend) * xgap));
-	}
-*/
 	plot_line_second_pt(fdf, &var, p1);
-//	printf("point 1: r: %d g: %d b: %d\n", p0.rgb.r, p0.rgb.g, p0.rgb.b);
-//	printf("point 2: r: %d g: %d b: %d\n", p1.rgb.r, p1.rgb.g, p1.rgb.b);
 	plot_line_main(fdf, var, p0.rgb, p1.rgb);
-	//double x;
-	//x = 0.0;
-//	printf("color before main: %d\n", fdf->color.rgb);
-/*	if (steep)
-	{
-//		x = xpxl1;
-		while (xpxl1++ < xpxl2)
-		{
-			plot_pixel(fdf, ipart(intery), xpxl1, fdf_rgb(*fdf, rfpart(intery)));
-			plot_pixel(fdf, ipart(intery) + 1, xpxl1, fdf_rgb(*fdf, fpart(intery)));
-			intery += gradient;
-		}
-	}
-	else
-	{
-	//	x = xpxl1;
-		while (xpxl1++ < xpxl2)
-		{
-			plot_pixel(fdf, xpxl1, ipart(intery), fdf_rgb(*fdf, rfpart(intery)));
-			plot_pixel(fdf, xpxl1, ipart(intery) + 1, fdf_rgb(*fdf, fpart(intery)));
-			intery += gradient;
-		}
-	}
-*/
 }
 
-void	fdf_color(t_fdf **fdf)
-{
-	(*fdf)->color.r = 255;
-	(*fdf)->color.g = 255;
-	(*fdf)->color.b = 255;
-//	(*fdf)->color.r *= (*fdf)->color.c;
-//	(*fdf)->color.g *= (*fdf)->color.c;
-//	(*fdf)->color.b *= (*fdf)->color.c;
-	(*fdf)->color.rgb = (*fdf)->color.r;
-	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.g;
-	(*fdf)->color.rgb = ((*fdf)->color.rgb << 8) + (*fdf)->color.b;
-//	printf("color set at: %d\n", (*fdf)->color.rgb);
-}
 
 void	fdf_rot_x(double *y , int *z, double alpha)
 {
@@ -399,14 +317,14 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	
 	p.x -= (fdf->data->map_w * fdf->cam.zoom) / 2;
 	p.y -= (fdf->data->map_h * fdf->cam.zoom) / 2;
-	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
+//	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
-	//fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
+	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
-	p.x += (WIN_W / 2) ;//+ (WIN_H / 10);
-	p.y += (WIN_H / 2) ;//- (WIN_W / 10);
+	p.x += (WIN_W / 2) + fdf->cam.x_offset;//+ (WIN_H / 10);
+	p.y += (WIN_H / 2) + fdf->cam.y_offset;//- (WIN_W / 10);
 //	printf("(%.1f, %.1f, %d)\n", p.x, p.y, p.z);
 	return (p);
 }
@@ -427,15 +345,16 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
 	
 	rgb = fdf->ramp[get_color_index(p.z, fdf->ramp_size)];
-	apply_depth(p.z, rgb, fdf);
-	p.rgb = *rgb; 
-//	printf("z: %d idx: %d r: %d g: %d b: %d\n", p.z, idx, p.rgb.r, p.rgb.g, p.rgb.b);
+	p.rgb = *rgb;
+	p.rgb = (fdf->cam.depth) ? apply_depth(p.z, *rgb, fdf) : *rgb;
+	apply_brightness(&p.rgb, fdf->cam.brightness);
 	return (p);
 }
 
 void	draw_bg(t_fdf *fdf)
 {
 	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	//ft_memset(fdf->data_addr, fdf->cam.brightness, WIN_W * WIN_H * (fdf->bits_per_pix /8));
 	int x;
 	int *image;
 	int y;
@@ -453,31 +372,42 @@ void	draw_bg(t_fdf *fdf)
 void	draw_menu(t_fdf *fdf)
 {
 	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
+	mlx_string_put(fdf->mlx, fdf->win, 1700, 50, FDF_WHITE, "Press h for help");
 	mlx_string_put(fdf->mlx, fdf->win, 225, 250, FDF_WHITE, "VIEW");
-	mlx_string_put(fdf->mlx, fdf->win, 320, 300, (fdf->cam.projection == PARALLEL) ? FDF_RED: FDF_WHITE, "PARALLEL");
-	mlx_string_put(fdf->mlx, fdf->win, 100, 300, (fdf->cam.projection == ISO)? FDF_RED : FDF_WHITE, "ISO");
-	mlx_string_put(fdf->mlx, fdf->win, 200, 300, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "ELEVATION");
+	mlx_string_put(fdf->mlx, fdf->win, 320, 300, (fdf->cam.projection == PARALLEL) ? FDF_RED: FDF_WHITE, "[PARALLEL]");
+	mlx_string_put(fdf->mlx, fdf->win, 100, 300, (fdf->cam.projection == ISO)? FDF_RED : FDF_WHITE, "[ISO]");
+	mlx_string_put(fdf->mlx, fdf->win, 200, 300, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "[ELEVATION]");
 	mlx_string_put(fdf->mlx, fdf->win, 50, 450, FDF_WHITE, "THEME");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 500, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "DEFAULT");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 550, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "HOT");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 600, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "COLD");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 500, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "[DEFAULT]");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 550, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "[HOT]");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 600, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "[COLD]");
 	mlx_string_put(fdf->mlx, fdf->win, 140, 970, FDF_WHITE, "Z ZOOM");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 1000, (fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "x0.05");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 1000, (fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "x0.5");
-	mlx_string_put(fdf->mlx, fdf->win, 250, 1000, (fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "x1.0");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 1000, (fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "[x0.05]");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 1000, (fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "[x0.5]");
+	mlx_string_put(fdf->mlx, fdf->win, 250, 1000, (fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "[x1.0]");
 	mlx_string_put(fdf->mlx, fdf->win, 140, 900, FDF_WHITE, "Z ACCEL +/-");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 930, (fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "0.05");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 930, (fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "0.5");
-	mlx_string_put(fdf->mlx, fdf->win, 250, 930, (fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "1.0");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 930, (fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "[0.05]");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 930, (fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
+	mlx_string_put(fdf->mlx, fdf->win, 250, 930, (fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
+	mlx_string_put(fdf->mlx, fdf->win, 110, 850, FDF_WHITE, "[-] BRIGHTNESS [+]");
+	mlx_string_put(fdf->mlx, fdf->win, 50, 700,  FDF_WHITE, "DEPTH");
+	mlx_string_put(fdf->mlx, fdf->win, 150, 700, (fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
+	mlx_string_put(fdf->mlx, fdf->win, 250, 700, (!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
 }
 
+void	draw_help_menu(t_fdf *fdf)
+{
+	ft_memset(fdf->data_addr, 50, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
+//	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
+	fdf->help = false;
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
+	mlx_string_put(fdf->mlx, fdf->win, 150, 150, FDF_WHITE, "HELP");
+}
 int	draw(t_fdf *fdf, t_map *data)
 {
 	int x;
 	int y;
 	
-	//ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
-	puts("start");
 	draw_bg(fdf);
 	y = 0;
 	while (y < data->map_h)
@@ -485,11 +415,9 @@ int	draw(t_fdf *fdf, t_map *data)
 		x = 0;
 		while (x < data->map_w)
 		{
-//			puts("plot x:");
 			if (x != data->map_w - 1)
   			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
   					get_point(gen_point(x+1, y, fdf), fdf));
-//			puts("plot y");
 			if (y != data->map_h - 1)
   			plot_line(fdf, get_point(gen_point(x, y, fdf), fdf),
   				get_point(gen_point(x, y+1, fdf), fdf));
@@ -499,17 +427,13 @@ int	draw(t_fdf *fdf, t_map *data)
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 	draw_menu(fdf);
-	puts("done");
 	return (0);
 }	
 
 void	print_map(int *coord, int size, int mod);
 char	**ft_split(char *str);
-int	key_control(int key, void *param)
+int	key_control(int key, t_fdf *fdf)
 {
-	t_fdf *fdf;
-
-	fdf = (t_fdf *)param;
 	if (key == KEY_ESC)
 		exit(0);
 	else if (key == KEY_I || key == KEY_K)
@@ -518,36 +442,19 @@ int	key_control(int key, void *param)
 		if (fdf->cam.zoom < 3.0)
 			fdf->cam.zoom = 3.0;
 	}
-	else if (key == KEY_PLUS || key == KEY_MINUS)
-		fdf->cam.z_zoom += (key == KEY_PLUS) ? 0.05 : -0.05;
-/*	else if (key == KEY_L_SQ_BRKT)
-	{
-		fdf->cam.beta = 0;
-		fdf->cam.alpha = 0;
-		fdf->cam.eta = 0;
-		projection = ISO;
-	}
-	else if (key == KEY_R_SQ_BRKT)
-	{
-		fdf->cam.beta = 0;
-		fdf->cam.alpha = 0;
-		fdf->cam.eta = 0;
-		projection = PARALLEL;
-	}*/
+	else if (key == KEY_H)
+		fdf->help = true;
 	else if (key == KEY_L_ARROW)
-		fdf->cam.beta += 0.05;
+		fdf->cam.x_offset -= 5;
 	else if (key == KEY_R_ARROW)
-		fdf->cam.beta -= 0.05;
+		fdf->cam.x_offset += 5;
 	else if (key == KEY_U_ARROW)
-		fdf->cam.alpha -= 0.05;
+		fdf->cam.y_offset -= 5;
 	else if (key == KEY_D_ARROW)
-		fdf->cam.alpha += 0.05;
-	else if (key == KEY_NUM_7)
-		fdf->cam.eta += 0.05;
-	else if (key == KEY_NUM_9)
-		fdf->cam.eta -= 0.05;
+		fdf->cam.y_offset += 5;
 	draw(fdf, fdf->data);
-//	printf("%.2f\n", fdf->cam.alpha);
+	if (fdf->help)
+		draw_help_menu(fdf);
 	return (0);
 }
 
@@ -556,16 +463,9 @@ void	**fdf_index_color_ramp(t_ramp *ramp);
 void	switch_fdf_theme(t_fdf *fdf, int theme)
 {
 	int i;
-//	t_ramp *pt;
 
 	i = 0;
 	fdf->theme = theme;
-//	while (fdf->ramp_list)
-//	{
-//		pt = fdf->ramp_list;
-//		free(fdf->ramp_list);
-//		fdf->ramp_list = pt->next;
-//	}
 	while (fdf->ramp[i])
 		free(fdf->ramp[i++]);
 	free(fdf->ramp);
@@ -625,6 +525,14 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.z_accel = 0.5;
 		else if (x >= 250 && x <= 350 && y >= 930 && y <= 980)
 			fdf->cam.z_accel = 1.0;
+		else if (x >= 110 && x <= 130 && y >= 840 && y <= 880)
+			fdf->cam.brightness -= 5;
+		else if (x >= 230 && x <= 250 && y >= 840 && y <= 880)
+			fdf->cam.brightness += 5;
+		else if (x >= 150 && x <= 170 && y >= 700 && y <= 800)
+			fdf->cam.depth = true;
+		else if (x >= 250 && x <= 300 && y >= 700 && y <= 800)
+			fdf->cam.depth = false;
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
@@ -637,6 +545,8 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 	if (fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
 		fdf->cam.zoom -= 0.5;
 	draw(fdf, fdf->data);
+	if (fdf->help)
+		draw_help_menu(fdf);
 	return (0);
 }
 
@@ -653,8 +563,6 @@ int		mouse_release(int button, int x, int y, t_fdf *fdf)
 
 int		mouse_move(int x, int y, t_fdf *fdf)
 {
-//	int dx;
-//	int dy;
 
 	if (fdf->mouse.left_b == false && fdf->mouse.right_b == false)
 		return (0);
@@ -669,27 +577,8 @@ int		mouse_move(int x, int y, t_fdf *fdf)
 	}
 	if (fdf->mouse.right_b)
 		fdf->cam.eta -= (x - fdf->mouse.prev_x) * 0.002;
-//	dx = x - fdf->mouse.x;
-//	fdf->mouse.x = x;
-//	fdf->cam.beta += (dx > 0) ? 0.02 : -0.02;
-//	dy = y - fdf->mouse.y;
-//	fdf->mouse.y = y;
-//	fdf->cam.alpha += (dy > 0) ? 0.02 : -0.02;
 	draw(fdf, fdf->data);
 	return (0);
-}
-int		fdf_read(const char *path)
-{
-	int ret;
-
-	ret = open(path, O_RDONLY);
-	if (ret < 0)
-	{
-		ft_printf("%s\n", strerror(errno));
-		exit(1);
-	}
-	printf("ret: %d\n", ret);
-	return (ret);
 }
 
 int		abort_fdf(void)
@@ -762,7 +651,6 @@ int	get_color_index(int z, int size)
 		mid_idx = 0;
 	if (mid_idx >= size)
 		mid_idx = size - 1;
-	//printf("mid_idx: %d, size: %d z: %d\n", mid_idx, size, z);
 	return (mid_idx);
 }
 
@@ -792,12 +680,9 @@ void	color_ramp(t_ramp **ramp, int c_start, int steps, int c_end)
 	rgb.g = start.g;
 	rgb.b = start.b;
 	*ramp = (!*ramp) ? create_ramp_node(start) : *ramp;
-//	printf("start r: %d g: %d b: %d\n", start.r, start.g, start.b);
-//	printf("end r: %d g: %d b: %d\n", end.r, end.g, end.b);
 	while (temp--)
 	{
 		color_node(start, steps, end, &rgb);
-//		printf("r: %d g: %d b: %d\n", rgb.r, rgb.g, rgb.b);
 		append_ramp_node(ramp, rgb);
 	}
 	append_ramp_node(ramp, end);
@@ -949,6 +834,10 @@ t_cam	fdf_cam_init(void)
 	cam.alpha = 0.0;
 	cam.beta = 0.0;
 	cam.eta = 0.0;
+	cam.brightness = 1.0;
+	cam.depth = false;
+	cam.x_offset = 0;
+	cam.y_offset = 0;
 	cam.projection = ISO;
 	return (cam);
 }
@@ -986,6 +875,7 @@ t_fdf	*fdf_init(void)
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
 	frame->mouse = mouse_init();
+	frame->help = false;
 	return (frame);
 }
 
@@ -1483,10 +1373,7 @@ int  *parse_1(int fd, t_fdf *fdf)
 		link_arr_node(&read, arr);
 		free(line);
 	}
-	map = map_coord(read, fdf);
-	//(void)fdf;
-	//print_link_arr(read);
-	
+	map = map_coord(read, fdf);	
 	return (map);
 }
 
@@ -1541,58 +1428,8 @@ void	get_coefficient(int *map, t_fdf *fdf)
 	
 int main(int argc, char *argv[])
 {
-//	print_map(map_data->map, 209);
-	int i = 0;
-	i = 0;
-
-	int coord_small[] = 
-	{
-		0, 0, 0,
-		0,10, 0,
-		0,0,0
-	};
-	(void)coord_small;
-	int coord[] = 
-	{
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10, 5, 0, 0,
-		0, 0,10,10, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
-		0, 0,10,10, 0, 0,10,10, 0, 0, 0, 0, 0, 0, 0,10,10, 0, 0,
-		0, 0,10,10,10,10,10,10, 0, 0, 0, 5,10,10,10,10,10, 0, 0,
-		0, 0, 0,10,10,10,10,10, 0, 0, 0,10,10, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0,10,10, 0, 0, 0,10,10, 5, 5, 5,10, 0, 0,
-		0, 0, 0, 0, 0, 0,10,10, 0, 0, 0,10,10,10,10,10,10, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-	};
-	(void)coord;
-	int size;
-	size = sizeof(coord)/sizeof(int);
-//	t_ramp *ramp;
-//	ramp = NULL;
-//	print_ramp(ramp);
-//	int ramp_size;
-//	ramp_size = 0;
-//	for (int i = 0; i < size; i++)
-//		get_color_index(coord[i], ramp_size);
 	t_fdf *fdf;
 	fdf = fdf_init();
-	print_camera_settings(fdf);
-//	switch_camera_settings(fdf);
-//	print_camera_settings(fdf);
-	
-//	ramp_size = count_ramp(fdf->ramp_list);
-//	printf("ramp size: %d\n", ramp_size);
-	
-
-/*	puts("printing void pointer");
-	for (int i = 0; fdf->ramp[i]; i++)
-	{
-		ramp = fdf->ramp[i];
-		printf("r: %d g: %d b: %d\n", ramp->r, ramp->g, ramp->b);
-	}
-*/
 	char *path;
 	path = argv[argc-1];
 	
@@ -1608,37 +1445,21 @@ int main(int argc, char *argv[])
 		fdf->data->map = parse_1(fd, fdf);
 		close(fd);
 	}
-	fdf->cam.zoom = -12.2123 * log(0.0000747893 * (fdf->data->map_w * fdf->data->map_h));
+	fdf->cam.zoom = -12.2123 * log(0.0000747893 * (fdf->data->map_size));
 	if (fdf->cam.zoom <= 0.0)
 		fdf->cam.zoom = 3.0;
+	fdf->cam.depth_f = fdf->cam.zoom;
 	get_coefficient(fdf->data->map, fdf);
-//	fdf->data->map = coord;
-//	fdf->data->map_w = 19;
-//	fdf->data->map_h = 11;
-//	gradient_test(fdf);
 	draw(fdf, fdf->data);
-//	plot_line(fdf, p0, p1);
-//	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
-//	mlx_string_put(fdf->mlx, fdf->win, 50, 620, FDF_WHITE, "DEFAULT");
-//	mlx_string_put(fdf->mlx, fdf->win, 800, 620, FDF_WHITE, "HOT");
-//	mlx_string_put(fdf->mlx, fdf->win, 1550, 620, FDF_WHITE, "COLD");
-//	fdf->data = malloc(sizeof(t_map));
-//	t_map *data;
-	
-//	data = fdf_map(r);
-//	fdf->data = fdf_map(r);
-//	int *map;
-//	map = dup_coord(fdf->data->map, fdf_total(r));
-//	print_map(map, fdf_total(r), fdf->data->width);
 
 	draw_menu(fdf);
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->win, 5, 0,mouse_release, fdf);
 	mlx_hook(fdf->win, 6, 0,mouse_move, fdf);
-//	mlx_loop_hook(fdf->mlx, &draw, fdf);
+	if (fdf->help)
+		draw_help_menu(fdf);
 	mlx_loop(fdf->mlx);
-//	//fdf->test = coord;
 	return (0);
 }
 
