@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/26 08:01:43 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/26 16:29:15 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 ** Handle error maps
 ** Create a prototype for shell built in
 ** Create depth ✓
+** Scaling buttons ...
 ** If you're gonna do it, do it right.
 */
 
@@ -372,16 +373,16 @@ void	draw_bg(t_fdf *fdf)
 
 void	draw_menu(t_fdf *fdf)
 {
-	mlx_string_put(fdf->mlx, fdf->win, 50, 50, FDF_WHITE, "ESC");
-	mlx_string_put(fdf->mlx, fdf->win, 1700, 50, FDF_WHITE, "Press h for help");
-	mlx_string_put(fdf->mlx, fdf->win, 225, 250, FDF_WHITE, "VIEW");
-	mlx_string_put(fdf->mlx, fdf->win, 320, 300, (fdf->cam.projection == PARALLEL) ? FDF_RED: FDF_WHITE, "[PARALLEL]");
-	mlx_string_put(fdf->mlx, fdf->win, 100, 300, (fdf->cam.projection == ISO)? FDF_RED : FDF_WHITE, "[ISO]");
-	mlx_string_put(fdf->mlx, fdf->win, 200, 300, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "[ELEVATION]");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 450, FDF_WHITE, "THEME");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 500, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "[DEFAULT]");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 550, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "[HOT]");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 600, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "[COLD]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30, FDF_WHITE, "ESC");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W - (12 * 16), WIN_H / 30, FDF_WHITE, "Press h for help");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + 50 + (12 * 4), WIN_H / 30 + 100, FDF_WHITE, "VIEW");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + 150, (fdf->cam.projection == ISO) ? FDF_RED: FDF_WHITE, "[ISO]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 5, WIN_H / 30 + 150, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "[ELEVATION]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 16) + 5, WIN_H / 30 + 150, (fdf->cam.projection == PARALLEL)? FDF_RED : FDF_WHITE, "[PARALLEL]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + 400, FDF_WHITE, "THEME");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 10, WIN_H / 30 + 350, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "|-[DEFAULT]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 10, WIN_H / 30 + 400, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "|-[HOT]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 +	(12 * 5) + 10, WIN_H / 30 + 450, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "|-[COLD]");
 	mlx_string_put(fdf->mlx, fdf->win, 140, 970, FDF_WHITE, "Z ZOOM");
 	mlx_string_put(fdf->mlx, fdf->win, 50, 1000, (fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "[x0.05]");
 	mlx_string_put(fdf->mlx, fdf->win, 150, 1000, (fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "[x0.5]");
@@ -391,9 +392,9 @@ void	draw_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win, 150, 930, (fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
 	mlx_string_put(fdf->mlx, fdf->win, 250, 930, (fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
 	mlx_string_put(fdf->mlx, fdf->win, 110, 850, FDF_WHITE, "[-] BRIGHTNESS [+]");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 700,  FDF_WHITE, "DEPTH");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 700, (fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
-	mlx_string_put(fdf->mlx, fdf->win, 250, 700, (!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + WIN_H / 2,  FDF_WHITE, "DEPTH");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 20, WIN_H / 30 + WIN_H / 2, (fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 9) + 40, WIN_H / 30 + WIN_H / 2, (!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
 }
 
 void	draw_help_menu(t_fdf *fdf)
@@ -403,6 +404,7 @@ void	draw_help_menu(t_fdf *fdf)
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 	mlx_string_put(fdf->mlx, fdf->win, 150, 150, FDF_WHITE, "HELP");
 }
+
 int	draw(t_fdf *fdf, t_map *data)
 {
 	int x;
@@ -434,6 +436,12 @@ void	print_map(int *coord, int size, int mod);
 char	**ft_split(char *str);
 void	get_coefficient(int *map, t_fdf *fdf);
 int		*parse_1(int fd, t_fdf *fdf);
+
+
+/*
+** main shell function
+*/
+
 void	shell_in(t_fdf *fdf)
 {
 	char *line;
@@ -784,7 +792,7 @@ void	fdf_theme_cold(t_ramp **ramp)
 
 void	fdf_theme_custom(t_ramp **ramp)
 {
-	color_ramp(ramp, FDF_BLACK, 20, FDF_WHITE);
+	color_ramp(ramp, FDF_BLACK, 121, FDF_WHITE);
 }
 
 t_ramp *fdf_gen_color_ramp(t_fdf *fdf)
@@ -802,6 +810,7 @@ t_ramp *fdf_gen_color_ramp(t_fdf *fdf)
 		fdf_theme_custom(&ramp);
 	return (ramp);
 }
+
 void	print_ramp(t_ramp *ramp)
 {
 	int i = 0;
@@ -905,7 +914,7 @@ t_fdf	*fdf_init(void)
 				mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 				&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->theme = DEFAULT;
+	frame->theme = CUSTOM;
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
@@ -1398,17 +1407,22 @@ int  *parse_1(int fd, t_fdf *fdf)
 	char **arr;
 	int	 *map;
 	t_read *read;
+
 	line = NULL;
 	arr = NULL;
 	read = NULL;
 	map = NULL;
-	while (get_next_line(fd, &line))
+
+	while (get_next_line(fd, &line) == 1)
 	{
 		arr = ft_strsplit(line, ' ');
 		link_arr_node(&read, arr);
 		free(line);
 	}
-	map = map_coord(read, fdf);	
+	if (read)
+		map = map_coord(read, fdf);	
+	else
+		abort_fdf();
 	return (map);
 }
 
@@ -1472,6 +1486,7 @@ int main(int argc, char *argv[])
 	{
 		int fd;
 		fd = open(argv[1], O_RDONLY);
+		printf("fd: %d\n", fd);
 		if (fd < 0)
 		{
 			perror("Error");
