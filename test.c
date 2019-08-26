@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/25 19:07:42 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/26 08:01:43 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 ** Organize the plot function. (moved out of main)
 ** Create a struct to store plotting points ✓
 ** Reduce parameters in plot function
-** Create a parser
+** Create a parser ✓
 ** Create an init function ✓
 ** Create a color ramp ✓
 ** Create theme for color ramp✓
@@ -37,6 +37,7 @@
 ** Create help menu
 ** Create a reset button
 ** Handle error maps
+** Create a prototype for shell built in
 ** Create depth ✓
 ** If you're gonna do it, do it right.
 */
@@ -399,7 +400,6 @@ void	draw_help_menu(t_fdf *fdf)
 {
 	ft_memset(fdf->data_addr, 50, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
 //	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
-	fdf->help = false;
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 	mlx_string_put(fdf->mlx, fdf->win, 150, 150, FDF_WHITE, "HELP");
 }
@@ -432,6 +432,37 @@ int	draw(t_fdf *fdf, t_map *data)
 
 void	print_map(int *coord, int size, int mod);
 char	**ft_split(char *str);
+void	get_coefficient(int *map, t_fdf *fdf);
+int		*parse_1(int fd, t_fdf *fdf);
+void	shell_in(t_fdf *fdf)
+{
+	char *line;
+
+	line = NULL;
+	int fd = 0;
+	while (1)
+	{
+		get_next_line(1, &line);
+		fd = open(line, O_RDONLY);
+		if (ft_strcmp(line, "quit") == 0)
+		{
+			free(line);
+			break;
+		}
+		free(line);
+		if (fd > 0)
+		{
+			free(fdf->data->map);
+			fdf->data->map = parse_1(fd, fdf);
+		}
+		close(fd);
+	}
+	fdf->cam.zoom = -12.2123 * log(0.0000747893 * (fdf->data->map_size));
+	if (fdf->cam.zoom <= 0.0)
+		fdf->cam.zoom = 3.0;
+	fdf->cam.depth_f = fdf->cam.zoom;
+	get_coefficient(fdf->data->map, fdf);
+}
 int	key_control(int key, t_fdf *fdf)
 {
 	if (key == KEY_ESC)
@@ -442,7 +473,9 @@ int	key_control(int key, t_fdf *fdf)
 		if (fdf->cam.zoom < 3.0)
 			fdf->cam.zoom = 3.0;
 	}
-	else if (key == KEY_H)
+	else if (key == KEY_H && fdf->help == true)
+		fdf->help = false;
+	else if (key == KEY_H && fdf->help == false)
 		fdf->help = true;
 	else if (key == KEY_L_ARROW)
 		fdf->cam.x_offset -= 5;
@@ -452,6 +485,8 @@ int	key_control(int key, t_fdf *fdf)
 		fdf->cam.y_offset -= 5;
 	else if (key == KEY_D_ARROW)
 		fdf->cam.y_offset += 5;
+	else if (key == KEY_S)
+		shell_in(fdf);
 	draw(fdf, fdf->data);
 	if (fdf->help)
 		draw_help_menu(fdf);
@@ -1451,14 +1486,15 @@ int main(int argc, char *argv[])
 	fdf->cam.depth_f = fdf->cam.zoom;
 	get_coefficient(fdf->data->map, fdf);
 	draw(fdf, fdf->data);
+	
 
 	draw_menu(fdf);
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->win, 5, 0,mouse_release, fdf);
 	mlx_hook(fdf->win, 6, 0,mouse_move, fdf);
-	if (fdf->help)
-		draw_help_menu(fdf);
+//	if (fdf->help)
+//		draw_help_menu(fdf);
 	mlx_loop(fdf->mlx);
 	return (0);
 }
