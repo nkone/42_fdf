@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/25 00:09:40 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/25 18:55:18 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # define KEY_ESC	53
 # define KEY_I		34
 # define KEY_K		40
+# define KEY_H		4
 # define KEY_PLUS	24
 # define KEY_MINUS	27
 # define KEY_L_SQ_BRKT 33
@@ -244,10 +245,15 @@ typedef struct	s_cam
 {
 	double			zoom;
 	double			z_zoom;
+	double			depth_f;
 	double			z_accel;
 	double			alpha;
 	double			beta;
 	double			eta;
+	int				brightness;
+	bool			depth;
+	int				x_offset;
+	int				y_offset;
 	t_projection	projection;
 }				t_cam;
 
@@ -314,6 +320,7 @@ typedef struct		s_fdf
 	double		coef_b;
 	t_theme		theme;
 	t_mouse		mouse;
+	bool		help;
 }					t_fdf;
 
 typedef struct		s_read
