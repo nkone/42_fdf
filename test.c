@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/27 15:25:14 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/27 16:24:30 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,7 +515,7 @@ void	draw_help_mouse(int fd, t_fdf *fdf)
 
 	line = NULL;
 	y = WIN_H / 3;
-	while (y <= (WIN_H / 3 + (20 * 11)) && get_next_line(fd, &line) == 1)
+	while (y <= (WIN_H / 3 + (20 * 10)) && get_next_line(fd, &line) == 1)
 	{
 		mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 15, y, FDF_WHITE, line);
@@ -531,7 +531,7 @@ void	draw_help_description_view(int fd, t_fdf *fdf)
 
 	line = NULL;
 	y = WIN_H / 1.7;
-	while (y <= (WIN_H / 1.7 + (20 * 10)) && get_next_line(fd, &line) == 1)
+	while (y <= (WIN_H / 1.7 + (20 * 11)) && get_next_line(fd, &line) == 1)
 	{
 		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 15, y, FDF_WHITE, line);
 		free(line);
@@ -545,10 +545,42 @@ void	draw_help_description_theme(int fd, t_fdf *fdf)
 	int y;
 
 	line = NULL;
-	y = WIN_H / 1.3;
-	while (y <= (WIN_H / 1.3 + (20 * 7)) && get_next_line(fd, &line) == 1)
+	y = WIN_H / 1.25;
+	while (y <= (WIN_H / 1.25 + (20 * 7)) && get_next_line(fd, &line) == 1)
 	{
 		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 15, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_description_depth(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+	int len;
+
+	line = NULL;
+	y = WIN_H / 1.6;
+	while (y <= (WIN_H / 1.6 + (20 * 5)) && get_next_line(fd, &line) == 1)
+	{
+		len = ft_strlen(line);
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 1.9 - (5 * len), y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_description_brightness(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+	
+	line = NULL;
+	y = WIN_H / 1.3;
+	while (y <= (WIN_H / 1.3 + (20 * 4)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 2.5, y, FDF_WHITE, line);
 		free(line);
 		y += 20;
 	}
@@ -567,6 +599,8 @@ void	draw_help_menu(t_fdf *fdf)
 		draw_help_mouse(fd, fdf);
 		draw_help_description_view(fd, fdf);
 		draw_help_description_theme(fd, fdf);
+		draw_help_description_depth(fd, fdf);
+		draw_help_description_brightness(fd, fdf);
 	}
 	close(fd);
 	fdf->help = false;
