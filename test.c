@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/26 16:29:15 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/27 15:25:14 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 ** Create help menu
 ** Create a reset button
 ** Handle error maps
-** Create a prototype for shell built in
+** Create a prototype for shell built in ✓
 ** Create depth ✓
 ** Scaling buttons ...
 ** If you're gonna do it, do it right.
@@ -317,8 +317,8 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	p.y *= fdf->cam.zoom;
 //	p.z *= fdf->cam.z_zoom;
 	
-	p.x -= (fdf->data->map_w * fdf->cam.zoom) / 2;
-	p.y -= (fdf->data->map_h * fdf->cam.zoom) / 2;
+	p.x -= (float)(fdf->data->map_w * fdf->cam.zoom) / 2;
+	p.y -= (float)(fdf->data->map_h * fdf->cam.zoom) / 2;
 //	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
@@ -326,7 +326,7 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	if (fdf->cam.projection == ISO)
 		fdf_iso(&p.x, &p.y, p.z);
 	p.x += (WIN_W / 2) + fdf->cam.x_offset;//+ (WIN_H / 10);
-	p.y += (WIN_H / 2) + fdf->cam.y_offset;//- (WIN_W / 10);
+	p.y += (WIN_H / 2) + fdf->cam.y_offset;// + (fdf->data->map_h * 2;//- (WIN_W / 10);
 //	printf("(%.1f, %.1f, %d)\n", p.x, p.y, p.z);
 	return (p);
 }
@@ -356,7 +356,7 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 void	draw_bg(t_fdf *fdf)
 {
 	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
-	//ft_memset(fdf->data_addr, fdf->cam.brightness, WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	ft_memset(fdf->data_addr, fdf->cam.brightness, WIN_W * WIN_H * (fdf->bits_per_pix /8));
 	int x;
 	int *image;
 	int y;
@@ -371,38 +371,206 @@ void	draw_bg(t_fdf *fdf)
 	}
 }
 
+void	draw_view_menu(t_fdf *fdf)
+{
+	double h;
+
+	h = 7.5;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 50 + (12 * 4), WIN_H / h,
+		FDF_WHITE, "VIEW");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 30,
+		(fdf->cam.projection == ISO) ? FDF_RED: FDF_WHITE, "[ISO]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 5, WIN_H / h + 30,
+		(fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "[ELEVATION]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 16) + 5, WIN_H / h + 30,
+		(fdf->cam.projection == PARALLEL)? FDF_RED : FDF_WHITE, "[PARALLEL]");
+}
+
+void	draw_info_menu(t_fdf *fdf)
+{
+	double h;
+	char *buff;
+
+	h = 5;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 50 + (12 *4), WIN_H / h, FDF_WHITE, "INFO");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 50,
+		FDF_WHITE, "Rotation angle x:     y:     z:");
+	buff = ft_itoa(fdf->cam.alpha * 100);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 170, WIN_H / h + 50, FDF_WHITE, buff);
+	free(buff);
+	buff = ft_itoa(fdf->cam.beta * 100);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 240, WIN_H / h + 50, FDF_WHITE, buff);
+	free(buff);
+}
+
+void	draw_theme_menu(t_fdf *fdf)
+{
+	double h;
+
+	h = 2.35;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h,
+		FDF_WHITE, "THEME");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 10, WIN_H / h - 50,
+		(fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "|-[DEFAULT]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 10, WIN_H / h - 25,
+		(fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "|-[HOT]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 10, WIN_H / h + 25,
+		(fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "|-[COLD]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 10, WIN_H / h + 50,
+		(fdf->theme == CUSTOM) ? FDF_YELLOW : FDF_WHITE, "|-[CUSTOM]");
+}
+
+void	draw_depth_menu(t_fdf *fdf)
+{
+	double h;
+
+	h = 1.88;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h, FDF_WHITE, "DEPTH");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5) + 20, WIN_H / h,
+		(fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 9) + 40, WIN_H / h,
+		(!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 10, WIN_H / h + 50,
+		FDF_WHITE, "[-] BRIGHTNESS [+]");
+}
+
+void	draw_z_menu(t_fdf *fdf)
+{	
+	double h;
+
+	h = 1.5;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 85, WIN_H / h, FDF_WHITE, "Z ZOOM");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 25,
+		(fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "[x0.05]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 7) + 5, WIN_H / h + 25,
+		(fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "[x0.5]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 13) + 10, WIN_H / h + 25,
+		(fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "[x1.0]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 75, WIN_H / h + 75,
+		FDF_WHITE, "Z ACCEL +/-");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 100,
+		(fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "[0.05]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 7) + 5, WIN_H / h + 100,
+		(fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 13) + 10, WIN_H / h + 100,
+		(fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
+}
+
 void	draw_menu(t_fdf *fdf)
 {
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30, FDF_WHITE, "ESC");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W - (12 * 16), WIN_H / 30, FDF_WHITE, "Press h for help");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + 50 + (12 * 4), WIN_H / 30 + 100, FDF_WHITE, "VIEW");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + 150, (fdf->cam.projection == ISO) ? FDF_RED: FDF_WHITE, "[ISO]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 5, WIN_H / 30 + 150, (fdf->cam.projection == ELEVATION)? FDF_RED : FDF_WHITE, "[ELEVATION]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 16) + 5, WIN_H / 30 + 150, (fdf->cam.projection == PARALLEL)? FDF_RED : FDF_WHITE, "[PARALLEL]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + 400, FDF_WHITE, "THEME");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 10, WIN_H / 30 + 350, (fdf->theme == DEFAULT) ? FDF_RED : FDF_WHITE, "|-[DEFAULT]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 10, WIN_H / 30 + 400, (fdf->theme == HOT) ? FDF_ORANGE: FDF_WHITE, "|-[HOT]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 +	(12 * 5) + 10, WIN_H / 30 + 450, (fdf->theme == COLD) ? FDF_CORN_FLOWER_BLUE : FDF_WHITE, "|-[COLD]");
-	mlx_string_put(fdf->mlx, fdf->win, 140, 970, FDF_WHITE, "Z ZOOM");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 1000, (fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "[x0.05]");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 1000, (fdf->cam.z_zoom == 0.5) ? FDF_RED : FDF_WHITE, "[x0.5]");
-	mlx_string_put(fdf->mlx, fdf->win, 250, 1000, (fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "[x1.0]");
-	mlx_string_put(fdf->mlx, fdf->win, 140, 900, FDF_WHITE, "Z ACCEL +/-");
-	mlx_string_put(fdf->mlx, fdf->win, 50, 930, (fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "[0.05]");
-	mlx_string_put(fdf->mlx, fdf->win, 150, 930, (fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
-	mlx_string_put(fdf->mlx, fdf->win, 250, 930, (fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
-	mlx_string_put(fdf->mlx, fdf->win, 110, 850, FDF_WHITE, "[-] BRIGHTNESS [+]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30 + WIN_H / 2,  FDF_WHITE, "DEPTH");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 5) + 20, WIN_H / 30 + WIN_H / 2, (fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
-	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30 + (12 * 9) + 40, WIN_H / 30 + WIN_H / 2, (!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
+	draw_view_menu(fdf);
+	draw_info_menu(fdf);
+	draw_theme_menu(fdf);
+	draw_depth_menu(fdf);
+	draw_z_menu(fdf);
+}
+
+void	draw_help_title(int fd, t_fdf *fdf)
+{
+	char *line;
+	int		y;
+	int		len;
+
+	line = NULL;
+	y = 25;
+	while (y <= (25 + (20 * 7)) && get_next_line(fd, &line) == 1)
+	{
+		len = ft_strlen(line);
+		mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 2 - (5 * len), y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_mouse(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+
+	line = NULL;
+	y = WIN_H / 3;
+	while (y <= (WIN_H / 3 + (20 * 11)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 15, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_description_view(int fd, t_fdf *fdf)
+{
+	char *line;
+	int		y;
+
+	line = NULL;
+	y = WIN_H / 1.7;
+	while (y <= (WIN_H / 1.7 + (20 * 10)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 15, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_description_theme(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+
+	line = NULL;
+	y = WIN_H / 1.3;
+	while (y <= (WIN_H / 1.3 + (20 * 7)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 15, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
 }
 
 void	draw_help_menu(t_fdf *fdf)
 {
-	ft_memset(fdf->data_addr, 50, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
-//	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
+	int fd;
+
+	fd = open("help.txt", O_RDONLY);
+	ft_memset(fdf->data_addr, 25, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, 150, 150, FDF_WHITE, "HELP");
+	if (fd > 0)
+	{
+		draw_help_title(fd, fdf);
+		draw_help_mouse(fd, fdf);
+		draw_help_description_view(fd, fdf);
+		draw_help_description_theme(fd, fdf);
+	}
+	close(fd);
+	fdf->help = false;
+	
 }
 
 int	draw(t_fdf *fdf, t_map *data)
@@ -481,9 +649,7 @@ int	key_control(int key, t_fdf *fdf)
 		if (fdf->cam.zoom < 3.0)
 			fdf->cam.zoom = 3.0;
 	}
-	else if (key == KEY_H && fdf->help == true)
-		fdf->help = false;
-	else if (key == KEY_H && fdf->help == false)
+	else if (key == KEY_H)
 		fdf->help = true;
 	else if (key == KEY_L_ARROW)
 		fdf->cam.x_offset -= 5;
@@ -1472,6 +1638,8 @@ void	get_coefficient(int *map, t_fdf *fdf)
 	extract_min_max(map, &min, &max, fdf->data->map_size);
 	fdf->coef_m = (0.0 - 1.0) / (min - max);
 	fdf->coef_b = 1.0 - (fdf->coef_m * max);
+	fdf->min = min;
+	fdf->max = max;
 }
 	
 	
@@ -1502,14 +1670,15 @@ int main(int argc, char *argv[])
 	get_coefficient(fdf->data->map, fdf);
 	draw(fdf, fdf->data);
 	
-
+//	gradient_test(fdf);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0 , 0);
 	draw_menu(fdf);
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->win, 5, 0,mouse_release, fdf);
 	mlx_hook(fdf->win, 6, 0,mouse_move, fdf);
-//	if (fdf->help)
-//		draw_help_menu(fdf);
+	if (fdf->help)
+		draw_help_menu(fdf);
 	mlx_loop(fdf->mlx);
 	return (0);
 }
