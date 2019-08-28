@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/28 13:18:40 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/28 15:20:16 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -504,17 +504,17 @@ void	draw_z_accel_menu(t_fdf *fdf)
 {
 	double h;
 
-	h = 1.5;
+	h = 1.4;
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 75, WIN_H / h + 75, FDF_WHITE, "Z ACCEL +/-");
+		WIN_W / 30 + 75, WIN_H / h, FDF_WHITE, "Z ACCEL +/-");
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30, WIN_H / h + 100,
+		WIN_W / 30, WIN_H / h + 25,
 		(fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "[0.05]");
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + (12 * 7) + 5, WIN_H / h + 100,
+		WIN_W / 30 + (12 * 7) + 5, WIN_H / h + 25,
 		(fdf->cam.z_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + (12 * 13) + 10, WIN_H / h + 100,
+		WIN_W / 30 + (12 * 13) + 10, WIN_H / h + 25,
 		(fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
 }
 
@@ -524,7 +524,7 @@ void	draw_zoom_menu(t_fdf *fdf)
 
 	h = 1.25;
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 75, WIN_H / h, FDF_WHITE, "ZOOM +/-");
+		WIN_W / 30 + 50, WIN_H / h, FDF_WHITE, "ZOOM ACCEL +/-");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30, WIN_H / h + 25,
 		(fdf->cam.zoom_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
@@ -553,6 +553,13 @@ void	draw_after_img_menu(t_fdf *fdf)
 		(fdf->cam.after_img) ? FDF_RED : FDF_WHITE, "AFTER IMAGE MODE");
 }
 
+void	draw_utility_menu(t_fdf *fdf)
+{
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / 30, FDF_RED, "[ESC]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W - 200, WIN_H / 30, FDF_WHITE, "Press h for help");
+}
 void	draw_menu(t_fdf *fdf)
 {
 	draw_view_menu(fdf);
@@ -564,6 +571,7 @@ void	draw_menu(t_fdf *fdf)
 	draw_z_accel_menu(fdf);
 	draw_zoom_menu(fdf);
 	draw_after_img_menu(fdf);
+	draw_utility_menu(fdf);
 }
 
 void	draw_help_title(int fd, t_fdf *fdf)
@@ -781,13 +789,15 @@ void	shell_in(t_fdf *fdf)
 	fdf->cam.depth_f = fdf->cam.zoom;
 	get_coefficient(fdf->data->map, fdf);
 }
+
 int	key_control(int key, t_fdf *fdf)
 {
 	if (key == KEY_ESC)
 		exit(0);
 	else if (key == KEY_I || key == KEY_K)
 	{
-		fdf->cam.zoom += (key == KEY_I) ? 0.3 : -0.3;
+		fdf->cam.zoom += (key == KEY_I) ?
+			fdf->cam.zoom_accel : -fdf->cam.zoom_accel;
 		if (fdf->cam.zoom < 3.0)
 			fdf->cam.zoom = 3.0;
 	}
@@ -886,6 +896,7 @@ void	handle_theme_button_2(int x, int y, t_fdf *fdf)
 		switch_fdf_theme(fdf, CUSTOM);
 	}
 }
+
 void	handle_theme_button(int x, int y, t_fdf *fdf)
 {
 	double h;
@@ -920,7 +931,7 @@ void	handle_depth_button(int x, int y, t_fdf *fdf)
 	if (x >= WIN_W / 30 + 152 && x <= WIN_W / 30 + 194 &&
 		y >= WIN_H / h + 5 && y <=  WIN_H / h + 20)
 	{
-		ft_printf("Depth turned: ON\n");
+		ft_printf("Depth turned: OFF\n");
 		fdf->cam.depth = false;
 	}
 }
@@ -946,34 +957,89 @@ void	handle_brightness_button(int x, int y, t_fdf *fdf)
 	}
 }
 
-int		mouse_press(int button, int x, int y, t_fdf *fdf)
+void	handle_z_zoom_button(int x, int y, t_fdf *fdf)
 {
-	fdf->mouse.x = x;
-	fdf->mouse.y = y;
-	if (button == MOUSE_LEFT_B)
+	double h;
+
+	h = 1.5;
+	
+	if (x >= WIN_W / 30 + 3 && x <= WIN_W / 30 + 67 &&
+		y >= WIN_H / h + 31 && y <=  WIN_H / h + 45)
+		fdf->cam.z_zoom = 0.05;	
+	if (x >= WIN_W / 30 + 92 && x <= WIN_W / 30 + 145 &&
+		y >= WIN_H / h + 31 && y <=  WIN_H / h + 45)
+		fdf->cam.z_zoom = 0.5;
+	if (x >= WIN_W / 30 + 169 && x <= WIN_W / 30 + 223 &&
+		y >= WIN_H / h + 31 && y <=  WIN_H / h + 45)
+		fdf->cam.z_zoom = 1.0;
+}
+
+void	handle_z_accel_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 1.4;	
+	if (x >= WIN_W / 30 + 3 && x <= WIN_W / 30 + 57 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.z_accel = 0.05;
+	if (x >= WIN_W / 30 + 90 && x <= WIN_W / 30 + 135 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.z_accel = 0.5;
+	if (x >= WIN_W / 30 + 170 && x <= WIN_W / 30 + 213 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.z_accel = 1.0;
+}
+
+void	handle_zoom_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 1.25;	
+	if (x >= WIN_W / 30 + 3 && x <= WIN_W / 30 + 49 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.zoom_accel = 0.5;	
+	if (x >= WIN_W / 30 + 63 && x <= WIN_W / 30 + 107 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.zoom_accel = 1.0;
+	if (x >= WIN_W / 30 + 125 && x <= WIN_W / 30 + 167 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.zoom_accel = 2.0;
+	if (x >= WIN_W / 30 + 185 && x <= WIN_W / 30 + 226 &&
+		y >= WIN_H / h + 30 && y <=  WIN_H / h + 45)
+		fdf->cam.zoom_accel = 5.0;
+}
+
+void	handle_extra_button(int x, int y, t_fdf *fdf)
+{
+	if (x >= WIN_W / 30 && x <= WIN_W / 30 + 46 &&
+		y >= WIN_H / 30 + 5 && y <= WIN_H / 30 + 20)
+		exit(0);
+	if (x >= WIN_W / 30 && x <= WIN_W / 30 + 160 &&
+		y >= WIN_H - 45 && y <= WIN_H - 30 && fdf->cam.after_img == true)
 	{
-		fdf->mouse.left_b = true;
-		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
-			exit(0);
-		else if (x >= 50 && x <= 100 && y >= 1000 && y <= 1050)
-			fdf->cam.z_zoom = 0.05;
-		else if (x >= 150 && x <= 200 && y >= 1000 && y <= 1050)
-			fdf->cam.z_zoom = 0.5;
-		else if (x >= 250 && x <= 350 && y >= 1000 && y <= 1050)
-			fdf->cam.z_zoom = 1.0;
-		else if (x >= 50 && x <= 100 && y >= 930 && y <= 980)
-			fdf->cam.z_accel = 0.05;
-		else if (x >= 150 && x <= 200 && y >= 930 && y <= 980)
-			fdf->cam.z_accel = 0.5;
-		else if (x >= 250 && x <= 350 && y >= 930 && y <= 980)
-			fdf->cam.z_accel = 1.0;
-		handle_view_button(x, y, fdf);
-		handle_theme_button(x, y, fdf);
-		handle_depth_button(x, y, fdf);
-		handle_brightness_button(x, y, fdf);
+		fdf->cam.after_img = false; 
+		fdf->cam.brightness = 0;
 	}
-	if (button == MOUSE_RIGHT_B)
-		fdf->mouse.right_b = true;
+	else if (x >= WIN_W / 30 && x <= WIN_W / 30 + 160 &&
+		y >= WIN_H - 45 && y <= WIN_H - 30 && fdf->cam.after_img == false)
+		fdf->cam.after_img = true;
+}
+
+void	handle_mouse_leftb(int x, int y, t_fdf *fdf)
+{
+	fdf->mouse.left_b = true;
+	handle_view_button(x, y, fdf);
+	handle_theme_button(x, y, fdf);
+	handle_depth_button(x, y, fdf);
+	handle_brightness_button(x, y, fdf);
+	handle_z_zoom_button(x, y, fdf);
+	handle_z_accel_button(x, y, fdf);
+	handle_zoom_button(x, y, fdf);
+	handle_extra_button(x, y, fdf);
+}
+
+void	handle_mouse_right_b(int button, t_fdf *fdf)
+{
 	if (!fdf->mouse.right_b && button == MOUSE_SCROLL_UP)
 		fdf->cam.z_zoom += fdf->cam.z_accel;
 	if (!fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
@@ -982,6 +1048,17 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 		fdf->cam.zoom += fdf->cam.zoom_accel;
 	if (fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
 		fdf->cam.zoom -= fdf->cam.zoom_accel;
+}
+
+int		mouse_press(int button, int x, int y, t_fdf *fdf)
+{
+	fdf->mouse.x = x;
+	fdf->mouse.y = y;
+	if (button == MOUSE_LEFT_B)
+		handle_mouse_leftb(x, y, fdf);
+	if (button == MOUSE_RIGHT_B)
+		fdf->mouse.right_b = true;
+	handle_mouse_right_b(button, fdf);
 	draw(fdf, fdf->data);
 	if (fdf->help)
 		draw_help_menu(fdf);
@@ -1713,7 +1790,7 @@ int	check_map_width(t_read *read)
 	return (w);
 }
 
-int	check_map_height (t_read *read)
+int	check_map_height(t_read *read)
 {
 	int map_h;
 
