@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/27 21:12:36 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/28 13:03:07 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -463,7 +463,7 @@ void	draw_depth_menu(t_fdf *fdf)
 		WIN_W / 30, WIN_H / h, FDF_WHITE, "DEPTH");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + (12 * 5) + 20, WIN_H / h,
-		(fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[ON]");
+		(fdf->cam.depth) ? FDF_GREEN_YELLOW : FDF_WHITE, "[ON]");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + (12 * 9) + 40, WIN_H / h,
 		(!fdf->cam.depth) ? FDF_RED: FDF_WHITE, "[OFF]");
@@ -905,6 +905,26 @@ void	handle_theme_button(int x, int y, t_fdf *fdf)
 	}
 	handle_theme_button_2(x, y, fdf);
 }
+
+void	handle_depth_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 1.88;
+	if (x >= WIN_W / 30 + 84 && x <= WIN_W / 30 + 117 &&
+		y >= WIN_H / h + 5 && y <=  WIN_H / h + 20)
+	{
+		ft_printf("Depth turned: ON\n");
+		fdf->cam.depth = true;
+	}
+	if (x >= WIN_W / 30 + 152 && x <= WIN_W / 30 + 194 &&
+		y >= WIN_H / h + 5 && y <=  WIN_H / h + 20)
+	{
+		ft_printf("Depth turned: ON\n");
+		fdf->cam.depth = false;
+	}
+}
+
 int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	fdf->mouse.x = x;
@@ -930,12 +950,9 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.brightness -= 5;
 		else if (x >= 230 && x <= 250 && y >= 840 && y <= 880)
 			fdf->cam.brightness += 5;
-		else if (x >= 150 && x <= 170 && y >= 700 && y <= 800)
-			fdf->cam.depth = true;
-		else if (x >= 250 && x <= 300 && y >= 700 && y <= 800)
-			fdf->cam.depth = false;
 		handle_view_button(x, y, fdf);
 		handle_theme_button(x, y, fdf);
+		handle_depth_button(x, y, fdf);
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
