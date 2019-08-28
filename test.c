@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/27 16:24:30 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:04:49 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ t_rgb	apply_depth(double z, t_rgb rgb, t_fdf *fdf)
 	return (rgb);
 }
 
-void	apply_brightness(t_rgb *rgb, double brightness)
+void	apply_brightness(t_rgb *rgb, int brightness)
 {
 	rgb->r += brightness;
 	if (rgb->r > 255)
@@ -355,20 +355,11 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 
 void	draw_bg(t_fdf *fdf)
 {
-	ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
-	ft_memset(fdf->data_addr, fdf->cam.brightness, WIN_W * WIN_H * (fdf->bits_per_pix /8));
-	int x;
-	int *image;
-	int y;
-
-	image = (int *)fdf->data_addr;
-	y = 50;
-	while (y++ < 75) // Plot escape button
-	{
-		x = 40;
-		while (x++ < 90)
-			plot_pixel(fdf, x, y, FDF_GRAY);
-	}
+	if (fdf->cam.after_img && fdf->cam.brightness < 0)
+		ft_memset(fdf->data_addr, fdf->cam.brightness,
+				WIN_W * WIN_H * (fdf->bits_per_pix /8));
+	else
+		ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix /8));
 }
 
 void	draw_view_menu(t_fdf *fdf)
@@ -390,24 +381,51 @@ void	draw_view_menu(t_fdf *fdf)
 		(fdf->cam.projection == PARALLEL)? FDF_RED : FDF_WHITE, "[PARALLEL]");
 }
 
-void	draw_info_menu(t_fdf *fdf)
+void	draw_info_angle_menu(t_fdf *fdf)
 {
-	double h;
-	char *buff;
+	double	h;
+	char	*buff;
 
-	h = 5;
+	h = 4.7;
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 50 + (12 *4), WIN_H / h, FDF_WHITE, "INFO");
+		WIN_W / 30 + 50 + (12 * 4), WIN_H / h, FDF_WHITE, "INFO");
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30, WIN_H / h + 50,
+		WIN_W / 30, WIN_H / h + 30,
 		FDF_WHITE, "Rotation angle x:     y:     z:");
 	buff = ft_itoa(fdf->cam.alpha * 100);
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 170, WIN_H / h + 50, FDF_WHITE, buff);
+		WIN_W / 30 + 170, WIN_H / h + 30,
+		(fdf->cam.alpha <= 0.0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
 	free(buff);
 	buff = ft_itoa(fdf->cam.beta * 100);
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 240, WIN_H / h + 50, FDF_WHITE, buff);
+		WIN_W / 30 + 240, WIN_H / h + 30,
+		(fdf->cam.beta <= 0.0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
+	free(buff);
+	buff = ft_itoa(fdf->cam.eta * 100);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 310, WIN_H / h + 30,
+		(fdf->cam.eta <= 0.0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
+	free(buff);
+}
+
+void	draw_info_min_max_menu(t_fdf *fdf)
+{
+	double h;
+	char *buff;
+	
+	h = 4.7;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 60, FDF_WHITE, "Min:    Max:");
+	buff = ft_itoa(fdf->min);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 40, WIN_H / h + 60,
+		(fdf->min < 0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
+	free(buff);
+	buff = ft_itoa(fdf->max);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 120, WIN_H / h + 60,
+		(fdf->max < 0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
 	free(buff);
 }
 
@@ -436,6 +454,7 @@ void	draw_theme_menu(t_fdf *fdf)
 void	draw_depth_menu(t_fdf *fdf)
 {
 	double h;
+	char *buff;
 
 	h = 1.88;
 	mlx_string_put(fdf->mlx, fdf->win,
@@ -449,15 +468,24 @@ void	draw_depth_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + 10, WIN_H / h + 50,
 		FDF_WHITE, "[-] BRIGHTNESS [+]");
+	buff = ft_itoa(fdf->cam.brightness);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 95, WIN_H / h + 70, FDF_WHITE, buff);
+	free(buff);
 }
 
-void	draw_z_menu(t_fdf *fdf)
-{	
-	double h;
+void	draw_z_zoom_menu(t_fdf *fdf)
+{
+	double	h;
+	char	*buff;
 
 	h = 1.5;
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 85, WIN_H / h, FDF_WHITE, "Z ZOOM");
+		WIN_W / 30 + 85, WIN_H / h, FDF_WHITE, "Z ZOOM x");
+	buff = ft_itoa(fdf->cam.z_zoom);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 170, WIN_H /h,
+		(fdf->cam.z_zoom <= 0.0) ? FDF_RED : FDF_GREEN_YELLOW, buff);
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30, WIN_H / h + 25,
 		(fdf->cam.z_zoom == 0.05) ? FDF_RED : FDF_WHITE, "[x0.05]");
@@ -467,9 +495,16 @@ void	draw_z_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + (12 * 13) + 10, WIN_H / h + 25,
 		(fdf->cam.z_zoom == 1.0) ? FDF_RED : FDF_WHITE, "[x1.0]");
+	free(buff);
+}
+
+void	draw_z_accel_menu(t_fdf *fdf)
+{
+	double h;
+
+	h = 1.5;
 	mlx_string_put(fdf->mlx, fdf->win,
-		WIN_W / 30 + 75, WIN_H / h + 75,
-		FDF_WHITE, "Z ACCEL +/-");
+		WIN_W / 30 + 75, WIN_H / h + 75, FDF_WHITE, "Z ACCEL +/-");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30, WIN_H / h + 100,
 		(fdf->cam.z_accel == 0.05) ? FDF_RED : FDF_WHITE, "[0.05]");
@@ -481,13 +516,52 @@ void	draw_z_menu(t_fdf *fdf)
 		(fdf->cam.z_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
 }
 
+void	draw_zoom_menu(t_fdf *fdf)
+{
+	double h;
+
+	h = 1.25;
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 75, WIN_H / h, FDF_WHITE, "ZOOM +/-");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H / h + 25,
+		(fdf->cam.zoom_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 5), WIN_H / h + 25,
+		(fdf->cam.zoom_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 10), WIN_H / h + 25,
+		(fdf->cam.zoom_accel == 2.0) ? FDF_RED : FDF_WHITE, "[2.0]");
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + (12 * 15), WIN_H / h + 25,
+		(fdf->cam.zoom_accel == 5.0) ? FDF_RED : FDF_WHITE, "[5.0]");
+}
+void	draw_after_img_menu(t_fdf *fdf)
+{
+	char *warning;
+	int len;
+
+	warning = "[ AFTER IMAGE MODE ENABLED ]";
+	len = ft_strlen(warning);
+	if (fdf->cam.after_img)
+		mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 2 - (5 * len), 20, FDF_RED, warning);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30, WIN_H - 50,
+		(fdf->cam.after_img) ? FDF_RED : FDF_WHITE, "AFTER IMAGE MODE");
+}
+
 void	draw_menu(t_fdf *fdf)
 {
 	draw_view_menu(fdf);
-	draw_info_menu(fdf);
+	draw_info_angle_menu(fdf);
+	draw_info_min_max_menu(fdf);
 	draw_theme_menu(fdf);
 	draw_depth_menu(fdf);
-	draw_z_menu(fdf);
+	draw_z_zoom_menu(fdf);
+	draw_z_accel_menu(fdf);
+	draw_zoom_menu(fdf);
+	draw_after_img_menu(fdf);
 }
 
 void	draw_help_title(int fd, t_fdf *fdf)
@@ -586,6 +660,36 @@ void	draw_help_description_brightness(int fd, t_fdf *fdf)
 	}
 }
 
+void	draw_help_description_z_zoom(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+
+	line = NULL;
+	y = WIN_H / 1.6;
+	while (y <= (WIN_H / 1.6 + (20 * 3)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 1.5, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_description_z_accel(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+
+	line = NULL;
+	y = WIN_H / 1.4;
+	while (y <= (WIN_H / 1.4 + (20 * 4)) && get_next_line(fd, &line) == 1)
+	{
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 1.5, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
 void	draw_help_menu(t_fdf *fdf)
 {
 	int fd;
@@ -601,6 +705,8 @@ void	draw_help_menu(t_fdf *fdf)
 		draw_help_description_theme(fd, fdf);
 		draw_help_description_depth(fd, fdf);
 		draw_help_description_brightness(fd, fdf);
+		draw_help_description_z_zoom(fd, fdf);
+		draw_help_description_z_accel(fd, fdf);
 	}
 	close(fd);
 	fdf->help = false;
@@ -641,7 +747,7 @@ int		*parse_1(int fd, t_fdf *fdf);
 
 
 /*
-** main shell function
+** main shell function (prototype)
 */
 
 void	shell_in(t_fdf *fdf)
@@ -784,9 +890,9 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 	if (!fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
 		fdf->cam.z_zoom -= fdf->cam.z_accel;
 	if (fdf->mouse.right_b && button ==  MOUSE_SCROLL_UP)
-		fdf->cam.zoom += 0.5;
+		fdf->cam.zoom += fdf->cam.zoom_accel;
 	if (fdf->mouse.right_b && button == MOUSE_SCROLL_DOWN)
-		fdf->cam.zoom -= 0.5;
+		fdf->cam.zoom -= fdf->cam.zoom_accel;
 	draw(fdf, fdf->data);
 	if (fdf->help)
 		draw_help_menu(fdf);
@@ -943,10 +1049,10 @@ void	fdf_theme_default(t_ramp **ramp)
 	color_ramp(ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
 	color_ramp(ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE); 
 	color_ramp(ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE); 
-	color_ramp(ramp, FDF_AZURE, 10, FDF_POWDER_BLUE); 
-	color_ramp(ramp, FDF_POWDER_BLUE, 10, FDF_YELLOW_GREEN);
-//	color_ramp(ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON); 
-//	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
+//	color_ramp(ramp, FDF_AZURE, 10, FDF_POWDER_BLUE); 
+//	color_ramp(ramp, FDF_POWDER_BLUE, 10, FDF_YELLOW_GREEN);
+	color_ramp(ramp, FDF_AZURE, 10, FDF_MOCCASIN); 
+	color_ramp(ramp, FDF_MOCCASIN, 10, FDF_YELLOW_GREEN);
 	color_ramp(ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
 	color_ramp(ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
 	color_ramp(ramp, FDF_MAROON, 10, FDF_SIENNA);
@@ -1073,13 +1179,15 @@ t_cam	fdf_cam_init(void)
 	t_cam cam;
 
 	cam.zoom = 50.0;
+	cam.zoom_accel = 0.5;
 	cam.z_zoom = 1.0;
 	cam.z_accel = 0.05;
 	cam.alpha = 0.0;
 	cam.beta = 0.0;
 	cam.eta = 0.0;
-	cam.brightness = 1.0;
+	cam.brightness = 0;
 	cam.depth = false;
+	cam.after_img = false;
 	cam.x_offset = 0;
 	cam.y_offset = 0;
 	cam.projection = ISO;
@@ -1705,7 +1813,7 @@ int main(int argc, char *argv[])
 	draw(fdf, fdf->data);
 	
 //	gradient_test(fdf);
-	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0 , 0);
+//	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0 , 0);
 	draw_menu(fdf);
 	mlx_hook(fdf->win, 2, 0, key_control, fdf);
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
