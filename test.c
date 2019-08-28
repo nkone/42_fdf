@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/28 13:03:07 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/28 13:18:40 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -925,6 +925,27 @@ void	handle_depth_button(int x, int y, t_fdf *fdf)
 	}
 }
 
+void	handle_brightness_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+	
+	h = 1.88;
+	if (x >= WIN_W / 30 + 16 && x <= WIN_W / 30 + 36 &&
+		y >= WIN_H / h + 55 && y <=  WIN_H / h + 70)
+	{
+		fdf->cam.brightness -= 5;	
+		if (fdf->cam.after_img == false && fdf->cam.brightness < 0)
+			fdf->cam.brightness = 0;
+	}
+	if (x >= WIN_W / 30 + 163 && x <= WIN_W / 30 + 186 &&
+		y >= WIN_H / h + 55 && y <=  WIN_H / h + 70)
+	{
+		fdf->cam.brightness += 5;
+		if (fdf->cam.brightness > 255)
+			fdf->cam.brightness = 255;
+	}
+}
+
 int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	fdf->mouse.x = x;
@@ -946,13 +967,10 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.z_accel = 0.5;
 		else if (x >= 250 && x <= 350 && y >= 930 && y <= 980)
 			fdf->cam.z_accel = 1.0;
-		else if (x >= 110 && x <= 130 && y >= 840 && y <= 880)
-			fdf->cam.brightness -= 5;
-		else if (x >= 230 && x <= 250 && y >= 840 && y <= 880)
-			fdf->cam.brightness += 5;
 		handle_view_button(x, y, fdf);
 		handle_theme_button(x, y, fdf);
 		handle_depth_button(x, y, fdf);
+		handle_brightness_button(x, y, fdf);
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
