@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/27 20:04:49 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/27 20:45:02 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 ** Handle error maps
 ** Create a prototype for shell built in ✓
 ** Create depth ✓
+** Letter height is about 27 Width is about 12
 ** Scaling buttons ...
 ** If you're gonna do it, do it right.
 */
@@ -218,6 +219,7 @@ void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 		}
 	}
 }
+
 t_rgb	apply_depth(double z, t_rgb rgb, t_fdf *fdf)
 {
 	double percent;
@@ -822,7 +824,50 @@ void	switch_fdf_theme(t_fdf *fdf, int theme)
 	fdf->ramp = fdf_index_color_ramp(fdf->ramp_list);
 	fdf->ramp_size = count_ramp(fdf->ramp_list);
 }
-		
+
+void	handle_view_button_2(int x, int y, t_fdf *fdf)
+{
+	double h;
+	
+	h = 7.5;
+	
+	if (x >= WIN_W / 30 + 201 && x <= WIN_W / 30 + 293 &&
+		y >= WIN_H / h + 37 && y <= WIN_H / h + 50)
+	{
+		ft_printf("View switched to: PARALLEL\n");
+		fdf->cam.projection = PARALLEL;
+		fdf->cam.alpha = 0.0;
+		fdf->cam.beta = 0.0;
+		fdf->cam.eta = 0.0;
+	}
+}
+
+void	handle_view_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 7.5;
+	if (x >= WIN_W / 30 + 3 && x <= WIN_W / 30 + 48 &&
+		y >= WIN_H / h + 37 && y <= WIN_H / h + 50)
+	{
+		ft_printf("View switched to: ISO\n");
+		fdf->cam.projection = ISO;
+		fdf->cam.alpha = 0.0;
+		fdf->cam.beta = 0.0;
+		fdf->cam.eta = 0.0;
+	}
+	if (x >= WIN_W / 30 + 69 && x <= WIN_W / 30 + 171 &&
+		y >= WIN_H / h + 37 && y <= WIN_H / h + 50)
+	{
+		ft_printf("View switched to: ELEVATION\n");
+		fdf->cam.projection = ELEVATION;
+		fdf->cam.alpha = -7.855;
+		fdf->cam.beta = 0.0;
+		fdf->cam.eta = 0.0;
+	}
+	handle_view_button_2(x, y, fdf);
+}
+
 int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	fdf->mouse.x = x;
@@ -832,30 +877,6 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 		fdf->mouse.left_b = true;
 		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
 			exit(0);
-		else if (x >= 320 && x <= 420 && y >= 300 && y <= 350)
-		{
-			puts("View switched to: PARALLEL");
-			fdf->cam.projection = PARALLEL;
-			fdf->cam.alpha = 0.0;
-			fdf->cam.beta = 0.0;
-			fdf->cam.eta = 0.0;
-		}
-		else if (x >= 100 && x <= 150 && y >= 300 && y <= 350)
-		{
-			puts("View switched to: ISO");
-			fdf->cam.projection = ISO;
-			fdf->cam.alpha = 0.0;
-			fdf->cam.beta = 0.0;
-			fdf->cam.eta = 0.0;
-		}
-		else if (x >= 220 && x <= 300 && y >= 300 && y <= 350)
-		{
-			puts("View switched to: ELEVATION");
-			fdf->cam.projection = ELEVATION;
-			fdf->cam.alpha = -7.855;
-			fdf->cam.beta = 0.0;
-			fdf->cam.eta = 0.0;
-		}
 		else if (x >= 50 && x <= 150 && y >= 500 && y <= 540)
 			switch_fdf_theme(fdf, DEFAULT);
 		else if (x >= 50 && x <= 100 && y >= 550 && y <= 590)
@@ -882,6 +903,7 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 			fdf->cam.depth = true;
 		else if (x >= 250 && x <= 300 && y >= 700 && y <= 800)
 			fdf->cam.depth = false;
+		handle_view_button(x, y, fdf);
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
