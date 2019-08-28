@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/27 20:45:02 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/27 21:12:36 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -868,6 +868,43 @@ void	handle_view_button(int x, int y, t_fdf *fdf)
 	handle_view_button_2(x, y, fdf);
 }
 
+void	handle_theme_button_2(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 2.35;	
+	if (x >= WIN_W / 30 + 94 && x <= WIN_W / 30 + 148 &&
+		y >= WIN_H / h + 30 && y <= WIN_H / h + 45)
+	{
+		ft_printf("Theme switched to: COLD\n");
+		switch_fdf_theme(fdf, COLD);
+	}
+	if (x >= WIN_W / 30 + 94 && x <= WIN_W / 30 + 166 &&
+		y >= WIN_H / h + 55 && y <= WIN_H / h + 70)
+	{
+		ft_printf("Theme switched to: CUSTOM\n");
+		switch_fdf_theme(fdf, CUSTOM);
+	}
+}
+void	handle_theme_button(int x, int y, t_fdf *fdf)
+{
+	double h;
+
+	h = 2.35;
+	if (x >= WIN_W / 30 + 94 && x <= WIN_W / 30 + 176 &&
+		y >= WIN_H / h - 45 && y <= WIN_H / h - 30)
+	{
+		ft_printf("Theme switched to: DEFAULT\n");
+		switch_fdf_theme(fdf, DEFAULT);
+	}
+	if (x >= WIN_W / 30 + 94 && x <= WIN_W / 30 + 136 &&
+		y >= WIN_H / h - 20 && y <= WIN_H / h - 5)
+	{
+		ft_printf("Theme switched to: HOT\n");
+		switch_fdf_theme(fdf, HOT);
+	}
+	handle_theme_button_2(x, y, fdf);
+}
 int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	fdf->mouse.x = x;
@@ -877,12 +914,6 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 		fdf->mouse.left_b = true;
 		if (x >= 50 && x <= 100 && y >= 50 && y <= 100)
 			exit(0);
-		else if (x >= 50 && x <= 150 && y >= 500 && y <= 540)
-			switch_fdf_theme(fdf, DEFAULT);
-		else if (x >= 50 && x <= 100 && y >= 550 && y <= 590)
-			switch_fdf_theme(fdf, HOT);	
-		else if (x >= 50 && x <= 100 && y >= 600 && y <= 640)
-			switch_fdf_theme(fdf, COLD);
 		else if (x >= 50 && x <= 100 && y >= 1000 && y <= 1050)
 			fdf->cam.z_zoom = 0.05;
 		else if (x >= 150 && x <= 200 && y >= 1000 && y <= 1050)
@@ -904,6 +935,7 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 		else if (x >= 250 && x <= 300 && y >= 700 && y <= 800)
 			fdf->cam.depth = false;
 		handle_view_button(x, y, fdf);
+		handle_theme_button(x, y, fdf);
 	}
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
