@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/30 18:00:37 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/28 15:20:16 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/28 19:36:52 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,16 @@
 ** Test out the color ramp with 42 map ✓
 ** Find a way to centralize the map with any size (somewhat lol)
 ** Make a menu ✓
-** Fix button mapping
-** Create help menu
+** Fix button mapping ✓
+** Create help menu ✓
 ** Create a reset button
 ** Handle error maps
 ** Create a prototype for shell built in ✓
 ** Create depth ✓
 ** Letter height is about 27 Width is about 12
 ** Scaling buttons ...
+** Create a python program to extract bmp to fdf
+** Map key buttons
 ** If you're gonna do it, do it right.
 */
 
@@ -260,6 +262,7 @@ void	apply_brightness(t_rgb *rgb, int brightness)
 	rgb->rgb = (rgb->rgb << 8) + rgb->g;
 	rgb->rgb = (rgb->rgb << 8) + rgb->b;
 }
+
 void	plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 {
 	t_var var;
@@ -700,6 +703,32 @@ void	draw_help_description_z_accel(int fd, t_fdf *fdf)
 	}
 }
 
+void	draw_help_button(int fd, t_fdf *fdf)
+{
+	char *line;
+	int y;
+	
+	line = NULL;
+	y = WIN_H / 3;
+	while (y <= (WIN_H / 3 + (20 * 11)) && get_next_line(fd, &line) == 1)
+	{
+		
+		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 2, y, FDF_WHITE, line);
+		free(line);
+		y += 20;
+	}
+}
+
+void	draw_help_utility(int fd, t_fdf *fdf)
+{
+	char *line;
+	
+	line = NULL;
+	get_next_line(fd, &line);
+	mlx_string_put(fdf->mlx, fdf->win, WIN_W / 30, WIN_H / 30, FDF_WHITE, line);
+	free(line);
+}
+
 void	draw_help_menu(t_fdf *fdf)
 {
 	int fd;
@@ -717,10 +746,10 @@ void	draw_help_menu(t_fdf *fdf)
 		draw_help_description_brightness(fd, fdf);
 		draw_help_description_z_zoom(fd, fdf);
 		draw_help_description_z_accel(fd, fdf);
+		draw_help_button(fd, fdf);
+		draw_help_utility(fd, fdf);
 	}
-	close(fd);
-	fdf->help = false;
-	
+	close(fd);	
 }
 
 int	draw(t_fdf *fdf, t_map *data)
@@ -790,20 +819,27 @@ void	shell_in(t_fdf *fdf)
 	get_coefficient(fdf->data->map, fdf);
 }
 
-int	key_control(int key, t_fdf *fdf)
+void	handle_esc_key(t_fdf *fdf)
 {
-	if (key == KEY_ESC)
+	if (fdf->help)
+		fdf->help = false;
+	else
 		exit(0);
-	else if (key == KEY_I || key == KEY_K)
-	{
-		fdf->cam.zoom += (key == KEY_I) ?
-			fdf->cam.zoom_accel : -fdf->cam.zoom_accel;
-		if (fdf->cam.zoom < 3.0)
-			fdf->cam.zoom = 3.0;
-	}
-	else if (key == KEY_H)
-		fdf->help = true;
-	else if (key == KEY_L_ARROW)
+}
+
+void	handle_zoom_key(int key, t_fdf *fdf)
+{
+	fdf->help = false;	
+	fdf->cam.zoom += (key == KEY_I) ?
+		fdf->cam.zoom_accel : -fdf->cam.zoom_accel;
+	if (fdf->cam.zoom < 3.0)
+		fdf->cam.zoom = 3.0;
+}
+
+void	handle_arrow_key(int key, t_fdf *fdf)
+{
+	fdf->help = false;
+	if (key == KEY_L_ARROW)
 		fdf->cam.x_offset -= 5;
 	else if (key == KEY_R_ARROW)
 		fdf->cam.x_offset += 5;
@@ -811,8 +847,25 @@ int	key_control(int key, t_fdf *fdf)
 		fdf->cam.y_offset -= 5;
 	else if (key == KEY_D_ARROW)
 		fdf->cam.y_offset += 5;
-	else if (key == KEY_S)
+}
+
+int	key_control(int key, t_fdf *fdf)
+{
+	if (key == KEY_ESC)
+		handle_esc_key(fdf);
+	else if (key == KEY_I || key == KEY_K)
+		handle_zoom_key(key, fdf);
+	else if (key == KEY_H && fdf->help == false)
+		fdf->help = true;
+	else if (key == KEY_H && fdf->help == true)
+		fdf->help = false;
+	else if (key == KEY_L_ARROW || key == KEY_R_ARROW
+			|| key == KEY_U_ARROW || key == KEY_D_ARROW)
+		handle_arrow_key(key, fdf);
+	else if (key == KEY_S && fdf->help == false)
 		shell_in(fdf);
+	else
+		fdf->help = false;
 	draw(fdf, fdf->data);
 	if (fdf->help)
 		draw_help_menu(fdf);
@@ -821,6 +874,7 @@ int	key_control(int key, t_fdf *fdf)
 
 t_ramp *fdf_gen_color_ramp(t_fdf *fdf);
 void	**fdf_index_color_ramp(t_ramp *ramp);
+
 void	switch_fdf_theme(t_fdf *fdf, int theme)
 {
 	int i;
@@ -1054,14 +1108,15 @@ int		mouse_press(int button, int x, int y, t_fdf *fdf)
 {
 	fdf->mouse.x = x;
 	fdf->mouse.y = y;
+	fdf->help = false;
 	if (button == MOUSE_LEFT_B)
 		handle_mouse_leftb(x, y, fdf);
 	if (button == MOUSE_RIGHT_B)
 		fdf->mouse.right_b = true;
 	handle_mouse_right_b(button, fdf);
 	draw(fdf, fdf->data);
-	if (fdf->help)
-		draw_help_menu(fdf);
+	//if (fdf->help)
+	//	draw_help_menu(fdf);
 	return (0);
 }
 
