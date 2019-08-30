@@ -6,16 +6,15 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/29 21:06:37 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/29 21:53:59 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_FDF_H
 # define FT_FDF_H
 
-# include <stdbool.h>
-# include <sys/types.h>
-# include <stdio.h>
+# include "../minilibx_macos/mlx.h"
+# include "../libft/libft.h"
 
 # define WIN_H		1080
 # define WIN_W		1920
@@ -363,14 +362,15 @@ void		handle_extra_button(int x, int y, t_fdf *fdf);
 ** button_mapping_theme.c
 */
 
-static void	handle_theme_button_2(int x, int y, t_fdf *fdf);
+void		handle_theme_button_2(int x, int y, t_fdf *fdf);
 void		handle_theme_button(int x, int y, t_fdf *fdf);
+void		switch_fdf_theme(t_fdf *fdf, int theme);
 
 /*
 ** button_mapping_view.c
 */
 
-static void	handle_view_button_2(int x, int y, t_fdf *fdf);
+void		handle_view_button_2(int x, int y, t_fdf *fdf);
 void		handle_view_button(int x, int y, t_fdf *fdf);
 
 /*
@@ -398,6 +398,7 @@ t_ramp		*create_ramp_node(t_rgb rgb);
 int			count_ramp(t_ramp *ramp);
 void		**fdf_index_color_ramp(t_ramp *ramp);
 void		free_color_ramp(t_ramp *ramp);
+int			get_color_index(int z, int size); 
 
 /*
 ** draw_help_1.c
@@ -456,6 +457,7 @@ void		draw_menu(t_fdf *fdf);
 ** fdf_initializers.c
 */
 
+t_map		*fdf_init_data_struct(void);
 t_cam		fdf_cam_init(void);
 t_mouse		mouse_init(void);
 t_fdf		*fdf_init(void);
@@ -464,9 +466,18 @@ t_fdf		*fdf_init(void);
 ** fdf_parser.c
 */
 
-static void	create_arr_node(t_read **head, char **block);
-static void link_arr_node(t_read **head, char **block);
-int			parse_fdf(int fd, t_fdf *fdf);
+void		create_arr_node(t_read **head, char **block);
+void		link_arr_node(t_read **head, char **block);
+int			*parse_fdf(int fd, t_fdf *fdf);
+
+/*
+** fdf_minishell.c
+*/
+
+void		shell_in(t_fdf *fdf);
+int			check_input(char **input, t_fdf *fdf);
+void		shell_info(t_fdf *fdf);
+void		free_input(char **input);
 
 /*
 ** fdf_theme.c
@@ -479,13 +490,18 @@ void		fdf_theme_custom(t_ramp **ramp);
 t_ramp		*fdf_gen_color_ramp(t_fdf *fdf);
 
 /*
+** fdf_utility.c
+*/
+
+int			abort_fdf(void);
+/*
 ** keyboard_mapping.c
 */
 
 void		handle_esc_key(t_fdf *fdf);
-void		handle_zoom_key(t_fdf *fdf);
-void		handle_arrow_key(t_fdf *fdf);
-void		key_control(t_fdf *fdf);
+void		handle_zoom_key(int key, t_fdf *fdf);
+void		handle_arrow_key(int key, t_fdf *fdf);
+int			key_control(int key, t_fdf *fdf);
 
 /*
 ** map_fdf.c
@@ -495,17 +511,17 @@ int			count_arr_width(char **arr);
 int			check_map_width(t_read *read);
 int			check_map_height(t_read *read);
 int			get_map_size(t_read *read, t_fdf *fdf);
-int			map_coord(t_read *read, t_fdf *fdf);
+int			*map_coord(t_read *read, t_fdf *fdf);
 
 /*
 ** mouse_handler.c
 */
 
 void		handle_mouse_left_b(int x, int y, t_fdf *fdf);
-void		handle_mouse_right_b(int x, int y, t_fdf *fdf);
-void		mouse_press(int x, int y, t_fdf *fdf);
-void		mouse_release(int x, int y, t_fdf *fdf);
-void		mouse_move(int x, int y, t_fdf *fdf);
+void		handle_mouse_right_b(int button, t_fdf *fdf);
+int			mouse_press(int button, int x, int y, t_fdf *fdf);
+int			mouse_release(int button, int x, int y, t_fdf *fdf);
+int			mouse_move(int x, int y, t_fdf *fdf);
 
 /*
 ** plot_init.c
@@ -519,9 +535,9 @@ void		plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1);
 ** plot_main.c
 */
 
-static void	plot_main_steep(t_fdf *fdf, tvar var, t_rgb p0, t_rgb p1);
-static void	plot_main_not_steep(t_fdf *fdf, tvar var, t_rgb p0, t_rgb p1);
-static void	plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
+void		plot_main_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
+void		plot_main_not_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
+void		plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
 void		plot_line(t_fdf *fdf, t_pt p0, t_pt p1);
 
 /*
@@ -555,8 +571,8 @@ int			draw(t_fdf *fdf, t_map *data);
 ** rotation_magic.c
 */
 
-void		fdf_rot_x(double *y, double *z, double alpha);
-void		fdf_rot_y(double *x, double *z, double beta);
+void		fdf_rot_x(double *y, int *z, double alpha);
+void		fdf_rot_y(double *x, int *z, double beta);
 void		fdf_rot_z(double *x, double *y, double eta);
 void		fdf_iso(double *x, double *y, int z);
 
@@ -580,8 +596,8 @@ void		shell_ls_wrapper(char **input);
 ** zoom_magic.c
 */
 
-static void	extract_min_max(int *map, int *min, int *max, int size);
-static void get_coefficient(int *map, t_fdf *fdf);
+void		extract_min_max(int *map, int *min, int *max, int size);
+void 		get_coefficient(int *map, t_fdf *fdf);
 void		fdf_zoom_magic(t_fdf *fdf);
 
 #endif
