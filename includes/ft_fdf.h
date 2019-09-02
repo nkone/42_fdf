@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/29 21:53:59 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/01 17:27:25 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,56 @@
 
 # include "../minilibx_macos/mlx.h"
 # include "../libft/libft.h"
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/xattr.h>
+# include <sys/acl.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <dirent.h>
+# include <errno.h>
+# include <time.h>
 
-# define WIN_H		1080
-# define WIN_W		1920
-# define KEY_ESC	53
-# define KEY_I		34
-# define KEY_K		40
-# define KEY_S		1
-# define KEY_H		4
-# define KEY_PLUS	24
-# define KEY_MINUS	27
-# define KEY_L_SQ_BRKT 33
-# define KEY_R_SQ_BRKT 30
-# define KEY_L_ARROW 123
-# define KEY_R_ARROW 124
-# define KEY_U_ARROW 126
-# define KEY_D_ARROW 125
-# define KEY_NUM_7	89
-# define KEY_NUM_9	92
+# define WIN_H			1080
+# define WIN_W			1920
+# define KEY_ESC		53
+# define KEY_I			34
+# define KEY_K			40
+# define KEY_S			1
+# define KEY_Q			12
+# define KEY_W			13
+# define KEY_D			2
+# define KEY_H			4
+# define KEY_PLUS		24
+# define KEY_MINUS		27
+# define KEY_L_SQ_BRKT 	33
+# define KEY_R_SQ_BRKT 	30
+# define KEY_L_ARROW 	123
+# define KEY_R_ARROW 	124
+# define KEY_U_ARROW 	126
+# define KEY_D_ARROW 	125
+# define KEY_NUM_7		89
+# define KEY_NUM_9		92
 
-# define MOUSE_LEFT_B 1
-# define MOUSE_RIGHT_B 2
-# define MOUSE_SCROLL_UP 4
-# define MOUSE_SCROLL_DOWN 5
-# define ISO_RAD	(30 * M_PI/180)
+# define MOUSE_LEFT_B 		1
+# define MOUSE_RIGHT_B 		2
+# define MOUSE_SCROLL_UP 	4
+# define MOUSE_SCROLL_DOWN 	5
+# define ISO_RAD			(30 * M_PI/180)
 
 # define FDF_ABORT_MESSAGE "An unknown error has occured\n"
 
-# define P_RED "\033[31m"
-# define P_GREEN "\033[32m"
-# define P_YELLOW "\033[33m"
-# define P_NC "\033[0m"
-# define P_FG_256_154 "\033[38;5;154m"
+# define P_RED				"\033[31m"
+# define P_GREEN			"\033[32m"
+# define P_YELLOW			"\033[33m"
+# define P_NC				"\033[0m"
+# define P_FG_256_154		"\033[38;5;154m"
+
+# define LS_PATH				"./ft_ls/ft_ls"
+# define FDF_HELP_PATH			"./read_me/help.txt"
+# define FDF_SHELL_HELP_PATH	"./read_me/shell_help.txt"
+# define FDF_USAGE 				"./fdf [.fdf file]\n"
 
 /*
 ** FDF_COLORS MACROS
@@ -286,9 +304,11 @@ typedef struct		s_ramp
 typedef struct		s_map
 {
 	int		*map;
+	int		*c_map;
 	int		map_h;
 	int		map_w;
 	int		map_size;
+	bool	map_color;
 }					t_map;
 
 typedef struct		s_var
@@ -308,6 +328,14 @@ typedef struct		s_var
 	double	xpxl2;
 	double	ypxl2;
 }					t_var;
+
+typedef struct		s_files
+{
+	char			*name;
+	char			*path;
+	struct s_files	*next;
+	struct s_files	*prev;
+}					t_files;
 
 typedef struct		s_fdf
 {
@@ -332,6 +360,8 @@ typedef struct		s_fdf
 	t_theme		theme;
 	t_mouse		mouse;
 	bool		help;
+	bool		multi_fdf;
+	t_files		*fdf_queue;
 }					t_fdf;
 
 typedef struct		s_read
@@ -344,260 +374,280 @@ typedef struct		s_read
 ** button_mapping_brightness.c
 */
 
-void		handle_brightness_button(int x, int y, t_fdf *fdf);
+void				handle_brightness_button(int x, int y, t_fdf *fdf);
 
 /*
 ** button_mapping_depth.c
 */
 
-void		handle_depth_button(int x, int y, t_fdf *fdf);
+void				handle_depth_button(int x, int y, t_fdf *fdf);
 
 /*
 ** button_mapping_extra.c
 */
 
-void		handle_extra_button(int x, int y, t_fdf *fdf);
+void				handle_extra_button(int x, int y, t_fdf *fdf);
 
 /*
 ** button_mapping_theme.c
 */
 
-void		handle_theme_button_2(int x, int y, t_fdf *fdf);
-void		handle_theme_button(int x, int y, t_fdf *fdf);
-void		switch_fdf_theme(t_fdf *fdf, int theme);
+void				handle_theme_button(int x, int y, t_fdf *fdf);
+void				switch_fdf_theme(t_fdf *fdf, int theme);
 
 /*
 ** button_mapping_view.c
 */
 
-void		handle_view_button_2(int x, int y, t_fdf *fdf);
-void		handle_view_button(int x, int y, t_fdf *fdf);
+void				handle_view_button(int x, int y, t_fdf *fdf);
 
 /*
 ** button_mapping_zoom.c
 */
 
-void		handle_z_zoom_button(int x, int y, t_fdf *fdf);
-void		handle_z_accel_button(int x, int y, t_fdf *fdf);
-void		handle_zoom_button(int x, int y, t_fdf *fdf);
+void				handle_z_zoom_button(int x, int y, t_fdf *fdf);
+void				handle_z_accel_button(int x, int y, t_fdf *fdf);
+void				handle_zoom_button(int x, int y, t_fdf *fdf);
 
 /*
 ** color_ramp.c
 */
 
-void		int_to_rgb(t_rgb *ret, int color);
-void		append_ramp_node(t_ramp **ramp, t_rgb rgb);
-void		color_node(t_rgb start, int steps, t_rgb end, t_rgb *rgb);
-void		color_ramp(t_ramp **ramp, int c_start, int steps, int c_end);
-t_ramp		*create_ramp_node(t_rgb rgb);
+void				int_to_rgb(t_rgb *ret, int color);
+void				append_ramp_node(t_ramp **ramp, t_rgb rgb);
+void				color_node(t_rgb start, int steps, t_rgb end, t_rgb *rgb);
+void				color_ramp(t_ramp **r, int c_start, int steps, int c_end);
+t_ramp				*create_ramp_node(t_rgb rgb);
 
 /*
 ** color_ramp_util.c
 */
 
-int			count_ramp(t_ramp *ramp);
-void		**fdf_index_color_ramp(t_ramp *ramp);
-void		free_color_ramp(t_ramp *ramp);
-int			get_color_index(int z, int size); 
+int					count_ramp(t_ramp *ramp);
+void				**fdf_index_color_ramp(t_ramp *ramp);
+void				free_color_ramp(t_ramp *ramp);
+int					get_color_index(int z, int size);
 
 /*
 ** draw_help_1.c
 */
 
-void		draw_help_title(int fd, t_fdf *fdf);
-void		draw_help_mouse(int fd, t_fdf *fdf);
-void		draw_help_description_view(int fd, t_fdf *fdf);
-void		draw_help_description_theme(int fd, t_fdf *fdf);
-void		draw_help_description_depth(int fd, t_fdf *fdf);
+void				draw_help_title(int fd, t_fdf *fdf);
+void				draw_help_mouse(int fd, t_fdf *fdf);
+void				draw_help_description_view(int fd, t_fdf *fdf);
+void				draw_help_description_theme(int fd, t_fdf *fdf);
+void				draw_help_description_depth(int fd, t_fdf *fdf);
 
 /*
 ** draw_help_2.c
 */
 
-void		draw_help_description_brightness(int fd, t_fdf *fdf);
-void		draw_help_description_z_zoom(int fd, t_fdf *fdf);
-void		draw_help_description_z_accel(int fd, t_fdf *fdf);
-void		draw_help_button(int fd, t_fdf *fdf);
-void		draw_help_utility(int fd, t_fdf *fdf);
+void				draw_help_description_brightness(int fd, t_fdf *fdf);
+void				draw_help_description_z_zoom(int fd, t_fdf *fdf);
+void				draw_help_description_z_accel(int fd, t_fdf *fdf);
+void				draw_help_button(int fd, t_fdf *fdf);
+void				draw_help_utility(int fd, t_fdf *fdf);
 
 /*
 ** draw_help_driver.c
 */
 
-void		draw_help_menu(t_fdf *fdf);
+void				draw_help_menu(t_fdf *fdf);
 
 /*
 ** draw_menu_1.c
 */
 
-void		draw_view_menu(t_fdf *fdf);
-void		draw_info_angle_menu(t_fdf *fdf);
-void		draw_info_min_max_menu(t_fdf *fdf);
-void		draw_theme_menu(t_fdf *fdf);
-void		draw_depth_menu(t_fdf *fdf);
+void				draw_view_menu(t_fdf *fdf);
+void				draw_info_angle_menu(t_fdf *fdf);
+void				draw_info_min_max_menu(t_fdf *fdf);
+void				draw_theme_menu(t_fdf *fdf);
+void				draw_depth_menu(t_fdf *fdf);
 
 /*
 ** draw_menu_2.c
 */
 
-void		draw_z_zoom_menu(t_fdf *fdf);
-void		draw_z_accel_menu(t_fdf *fdf);
-void		draw_zoom_menu(t_fdf *fdf);
-void		draw_after_img_menu(t_fdf *fdf);
-void		draw_utility_menu(t_fdf *fdf);
+void				draw_z_zoom_menu(t_fdf *fdf);
+void				draw_z_accel_menu(t_fdf *fdf);
+void				draw_zoom_menu(t_fdf *fdf);
+void				draw_after_img_menu(t_fdf *fdf);
+void				draw_utility_menu(t_fdf *fdf);
 
 /*
 ** draw_menu_driver.c
 */
 
-void		draw_bg(t_fdf *fdf);
-void		draw_menu(t_fdf *fdf);
+void				draw_bg(t_fdf *fdf);
+void				draw_menu(t_fdf *fdf);
 
 /*
 ** fdf_initializers.c
 */
 
-t_map		*fdf_init_data_struct(void);
-t_cam		fdf_cam_init(void);
-t_mouse		mouse_init(void);
-t_fdf		*fdf_init(void);
+t_map				*fdf_init_data_struct(void);
+t_cam				fdf_cam_init(void);
+t_mouse				mouse_init(void);
+t_fdf				*fdf_init(void);
 
 /*
 ** fdf_parser.c
 */
 
-void		create_arr_node(t_read **head, char **block);
-void		link_arr_node(t_read **head, char **block);
-int			*parse_fdf(int fd, t_fdf *fdf);
+void				create_arr_node(t_read **head, char **block);
+void				link_arr_node(t_read **head, char **block);
+int					*parse_fdf(int fd, t_fdf *fdf);
 
 /*
 ** fdf_minishell.c
 */
 
-void		shell_in(t_fdf *fdf);
-int			check_input(char **input, t_fdf *fdf);
-void		shell_info(t_fdf *fdf);
-void		free_input(char **input);
+void				shell_in(t_fdf *fdf);
+int					check_input(char **input, t_fdf *fdf);
+void				free_input(char **input);
 
 /*
 ** fdf_theme.c
 */
 
-void		fdf_theme_default(t_ramp **ramp);
-void		fdf_theme_hot(t_ramp **ramp);
-void		fdf_theme_cold(t_ramp **ramp);
-void		fdf_theme_custom(t_ramp **ramp);
-t_ramp		*fdf_gen_color_ramp(t_fdf *fdf);
+void				fdf_theme_default(t_ramp **ramp);
+void				fdf_theme_hot(t_ramp **ramp);
+void				fdf_theme_cold(t_ramp **ramp);
+void				fdf_theme_custom(t_ramp **ramp);
+t_ramp				*fdf_gen_color_ramp(t_fdf *fdf);
 
 /*
 ** fdf_utility.c
 */
 
-int			abort_fdf(void);
+int					abort_fdf(void);
+void				delay(int milliseconds);
+
 /*
 ** keyboard_mapping.c
 */
 
-void		handle_esc_key(t_fdf *fdf);
-void		handle_zoom_key(int key, t_fdf *fdf);
-void		handle_arrow_key(int key, t_fdf *fdf);
-int			key_control(int key, t_fdf *fdf);
+int					key_control(int key, t_fdf *fdf);
 
 /*
 ** map_fdf.c
 */
 
-int			count_arr_width(char **arr);
-int			check_map_width(t_read *read);
-int			check_map_height(t_read *read);
-int			get_map_size(t_read *read, t_fdf *fdf);
-int			*map_coord(t_read *read, t_fdf *fdf);
+int					count_arr_width(char **arr);
+int					check_map_width(t_read *read);
+int					check_map_height(t_read *read);
+int					get_map_size(t_read *read, t_fdf *fdf);
+int					*map_coord(t_read *read, t_fdf *fdf);
+
+/*
+** map_fdf_utility.c
+*/
+
+void				map_magic(const char *str, int *map, int *c, t_fdf *fdf);
 
 /*
 ** mouse_handler.c
 */
 
-void		handle_mouse_left_b(int x, int y, t_fdf *fdf);
-void		handle_mouse_right_b(int button, t_fdf *fdf);
-int			mouse_press(int button, int x, int y, t_fdf *fdf);
-int			mouse_release(int button, int x, int y, t_fdf *fdf);
-int			mouse_move(int x, int y, t_fdf *fdf);
+void				handle_mouse_left_b(int x, int y, t_fdf *fdf);
+void				handle_mouse_right_b(int button, t_fdf *fdf);
+int					mouse_press(int button, int x, int y, t_fdf *fdf);
+int					mouse_release(int button, int x, int y, t_fdf *fdf);
+int					mouse_move(int x, int y, t_fdf *fdf);
 
 /*
 ** plot_init.c
 */
 
-void		plot_line_init(t_pt *p0, t_pt *p1, t_var *var);
-void		plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0);
-void		plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1);
+void				plot_line_init(t_pt *p0, t_pt *p1, t_var *var);
+void				plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0);
+void				plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1);
 
 /*
 ** plot_main.c
 */
 
-void		plot_main_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
-void		plot_main_not_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
-void		plot_line_main(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1);
-void		plot_line(t_fdf *fdf, t_pt p0, t_pt p1);
+void				plot_line(t_fdf *fdf, t_pt p0, t_pt p1);
 
 /*
 ** plot_pixel.c
 */
 
-void		plot_pixel(t_fdf *frame, int x, int y, int rgb);
-t_rgb		apply_depth(double z, t_rgb rgb, t_fdf *fdf);
-void		apply_brightness(t_rgb *rgb, int brightness);
-int			get_color(t_rgb start, t_rgb end, double curr, double brightness);
+void				plot_pixel(t_fdf *frame, int x, int y, int rgb);
+t_rgb				apply_depth(double z, t_rgb rgb, t_fdf *fdf);
+void				apply_brightness(t_rgb *rgb, int brightness);
+int					get_color(t_rgb s, t_rgb e, double curr, double bright);
 
 /*
 ** plot_util_calculations.c
 */
 
-double		ipart(double x);
-double		round(double x);
-double		fpart(double x);
-double		rfpart(double x);
-double		curr_percent(double start, double curr, double end);
+double				ipart(double x);
+double				round(double x);
+double				fpart(double x);
+double				rfpart(double x);
+double				curr_percent(double start, double curr, double end);
 
 /*
 ** point_generator.c
 */
 
-t_pt		get_point(t_pt p, t_fdf *fdf);
-t_pt		gen_point(double x, double y, t_fdf *fdf);
-int			draw(t_fdf *fdf, t_map *data);
+t_pt				get_point(t_pt p, t_fdf *fdf);
+t_pt				gen_point(double x, double y, t_fdf *fdf);
+int					draw(t_fdf *fdf, t_map *data);
+void				draw_multi_fdf(t_fdf *fdf, t_files *fdf_queue);
 
 /*
 ** rotation_magic.c
 */
 
-void		fdf_rot_x(double *y, int *z, double alpha);
-void		fdf_rot_y(double *x, int *z, double beta);
-void		fdf_rot_z(double *x, double *y, double eta);
-void		fdf_iso(double *x, double *y, int z);
+void				fdf_rot_x(double *y, int *z, double alpha);
+void				fdf_rot_y(double *x, int *z, double beta);
+void				fdf_rot_z(double *x, double *y, double eta);
+void				fdf_iso(double *x, double *y, int z);
+
+/*
+** shell_animate_wrapper.c
+*/
+
+void				shell_animate_wrapper(char **input, t_fdf *fdf);
+
+/*
+** shell_info_wrapper.c
+*/
+
+void				shell_info_wrapper(t_fdf *fdf);
 
 /*
 ** shell_change_wrapper.c
 */
 
-void		shell_change_map(char *file, t_fdf *fdf);
-void		shell_change_z_zoom(char *z, t_fdf *fdf);
-void		shell_change_brightness(char *brightness, t_fdf *fdf);
-void		shell_change_after_image(char *mod, t_fdf *fdf);
-void		shell_change_wrapper(char **input, t_fdf *fdf);
+void				shell_change_wrapper(char **input, t_fdf *fdf);
 
 /*
 ** shell_ls_wrapper.c
 */
 
-void		shell_ls_wrapper(char **input);
+void				shell_ls_wrapper(char **input);
+
+/*
+** shell_animate_sort.c
+*/
+
+void				shell_animate_sort(t_files **ls);
+
+/*
+** shell_animate_utility.c
+*/
+
+t_files				*read_multi_fdf(char *name);
 
 /*
 ** zoom_magic.c
 */
 
-void		extract_min_max(int *map, int *min, int *max, int size);
-void 		get_coefficient(int *map, t_fdf *fdf);
-void		fdf_zoom_magic(t_fdf *fdf);
+void				extract_min_max(int *map, int *min, int *max, int size);
+void				get_coefficient(int *map, t_fdf *fdf);
+void				fdf_zoom_magic(t_fdf *fdf);
 
 #endif
