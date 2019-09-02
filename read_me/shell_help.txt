@@ -1,0 +1,30 @@
+commands available:
+
+change			- set a variable to a value in the environment
+
+[variables] {map, z_zoom, brightness, after_image}
+
+-map			- changes map
+usage:			change map [path to map]
+-z_zoom			- changes z_zoom
+usage:			change z_zoom [integer]
+-brightness		- changes brightness
+usage:			change brightness [integer] (negative req. after_img)
+-after_image		- turn on/off (overrides all rgba values on map)
+usage:			change after_image [on/off]
+
+info			- print details info
+
+ls			- mini ls from ft_ls project, useful to find fdf
+
+resume			- exit minishell mode and resume visualizer
+
+animate			- animate mode (read in multiple fdf)
+
+fdf files are sorted using atoi, name the .fdf files with numbers to get correct sequence
+
+usage:			animate [path to folder of .fdf files]
+
+help			- print help menu
+
+quit			- exit(0)
