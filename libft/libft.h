@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 14:40:25 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/05 13:29:26 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/08/29 21:47:06 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <stdbool.h>
 # include <math.h>
 # include <errno.h>
+# include <sys/types.h>
+# include "ft_printf.h"
 
 typedef struct		s_list
 {

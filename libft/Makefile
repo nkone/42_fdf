@@ -6,7 +6,7 @@
 #    By: phtruong <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 21:46:13 by phtruong          #+#    #+#              #
-#    Updated: 2019/06/19 14:46:09 by phtruong         ###   ########.fr        #
+#    Updated: 2019/08/29 20:01:11 by phtruong         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 DEFAULT:=\033[39m
@@ -50,9 +50,6 @@ $(NAME): $(obj)
 	@echo
 	@echo "Total file compiled: ${no_files}"
 	@ar rc $(NAME) $(obj)
-
-$(PRINTF_D)%.o:$(PRINTF_D)%.c
-	@$(CC) $(CFLAGS) -I$(LIBFT_INC) -I$(PRINTF_INC) -c $< -o $@
 
 %.o: %.c
 	@if [ "$(HEADER)" = "NO" ]; then \
