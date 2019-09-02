@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:37:03 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:16:51 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/01 19:44:21 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 static void	free_fdf_queue(t_files *queue)
 {
 	t_files *tmp;
+	t_files *head;
 
+	head = queue;
 	if (queue)
 	{
-		while (queue->prev)
-			queue = queue->prev;
-		while (queue)
+		while (queue != head)
 		{
 			tmp = queue->next;
 			free(queue->name);
@@ -31,6 +31,23 @@ static void	free_fdf_queue(t_files *queue)
 	}
 	queue = NULL;
 }
+
+static void	circular_double(t_files **head)
+{
+	t_files *start;
+	t_files *cursor;
+
+	start = *head;
+	cursor = *head;
+	while (cursor->next)
+		cursor = cursor->next;
+	(*head)->prev = cursor;
+	while ((*head)->next)
+		*head = (*head)->next;
+	(*head)->next = start;
+	*head = start;
+}
+	
 
 void		shell_animate_wrapper(char **input, t_fdf *fdf)
 {
@@ -52,6 +69,7 @@ void		shell_animate_wrapper(char **input, t_fdf *fdf)
 			ft_printf("successfully parsed: %s\n", tmp->path);
 			tmp = tmp->next;
 		}
+		circular_double(&(fdf->fdf_queue));
 	}
 	free_input(input);
 }
