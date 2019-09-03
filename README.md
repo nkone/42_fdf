@@ -1,4 +1,5 @@
 # 42_fdf
+![](images/fdf_miku_dance.gif)
 Wireframe graphic
 ```
 gcc test.c minilibx_macos/libmlx.a libft/libft.a -framework OpenGl -framework AppKit
