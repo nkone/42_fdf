@@ -1,0 +1,7 @@
+python script:
+
+for f in [path/*.[img_extension]]; do python3 pixel.py $f [output folder]
+
+bash script:
+printf '%s\n' *(n) | cat -n | while read n f;
+do mv -n $f `printf "[prefix]%04d.fdf" $n`; done
