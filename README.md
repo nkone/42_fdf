@@ -1,8 +1,6 @@
 # 42_fdf
-<p float="left">
-  <img src="images/fdf_miku_dance.gif" width="350" />
-  <img src="images/miku_dance_demo.gif" width="350" />
-</p>
+<img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="20"/>
+<img align="left" src="images/miku_dance_demo.gif" width="350" />
 
 ## Compatibility (only tested with school machine):
 
