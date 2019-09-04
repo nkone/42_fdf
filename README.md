@@ -1,8 +1,6 @@
 # 42_fdf
-<p align ="left">
+<p float="left">
   <img src="images/fdf_miku_dance.gif" width="350" />
-</p>
-<p align ="right">
   <img src="images/miku_dance_demo.gif" width="350" />
 </p>
 
