@@ -49,8 +49,13 @@ Theme demo:
   <b>fdf files parsed with 160 x 90</b><br>
   <img src="images/shana_combo_demo.gif" width="1000" />
   <br><br>
-  <b>Matrix famous scene</b><br>
+  <b>Matrix famous scene</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
   <b>fdf files parsed with 120 x 49</b><br>
   <img src="images/matrix_bullet_demo.gif" width="1000" />
+  <br><br>
+  <b>Isopoly for "3D"</b><br><br>
+  <img src="images/isopoly.gif" width="400" /><br>
+  <b>fdf files parsed with 128 x 128</b><br>
+  <img src="images/isopoly_demo.gif" width="1000" />
 </p>
