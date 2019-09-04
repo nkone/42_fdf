@@ -42,13 +42,13 @@ Theme demo:
 
 ### GIF demonstration
 <p align="center">
-  <b>Fighting Climax Ignition: Shana</b><br>
-  <img src="images/shana_combo.gif" width="400" />
+  <b>Fighting Climax Ignition: Shana</b><br><br>
+  <img src="images/shana_combo.gif" width="400" /><br>
   <b>fdf files parsed with 160 x 90</b><br>
   <img src="images/shana_combo_demo.gif" width="1000" />
-  <br>
+  <br><br>
   <b>Matrix famous scene</b><br>
-  <img src="images/matrix_bullet.gif" width="400" />
+  <img src="images/matrix_bullet.gif" width="400" /><br>
   <b>fdf files parsed with 120 x 49</b><br>
   <img src="images/matrix_bullet_demo.gif" width="1000" />
 </p>
