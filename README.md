@@ -2,9 +2,8 @@
 <img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="60"/>
 <img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
 
-
-
-
+\
+\
 ## Compatibility (only tested with school machine):
 
 **about this mac**\
@@ -32,7 +31,10 @@ make
 ![](images/default_gradient_test.png)
 Theme demo:
 ![](images/theme.png)
-
+Gulf of California, ocean:
+![](images/map_parallel.png)
+![](images/map_iso.png)
+\
 ### GIF demonstration
 <p align="center">
   <img src="images/shana_combo.gif" width="400" />
