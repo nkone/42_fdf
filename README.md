@@ -1,5 +1,10 @@
 # 42_fdf
-![](images/fdf_miku_dance.gif)![](images/miku_dance_demo.gif)
+<p align ="left">
+  <img src="images/fdf_miku_dance.gif" width="400" />
+</p>
+<p align ="right">
+  <img src="images/miku_dance_demo.gif" width="400" />
+</p>
 
 Wireframe graphic
 ```
