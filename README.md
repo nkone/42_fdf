@@ -34,7 +34,7 @@ Theme demo:
 Gulf of California, ocean:
 ![](images/map_parallel.png)
 ![](images/map_iso.png)
-\
+
 ### GIF demonstration
 <p align="center">
   <img src="images/shana_combo.gif" width="400" />
