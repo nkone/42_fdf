@@ -30,7 +30,7 @@ make
 ![](images/default_gradient_test.png)
 Theme demo:
 ![](images/theme.png)
-Gulf of California, ocean:
+<div style="text-align:center">Gulf of California, ocean:</div>
 <p align="center">
   <b>Parallel view:</b><br><br>
   <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
