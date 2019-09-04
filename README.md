@@ -2,8 +2,7 @@
 <img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="60"/>
 <img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
 
-\
-\
+
 ## Compatibility (only tested with school machine):
 
 **about this mac**\
@@ -33,9 +32,9 @@ Theme demo:
 ![](images/theme.png)
 Gulf of California, ocean:
 <p align="center">
-  <b>Parallel view:</b><br>
+  <b>Parallel view:</b><br><br>
   <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
-  <b>Isometric view:</b><br>
+  <b>Isometric view:</b><br><br>
   <img src="images/map_iso.png" width="500" title"gulf of califronia ocean iso"/>
 </p>
 
