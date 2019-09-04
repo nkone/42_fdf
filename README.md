@@ -32,8 +32,10 @@ make
 Theme demo:
 ![](images/theme.png)
 Gulf of California, ocean:
-![](images/map_parallel.png)
-![](images/map_iso.png)
+<p align="center">
+  <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
+  <img src="images/map_iso.png" width="500" title"gulf of califronia ocean iso"/>
+</p>
 
 ### GIF demonstration
 <p align="center">
