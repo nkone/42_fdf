@@ -17,3 +17,9 @@ Theme demo:
 <p align="center">
   <img src="images/shana_combo_demo.gif" width="1000" />
 </p>
+<p align="center">
+  <img src="images/matrix_bullet.gif" width="400" />
+</p>
+<p align="center">
+  <img src="images/matrix_bullet_demo.gif" width="1000" />
+</p>
