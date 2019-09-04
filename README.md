@@ -10,6 +10,6 @@ make
 Theme demo:
 ![](images/theme.png)
 <p float="left">
-  <img src="images/shana_combo_demo.gif" width="500" />
+  <img src="images/shana_combo_demo.gif" width="400" />
   <img src="images/shana_combo.gif" width="400" />
 </p>
