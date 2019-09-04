@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:27:25 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/03 20:04:39 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define KEY_S			1
 # define KEY_Q			12
 # define KEY_W			13
+# define KEY_E			14
+# define KEY_R			15
 # define KEY_D			2
 # define KEY_H			4
 # define KEY_PLUS		24
