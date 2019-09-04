@@ -15,5 +15,5 @@ Theme demo:
   <img src="images/shana_combo.gif" width="400" />
 </p>
 <p align="center">
-  <img src="images/shana_combo_demo.gif" width="400" />
+  <img src="images/shana_combo_demo.gif" width="1000" />
 </p>
