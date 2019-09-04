@@ -4,7 +4,8 @@
 <img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
 <br><br><br>
 
-<br/><br/>
+&nbsp;
+&nbsp;
 ## Compatibility (only tested with school machine):
 
 **about this mac**\
