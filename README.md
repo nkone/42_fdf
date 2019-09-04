@@ -31,9 +31,8 @@ make
 Theme demo:
 ![](images/theme.png)
 
-<div style="text-align:center">Gulf of California, ocean:</div>
-
 <p align="center">
+  <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
   <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
   <br><br>
