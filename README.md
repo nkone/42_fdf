@@ -34,6 +34,7 @@ Gulf of California, ocean:
 <p align="center">
   <b>Parallel view:</b><br><br>
   <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
+  <br><br>
   <b>Isometric view:</b><br><br>
   <img src="images/map_iso.png" width="500" title"gulf of califronia ocean iso"/>
 </p>
