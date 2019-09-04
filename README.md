@@ -1,6 +1,6 @@
 # 42_fdf
-<img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
-<img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf" hspace="10" />
+<img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="70"/>
+<img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
 
 
 
