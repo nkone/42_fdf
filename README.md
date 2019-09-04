@@ -11,9 +11,9 @@ Theme demo:
 ![](images/theme.png)
 
 ### GIF demonstration
-<p float="middle">
+<p float="center">
   <img src="images/shana_combo.gif" width="400" />
 </p>
-<p float="middle">
+<p float="center">
   <img src="images/shana_combo_demo.gif" width="400" />
 </p>
