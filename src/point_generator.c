@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:25:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:02:50 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 14:36:00 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ void	draw_multi_fdf(t_fdf *fdf, t_files *fdf_queue)
 		free(fdf->data->c_map);
 		fdf->data->map = parse_fdf(fd, fdf);
 		close(fd);
+		extract_min_max(fdf->data->map,
+				&fdf->min, &fdf->max, fdf->data->map_size);
 		draw(fdf, fdf->data);
 	}
 	else
