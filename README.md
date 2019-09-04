@@ -1,9 +1,9 @@
 # 42_fdf
 <p align ="left">
-  <img src="images/fdf_miku_dance.gif" width="400" />
+  <img src="images/fdf_miku_dance.gif" width="350" />
 </p>
 <p align ="right">
-  <img src="images/miku_dance_demo.gif" width="400" />
+  <img src="images/miku_dance_demo.gif" width="350" />
 </p>
 
 Wireframe graphic
