@@ -1,6 +1,6 @@
 # 42_fdf
 <p float ="left">
-  <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance"/>
+  <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
   <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
   <br><br>
 </p>
