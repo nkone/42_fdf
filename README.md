@@ -1,5 +1,5 @@
 # 42_fdf
-![](images/fdf_miku_dance.gif)
+![](images/fdf_miku_dance.gif)![](images/miku_dance_demo.gif)
 
 Wireframe graphic
 ```
