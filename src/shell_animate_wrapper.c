@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:37:03 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 19:44:21 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/02 21:14:41 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,15 @@ static void	circular_double(t_files **head)
 	(*head)->next = start;
 	*head = start;
 }
-	
+
+static void	print_parsed_files(t_files *list)
+{
+	while (list)
+	{
+		ft_printf("successfully parsed: %s\n", list->path);
+		list = list->next;
+	}
+}
 
 void		shell_animate_wrapper(char **input, t_fdf *fdf)
 {
@@ -64,12 +72,13 @@ void		shell_animate_wrapper(char **input, t_fdf *fdf)
 		fdf->fdf_queue = read_multi_fdf(input[1]);
 		fdf->multi_fdf = true;
 		tmp = fdf->fdf_queue;
-		while (tmp)
+		if (tmp)
 		{
-			ft_printf("successfully parsed: %s\n", tmp->path);
-			tmp = tmp->next;
+			print_parsed_files(tmp);
+			circular_double(&(fdf->fdf_queue));
 		}
-		circular_double(&(fdf->fdf_queue));
+		else
+			ft_printf("Error parsing: empty list\n");
 	}
 	free_input(input);
 }

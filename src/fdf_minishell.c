@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 21:27:36 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:14:40 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/03 20:03:21 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ void	shell_help(char **input)
 
 int		check_input(char **input, t_fdf *fdf)
 {
+	if (!input[0])
+	{
+		free_input(input);
+		return (1);
+	}
 	if (ft_strcasecmp(input[0], "change") == 0)
 		shell_change_wrapper(input, fdf);
 	else if (ft_strcasecmp(input[0], "info") == 0)

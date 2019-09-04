@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:43:46 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/31 18:18:23 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/02 20:00:59 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_files		*read_multi_fdf(char *name)
 
 	ls = NULL;
 	if ((dir = opendir(name)) == NULL)
-		ft_printf("ft_ls: %s: %s\n", name, strerror(errno));
+		perror("Error");
 	else
 	{
 		while ((dp = readdir(dir)) != NULL)
@@ -88,7 +88,7 @@ t_files		*read_multi_fdf(char *name)
 			}
 		}
 		closedir(dir);
+		shell_animate_sort(&ls);
 	}
-	shell_animate_sort(&ls);
 	return (ls);
 }

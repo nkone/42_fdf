@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 13:14:52 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 15:45:35 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/02 20:10:47 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@ static int	read_fdf(const char *file, t_fdf *fdf)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		abort_fdf();
-	fdf->data->map = parse_fdf(fd, fdf);
-	close(fd);
-	fdf_zoom_magic(fdf);
+	else
+	{
+		fdf->data->map = parse_fdf(fd, fdf);
+		close(fd);
+		fdf_zoom_magic(fdf);
+	}
 	return (0);
 }
 
@@ -29,6 +32,7 @@ int			main(int argc, char *argv[])
 {
 	t_fdf	*fdf;
 
+	fdf = NULL;
 	if (argc != 2)
 	{
 		ft_printf(FDF_USAGE);

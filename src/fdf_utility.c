@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 21:19:25 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:16:32 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/02 19:59:45 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		abort_fdf(void)
 	if (errno == 0)
 		ft_printf(FDF_ABORT_MESSAGE);
 	else
-		perror("Error:");
+		perror("Error");
 	exit(1);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 17:13:42 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 17:15:14 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/02 16:31:33 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static t_files	*sorted_merge(t_files *a, t_files *b)
 		return (b);
 	else if (!b)
 		return (a);
-	if (ft_atoi(a->name) < ft_atoi(b->name))
+	if (ft_strcasecmp(a->name, b->name) < 0)
 	{
 		a->next = sorted_merge(a->next, b);
 		a->next->prev = a;
