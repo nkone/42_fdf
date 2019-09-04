@@ -21,7 +21,7 @@ resume			- exit minishell mode and resume visualizer
 
 animate			- animate mode (read in multiple fdf)
 
-fdf files are sorted using atoi, name the .fdf files with numbers to get correct sequence
+fdf files are sorted using strcasecmp, name the .fdf files with numbers to get correct sequence
 
 usage:			animate [path to folder of .fdf files]
 
