@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:51:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 16:44:18 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 19:31:13 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,15 @@ static void	shell_change_after_image(char *mod, t_fdf *fdf)
 		ft_printf(P_RED"Invalid input\n"P_NC);
 }
 
+static void	shell_change_delay(char *delay, t_fdf *fdf)
+{
+	int n;
+
+	n = ft_atoi(delay);
+	ft_printf(P_YELLOW"delay set to: %d milliseconds\n", n);
+	fdf->multi_delay = n;
+}
+
 void		shell_change_wrapper(char **input, t_fdf *fdf)
 {
 	int no;
@@ -90,5 +99,7 @@ void		shell_change_wrapper(char **input, t_fdf *fdf)
 		shell_change_brightness(input[2], fdf);
 	else if (ft_strcasecmp(input[1], "after_image") == 0)
 		shell_change_after_image(input[2], fdf);
+	else if (ft_strcasecmp(input[1], "delay") == 0)
+		shell_change_delay(input[2], fdf);
 	free_input(input);
 }

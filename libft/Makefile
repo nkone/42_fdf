@@ -6,7 +6,7 @@
 #    By: phtruong <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 21:46:13 by phtruong          #+#    #+#              #
-#    Updated: 2019/08/29 20:01:11 by phtruong         ###   ########.fr        #
+#    Updated: 2019/09/04 19:17:47 by phtruong         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 DEFAULT:=\033[39m
@@ -30,7 +30,7 @@ NC:=\033[0m
 
 CC := gcc
 NAME := libft.a
-CFLAGS := -Werror -Wall -Wextra
+CFLAGS := -Werror -Wall -Wextra -O3
 
 src := $(wildcard *.c)
 pfsrc := $(wildcard ./printf/*.c)

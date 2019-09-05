@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:04:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/02 19:42:30 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 19:28:44 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,13 @@ static void	handle_multi_fdf(int key, t_fdf *fdf)
 {
 	if (key == KEY_W && fdf->multi_fdf)
 	{
+		delay(fdf->multi_delay);
 		if (fdf->fdf_queue->next)
 			fdf->fdf_queue = fdf->fdf_queue->next;
 	}
 	else if (key == KEY_Q && fdf->multi_fdf)
 	{
+		delay(fdf->multi_delay);
 		if (fdf->fdf_queue->prev)
 			fdf->fdf_queue = fdf->fdf_queue->prev;
 	}

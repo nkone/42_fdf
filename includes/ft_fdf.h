@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/03 20:04:39 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 19:28:52 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@
 # define FDF_SHELL_HELP_PATH	"./read_me/shell_help.txt"
 # define FDF_USAGE 				"./fdf [.fdf file]\n"
 
+# define FDF_DELAY			200
 /*
 ** FDF_COLORS MACROS
 ** Source:
@@ -363,6 +364,7 @@ typedef struct		s_fdf
 	t_mouse		mouse;
 	bool		help;
 	bool		multi_fdf;
+	int			multi_delay;
 	t_files		*fdf_queue;
 }					t_fdf;
 
