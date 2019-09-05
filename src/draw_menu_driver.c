@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:34:17 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:02:27 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 21:50:23 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@ void	draw_bg(t_fdf *fdf)
 	if (fdf->cam.after_img && fdf->cam.brightness < 0)
 		ft_memset(fdf->data_addr, fdf->cam.brightness,
 				WIN_W * WIN_H * (fdf->bits_per_pix / 8));
-	else
+	else	
 		ft_bzero(fdf->data_addr, WIN_W * WIN_H * (fdf->bits_per_pix / 8));
+
 }
 
 void	draw_menu(t_fdf *fdf)
