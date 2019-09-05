@@ -1,9 +1,10 @@
 # 42_fdf
-<img align="left" src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="60"/>
-<img align="left" src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
+<p float ="left">
+  <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
+  <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
+  <br><br>
+</p>
 
-\
-\
 ## Compatibility (only tested with school machine):
 
 **about this mac**\
@@ -31,20 +32,30 @@ make
 ![](images/default_gradient_test.png)
 Theme demo:
 ![](images/theme.png)
-Gulf of California, ocean:
-![](images/map_parallel.png)
-![](images/map_iso.png)
-\
+
+<p align="center">
+  <b>Gulf of California Ocean</b><br><br>
+  <b>Parallel view:</b><br><br>
+  <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
+  <br><br>
+  <b>Isometric view:</b><br><br>
+  <img src="images/map_iso.png" width="500" title"gulf of califronia ocean iso"/>
+</p>
+
 ### GIF demonstration
 <p align="center">
-  <img src="images/shana_combo.gif" width="400" />
-</p>
-<p align="center">
+  <b>Fighting Climax Ignition: Shana</b><br><br>
+  <img src="images/shana_combo.gif" width="400" /><br>
+  <b>fdf files parsed with 160 x 90</b><br>
   <img src="images/shana_combo_demo.gif" width="1000" />
-</p>
-<p align="center">
-  <img src="images/matrix_bullet.gif" width="400" />
-</p>
-<p align="center">
+  <br><br>
+  <b>Matrix famous scene</b><br><br>
+  <img src="images/matrix_bullet.gif" width="400" /><br>
+  <b>fdf files parsed with 120 x 49</b><br>
   <img src="images/matrix_bullet_demo.gif" width="1000" />
+  <br><br>
+  <b>Isopoly for "3D"</b><br><br>
+  <img src="images/isopoly.gif" width="400" /><br>
+  <b>fdf files parsed with 128 x 128</b><br>
+  <img src="images/isopoly_demo.gif" width="1000" />
 </p>
