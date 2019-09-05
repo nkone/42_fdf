@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:17:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 22:54:06 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 23:22:18 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int		get_color(t_rgb start, t_rgb end, double percent, double brightness)
 {
 	t_rgb ret;
 
-	ret.r = round(((start.r * (1.0 - percent)) + (end.r * percent)) * brightness);
-	ret.g = round(((start.g * (1.0 - percent)) + (end.g * percent)) * brightness);
-	ret.b = round(((start.b * (1.0 - percent)) + (end.b * percent)) * brightness);
+	ret.r = (((start.r * (1.0 - percent)) + (end.r * percent)) * brightness);
+	ret.g = (((start.g * (1.0 - percent)) + (end.g * percent)) * brightness);
+	ret.b = (((start.b * (1.0 - percent)) + (end.b * percent)) * brightness);
 	ret.rgb = ret.r;
 	ret.rgb = (ret.rgb << 8) + ret.g;
 	ret.rgb = (ret.rgb << 8) + ret.b;
