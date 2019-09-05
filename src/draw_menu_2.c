@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:31:39 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:02:16 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 21:44:49 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	draw_zoom_menu(t_fdf *fdf)
 		WIN_W / 30 + 50, WIN_H / h, FDF_WHITE, "ZOOM ACCEL +/-");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30, WIN_H / h + 25,
-		(fdf->cam.zoom_accel == 0.5) ? FDF_RED : FDF_WHITE, "[0.5]");
+		(fdf->cam.zoom_accel == 0.1) ? FDF_RED : FDF_WHITE, "[0.1]");
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + (12 * 5), WIN_H / h + 25,
 		(fdf->cam.zoom_accel == 1.0) ? FDF_RED : FDF_WHITE, "[1.0]");
