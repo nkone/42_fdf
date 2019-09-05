@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 20:38:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/03 20:04:54 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 18:57:25 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_fdf	*fdf_init(void)
 		mlx_get_data_addr(frame->img, &(frame->bits_per_pix),
 		&(frame->size_line), &(frame->endian)))) && abort_fdf();
 	frame->data = fdf_init_data_struct();
-	frame->theme = CUSTOM;
+	frame->theme = DEFAULT;
 	frame->ramp_list = fdf_gen_color_ramp(frame);
 	frame->ramp = fdf_index_color_ramp(frame->ramp_list);
 	frame->ramp_size = count_ramp(frame->ramp_list);
