@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 19:28:52 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 23:15:46 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -586,8 +586,8 @@ int					get_color(t_rgb s, t_rgb e, double curr, double bright);
 ** plot_util_calculations.c
 */
 
-double				ipart(double x);
-double				round(double x);
+int					ipart(double x);
+int					ft_round(double x);
 double				fpart(double x);
 double				rfpart(double x);
 double				curr_percent(double start, double curr, double end);
