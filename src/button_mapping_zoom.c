@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:15:08 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:01:18 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 21:41:32 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	handle_zoom_button(int x, int y, t_fdf *fdf)
 	h = 1.25;
 	if (x >= WIN_W / 30 + 3 && x <= WIN_W / 30 + 49 &&
 		y >= WIN_H / h + 30 && y <= WIN_H / h + 45)
-		fdf->cam.zoom_accel = 0.5;
+		fdf->cam.zoom_accel = 0.1;
 	if (x >= WIN_W / 30 + 63 && x <= WIN_W / 30 + 107 &&
 		y >= WIN_H / h + 30 && y <= WIN_H / h + 45)
 		fdf->cam.zoom_accel = 1.0;
