@@ -28,10 +28,10 @@ if (len(sys.argv) == 3):
     pix_val = list(im.getdata())
     width, height = im.size
     tmp = width
-    print ("size(width x height):", width, "x", height)
-    
+
     arr_name = path_leaf(sys.argv[1]).split('.')
     file_name = arr_name[0].lower() + '.fdf'
+    print ("size(width x height):", width, "x", height, file_name)
     path_to_write = sys.argv[2]
     path_to_file = os.path.join(path_to_write, file_name)
     size = width * height
