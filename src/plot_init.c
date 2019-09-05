@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 16:30:57 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 22:58:18 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 23:15:20 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	plot_line_first_pt(t_fdf *fdf, t_var *var, t_pt p0)
 	double p;
 
 	p = 0.0;
-	var->xend = round(p0.x);
+	var->xend = ft_round(p0.x);
 	var->yend = p0.y + var->gradient * (var->xend - p0.x);
 	var->xgap = rfpart(p0.x + 0.5);
 	var->xpxl1 = var->xend;
@@ -75,7 +75,7 @@ void	plot_line_second_pt(t_fdf *fdf, t_var *var, t_pt p1)
 	p = 0.0;
 
 	var->intery = var->yend + var->gradient;
-	var->xend = round(p1.x);
+	var->xend = ft_round(p1.x);
 	var->yend = p1.y + var->gradient * (var->xend - p1.x);
 	var->xgap = fpart(p1.x + 0.5);
 	var->xpxl2 = var->xend;
