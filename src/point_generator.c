@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:25:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 14:36:00 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 23:05:28 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 {
 	p.x *= fdf->cam.zoom;
 	p.y *= fdf->cam.zoom;
-	p.x -= (float)(fdf->data->map_w * fdf->cam.zoom) / 2;
-	p.y -= (float)(fdf->data->map_h * fdf->cam.zoom) / 2;
+	p.x -= (fdf->data->map_w * fdf->cam.zoom) / 2;
+	p.y -= (fdf->data->map_h * fdf->cam.zoom) / 2;
 	fdf_rot_x(&p.y, &p.z, fdf->cam.alpha);
 	fdf_rot_y(&p.x, &p.z, fdf->cam.beta);
 	fdf_rot_z(&p.x, &p.y, fdf->cam.eta);
@@ -34,7 +34,7 @@ t_pt	gen_point(double x, double y, t_fdf *fdf)
 	t_rgb	*rgb;
 	int		idx;
 
-	idx = y * fdf->data->map_w + x;
+	idx = abs((int)y * fdf->data->map_w + (int)x);
 	p.x = x;
 	p.y = y;
 	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
