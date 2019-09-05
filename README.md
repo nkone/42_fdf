@@ -1,5 +1,10 @@
 # 42_fdf
-Special thanks to [mohammadbutt](https://github.com/mohammadbutt) for helping me out with testing.
+Many thanks to:
+* [Mohammad](https://github.com/mohammadbutt) for helping me out with testing.
+* [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
+* [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
+* [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
+* And of course 42 Silicon Valley for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
   <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
