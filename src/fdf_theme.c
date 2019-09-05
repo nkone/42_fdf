@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:28:24 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:04:01 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 18:56:57 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	fdf_theme_default(t_ramp **ramp)
 	color_ramp(ramp, FDF_MEDIUM_BLUE, 10, FDF_DEEP_SKY_BLUE);
 	color_ramp(ramp, FDF_DEEP_SKY_BLUE, 10, FDF_LIGHT_BLUE);
 	color_ramp(ramp, FDF_LIGHT_BLUE, 10, FDF_AZURE);
-	color_ramp(ramp, FDF_AZURE, 10, FDF_MOCCASIN);
-	color_ramp(ramp, FDF_MOCCASIN, 10, FDF_YELLOW_GREEN);
+	color_ramp(ramp, FDF_AZURE, 10, FDF_LEMON_CHIFFON);
+	color_ramp(ramp, FDF_LEMON_CHIFFON, 10, FDF_YELLOW_GREEN);
 	color_ramp(ramp, FDF_YELLOW_GREEN, 10, FDF_FOREST_GREEN);
 	color_ramp(ramp, FDF_FOREST_GREEN, 10, FDF_MAROON);
 	color_ramp(ramp, FDF_MAROON, 10, FDF_SIENNA);
