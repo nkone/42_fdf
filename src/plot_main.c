@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 16:35:19 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 22:44:49 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/04 23:17:34 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,16 @@ static void	plot_main_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	{
 		percent = (var.swap_d) ? curr_percent(var.xpxl2, var.xpxl1, start) :
 			curr_percent(start, var.xpxl1, var.xpxl2);
-		plot_pixel(fdf, ipart(var.intery), var.xpxl1,
+
+	/*	plot_pixel(fdf, ipart(var.intery), var.xpxl1,
 				get_color(p0, p1, percent, 1.0));//rfpart(var.intery))); // setting rfpart(var.intery) to 1.0 solves brightness issue
 		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1,
 				get_color(p0, p1, percent, 1.0));//fpart(var.intery)));
+	*/
+		plot_pixel(fdf, ipart(var.intery), var.xpxl1,
+				get_color(p0, p1, percent, rfpart(var.intery))); 
+		plot_pixel(fdf, ipart(var.intery) + 1, var.xpxl1,
+				get_color(p0, p1, percent, fpart(var.intery)));
 		var.intery += var.gradient;
 	}
 }
@@ -41,10 +47,16 @@ static void	plot_main_not_steep(t_fdf *fdf, t_var var, t_rgb p0, t_rgb p1)
 	{
 		percent = (var.swap) ? curr_percent(var.xpxl2, var.xpxl1, start) :
 			curr_percent(start, var.xpxl1, var.xpxl2);
+		/*
 		plot_pixel(fdf, var.xpxl1, ipart(var.intery),
 				get_color(p0, p1, percent, 1.0));//rfpart(var.intery)));
 		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1,
 				get_color(p0, p1, percent, 1.0));//fpart(var.intery)));
+		*/
+		plot_pixel(fdf, var.xpxl1, ipart(var.intery),
+				get_color(p0, p1, percent, rfpart(var.intery)));
+		plot_pixel(fdf, var.xpxl1, ipart(var.intery) + 1,
+				get_color(p0, p1, percent, fpart(var.intery)));
 		var.intery += var.gradient;
 	}
 }
