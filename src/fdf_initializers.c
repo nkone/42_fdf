@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 20:38:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 19:31:40 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 16:39:23 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_cam	fdf_cam_init(void)
 	cam.brightness = 0;
 	cam.depth = false;
 	cam.after_img = false;
+	cam.anti_alias = true;
 	cam.x_offset = 0;
 	cam.y_offset = 0;
 	cam.projection = ISO;
