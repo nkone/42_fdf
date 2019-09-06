@@ -77,30 +77,30 @@ Theme demo:
 </details>
                                                  
 #### Update Log
-<detials>
+<details>
   <summary>September</summary>
-<details>
-  <summary>September 6</summary>
-  <br>
+  <details>
+    <summary>September 6</summary>
+    <br>
   
-  + Code
-    + Fixed minor math issue and increase brightness by 20% for anti_alias
+      + Code
+        + Fixed minor math issue and increase brightness by 20% for anti_alias
     
-</details>
-<details>
-  <summary>September 5</summary>
-  <br>
+   </details>
+   <details>
+      <summary>September 5</summary>
+      <br>
   
-  + Code
-    + Change algorithm to use int instead of doubles.
-    + Added rosetta code algo for comparison.
-    + Added functionality for alias.
-  + Gifs
-    + Fix resolution after adding anti alias
-    + Update better gifs for matrix
-    + Gifs are now collapsible
+      + Code
+        + Change algorithm to use int instead of doubles.
+        + Added rosetta code algo for comparison.
+        + Added functionality for alias.
+      + Gifs
+        + Fix resolution after adding anti alias
+        + Update better gifs for matrix
+        + Gifs are now collapsible
   
+    </details>
 </details>
-</detials>
 
   
