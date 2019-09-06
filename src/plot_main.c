@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 16:35:19 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/05 20:55:59 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 21:05:15 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,17 @@ void		plot_line(t_fdf *fdf, t_pt p0, t_pt p1)
 
 	ft_bzero(&var, sizeof(t_var));
 //	ft_printf("p0: rgb(%x) p1: rgb(%x))\n", p0.rgb.rgb, p1.rgb.rgb); // for debugging color
+
+
 	plot_line_init(&p0, &p1, &var);
+	
+//	comment these three to see algo from rosetta
 	plot_line_first_pt(fdf, &var, p0);
 	plot_line_second_pt(fdf, &var, p1);
 	plot_line_main(fdf, var, p0.rgb, p1.rgb);
 	
 	// this whole chunk is from rosetta code for algo seems to produce same brightness effect
+	// to improve color brightness, modify get_color function
 
 	/*
 	var.swap = false;
