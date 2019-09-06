@@ -46,12 +46,12 @@ Theme demo:
   <table border="0" cellpadding="5">
   <tr>
     <td align="center" valign="center">
-      <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel" hspace="50"/>
+      <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel" hspace="80"/>
       <br />
       Without anti alias
     </td>
     <td align="center" valign="center">
-      <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias" hspace="50"/>
+      <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias" hspace="80"/>
       <br />
       With anti alias
     </td>
