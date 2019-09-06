@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:25:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 23:39:28 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 16:31:52 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ t_pt	get_point(t_pt p, t_fdf *fdf)
 	return (p);
 }
 
-t_pt	gen_point(double x, double y, t_fdf *fdf)
+t_pt	gen_point(int x, int y, t_fdf *fdf)
 {
 	t_pt	p;
 	t_rgb	*rgb;
 	int		idx;
 
-	idx = abs((int)y * fdf->data->map_w + (int)x);
+	idx = abs(y * fdf->data->map_w + x);
 	p.x = x;
 	p.y = y;
 	p.z = fdf->data->map[idx] * fdf->cam.z_zoom;
@@ -94,9 +94,8 @@ void	draw_multi_fdf(t_fdf *fdf, t_files *fdf_queue)
 		free(fdf->data->map);
 		free(fdf->data->c_map);
 		fdf->data->map = parse_fdf(fd, fdf);
+		get_coefficient(fdf->data->map, fdf);
 		close(fd);
-		extract_min_max(fdf->data->map,
-				&fdf->min, &fdf->max, fdf->data->map_size);
 		draw(fdf, fdf->data);
 	}
 	else
