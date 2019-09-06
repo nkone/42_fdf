@@ -69,7 +69,7 @@ Theme demo:
 </details>
 <details>
   <summary>Isopoly</summary>
-  <p align ="center>
+  <p align ="center">
   <b>Isopoly for "3D"</b><br><br>
   <img src="images/isopoly.gif" width="400" /><br>
   <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128width="1000" />
