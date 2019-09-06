@@ -50,15 +50,19 @@ Theme demo:
 
 ### GIF demonstration
 <p align="center">
-  <b>Fighting Climax Ignition: Shana</b><br><br>
-  <img src="images/shana_combo.gif" width="400" /><br>
-  <b>fdf files parsed with 160 x 90</b><br>
-  <img src="images/shana_combo_demo.gif" width="1000" />
+  <details>
+    <summary>Game</summary>
+    <br>
+    <b>Fighting Climax Ignition: Shana</b><br><br>
+    <img src="images/shana_combo.gif" width="400" /><br>
+    <b>fdf files parsed with 160 x 90</b><br>
+    <img src="images/shana_combo_demo.gif" width="1000" />
+  </details>
   <br><br>
   <b>Matrix famous scene</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
-  <b>fdf files parsed with 120 x 49</b><br>
-  <img src="images/matrix_bullet_demo.gif" width="1000" />
+  <b>fdf files parsed with 250 x 103</b><br>
+  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with anti-alias off"width="1000" />
   <br><br>
   <b>Isopoly for "3D"</b><br><br>
   <img src="images/isopoly.gif" width="400" /><br>
