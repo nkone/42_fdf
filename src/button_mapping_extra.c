@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:22:26 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:00:29 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 16:54:54 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,10 @@ void	handle_extra_button(int x, int y, t_fdf *fdf)
 	else if (x >= WIN_W / 30 && x <= WIN_W / 30 + 160 &&
 		y >= WIN_H - 45 && y <= WIN_H - 30 && fdf->cam.after_img == false)
 		fdf->cam.after_img = true;
+	else if (x >= WIN_W / 30 + 50 && x <= WIN_W / 30 + 160 &&
+		y >= WIN_H / 1.88 + 95 && y <= WIN_H / 1.88 + 110 && fdf->cam.anti_alias == true)
+		fdf->cam.anti_alias = false;
+	else if (x >= WIN_W / 30 + 50 && x <= WIN_W / 30 + 160 &&
+		y >= WIN_H / 1.88 + 95 && y <= WIN_H / 1.88 + 110 && fdf->cam.anti_alias == false)
+		fdf->cam.anti_alias = true;
 }
