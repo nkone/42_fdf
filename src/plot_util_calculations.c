@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 16:26:53 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 23:18:21 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 16:11:41 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ double	rfpart(double x)
 	return (1 - fpart(x));
 }
 
-double	curr_percent(double start, double curr, double end)
+double	curr_percent(int start, int curr, int end)
 {
 	double here;
 	double distance;
 	double where;
 
-	distance = end - start;
-	where = curr - start;
+	distance = (double)(end - start);
+	where = (double)(curr - start);
 	here = (distance == 0.0) ? 1.0 : (where / distance);
 	return (here);
 }
