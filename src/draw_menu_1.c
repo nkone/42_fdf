@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:28:41 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 14:52:56 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 16:52:38 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,7 @@ void	draw_depth_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win,
 		WIN_W / 30 + 95, WIN_H / h + 70, FDF_WHITE, buff);
 	free(buff);
+	mlx_string_put(fdf->mlx, fdf->win,
+		WIN_W / 30 + 40, WIN_H / h + 90,
+		(fdf->cam.anti_alias) ? FDF_RED : FDF_WHITE, "[ANTI-ALIAS]");
 }
