@@ -65,3 +65,15 @@ Theme demo:
   <b>fdf files parsed with 128 x 128</b><br>
   <img src="images/isopoly_demo.gif" width="1000" />
 </p>
+
+#### Update Log
+<details>
+  <summary>September 5</summary>
+  <br>
+  
+  + Change algorithm to use int instead of doubles.
+  + Added rosetta code algo for comparison.
+  + Added functionality for alias.
+  
+</details>
+  
