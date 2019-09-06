@@ -4,6 +4,7 @@ Many thanks to:
 * [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
+* [Mr Colour](https://github.com/mrcolour) for coding advices.
 * And of course 42 Silicon Valley for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
@@ -84,7 +85,7 @@ Theme demo:
     <br>
   
       + Code
-        + Fixed minor math issue and increase brightness by 20% for anti_alias
+        + Fixed minor math issue and increase brightness by 20% for anti alias
     
    </details>
    <details>
