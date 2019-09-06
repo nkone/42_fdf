@@ -70,8 +70,10 @@ Theme demo:
 <details>
   <summary>September 5</summary>
   <br>
+  
   + Change algorithm to use int instead of doubles.
   + Added rosetta code algo for comparison.
   + Added functionality for alias.
+  
 </details>
   
