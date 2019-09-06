@@ -45,10 +45,11 @@ Theme demo:
   <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
   <br><br>
   <b>Isometric view:</b><br><br>
-  <img src="images/map_iso.png" width="500" title"gulf of califronia ocean iso"/>
+  <img src="images/map_iso.png" width="500" title="gulf of califronia ocean iso"/>
 </p>
 
 ### GIF demonstration
+
 <details>
    <summary>Game</summary>
    <br>
@@ -56,22 +57,26 @@ Theme demo:
      <b>Fighting Climax Ignition: Shana</b><br><br>
      <img src="images/shana_combo.gif" width="400" /><br>
      <b>fdf files parsed with 160 x 90</b><br>
-     <img src="images/shana_combo_demo.gif" width="1000" />
+     <img src="images/shana_combo_demo.gif" title="shana demo 160 x 90"width="1000" />
    </p>
 </details>
-<p align ="center">
-  <br><br>
-  <b>Matrix famous scene</b><br><br>
+<details>
+  <summary>Matrix</summary>
+  <p align ="center">
+  <b>Matrix bullet dodging</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
-  <b>fdf files parsed with 250 x 103</b><br>
-  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with anti-alias off"width="1000" />
-  <br><br>
+  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with anti-alias off @ 250 x 103"width="1000" />
+  </p>
+</details>
+<details>
+  <summary>Isopoly</summary>
+  <p align ="center>
   <b>Isopoly for "3D"</b><br><br>
   <img src="images/isopoly.gif" width="400" /><br>
-  <b>fdf files parsed with 128 x 128</b><br>
-  <img src="images/isopoly_demo.gif" width="1000" />
-</p>
-
+  <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128width="1000" />
+  </p>
+</details>
+                                                 
 #### Update Log
 <details>
   <summary>September 5</summary>
@@ -84,6 +89,7 @@ Theme demo:
   + Gifs
     + Fix resolution after adding anti alias
     + Update better gifs for matrix
+    + Gifs are now collapsible
   
 </details>
   
