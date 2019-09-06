@@ -43,10 +43,11 @@ Theme demo:
 <p align="center">
   <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
-  <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
+  <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel"/>
+  <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias"/>
   <br><br>
   <b>Isometric view:</b><br><br>
-  <img src="images/map_iso.png" width="500" title="gulf of califronia ocean iso"/>
+  <img src="images/map_iso_normal.png" width="500" title="gulf of califronia ocean iso"/>
 </p>
 
 ### GIF demonstration
