@@ -56,7 +56,6 @@ Theme demo:
    <p align ="center">
      <b>Fighting Climax Ignition: Shana</b><br><br>
      <img src="images/shana_combo.gif" width="400" /><br>
-     <b>fdf files parsed with 160 x 90</b><br>
      <img src="images/shana_combo_demo.gif" title="shana demo 250 x 141"width="1000" />
    </p>
 </details>
