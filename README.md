@@ -56,7 +56,8 @@ Theme demo:
       With anti alias
     </td>
    </tr>
-   </table> 
+   </table>
+   
   <b>Isometric view:</b><br><br>
   <img src="images/map_iso_normal.png" width="500" title="gulf of califronia ocean iso"/>
 </p>
