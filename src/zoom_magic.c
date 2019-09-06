@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:49:24 by phtruong          #+#    #+#             */
-/*   Updated: 2019/08/30 13:06:40 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 17:45:28 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	get_coefficient(int *map, t_fdf *fdf)
 	int		max;
 	int		min;
 
+	min = 0;
+	max = 0;
 	extract_min_max(map, &min, &max, fdf->data->map_size);
 	fdf->coef_m = (0.0 - 1.0) / (min - max);
 	fdf->coef_b = 1.0 - (fdf->coef_m * max);
