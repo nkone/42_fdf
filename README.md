@@ -49,15 +49,17 @@ Theme demo:
 </p>
 
 ### GIF demonstration
-<p align="center">
-  <details>
-    <summary>Game</summary>
-    <br>
-    <b>Fighting Climax Ignition: Shana</b><br><br>
-    <img src="images/shana_combo.gif" width="400" /><br>
-    <b>fdf files parsed with 160 x 90</b><br>
-    <img src="images/shana_combo_demo.gif" width="1000" />
-  </details>
+<details>
+   <summary>Game</summary>
+   <br>
+   <p align ="center">
+     <b>Fighting Climax Ignition: Shana</b><br><br>
+     <img src="images/shana_combo.gif" width="400" /><br>
+     <b>fdf files parsed with 160 x 90</b><br>
+     <img src="images/shana_combo_demo.gif" width="1000" />
+   </p>
+</details>
+<p align ="center">
   <br><br>
   <b>Matrix famous scene</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
