@@ -43,11 +43,20 @@ Theme demo:
 <p align="center">
   <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
-  |no anti alias | with anti alias|
-  |--------------|----------------|
-  <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel"/>
-  <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias"/>
-  <br><br>
+  <table width="500" border="1" cellpadding="5">
+  <tr>
+    <td align="center" valign="center">
+    <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel"/>
+    <br />
+    Parallel view with no anti alias
+    </td>
+    <td align="center" valign="center">
+    <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias"/>
+    <br />
+    Parralel view with anti alias
+    </td>
+   </tr>
+   </table> 
   <b>Isometric view:</b><br><br>
   <img src="images/map_iso_normal.png" width="500" title="gulf of califronia ocean iso"/>
 </p>
