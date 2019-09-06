@@ -78,6 +78,14 @@ Theme demo:
                                                  
 #### Update Log
 <details>
+  <summary>September 6</summary>
+  <br>
+  
+  + Code
+    + Fixed minor math issue and increase brightness by 20% for anti_alias
+    
+</details>
+<details>
   <summary>September 5</summary>
   <br>
   
@@ -91,4 +99,5 @@ Theme demo:
     + Gifs are now collapsible
   
 </details>
+
   
