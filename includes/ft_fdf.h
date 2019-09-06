@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 23:15:46 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/05 18:15:41 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,8 @@ typedef struct		s_rgb
 
 typedef struct		s_pt
 {
-	double	x;
-	double	y;
+	int		x;
+	int		y;
 	int		z;
 	t_rgb	rgb;
 }					t_pt;
@@ -281,6 +281,7 @@ typedef struct		s_cam
 	int				brightness;
 	bool			depth;
 	bool			after_img;
+	bool			anti_alias;
 	int				x_offset;
 	int				y_offset;
 	t_projection	projection;
@@ -325,11 +326,13 @@ typedef struct		s_var
 	double	xend;
 	double	yend;
 	double	xgap;
-	double	xpxl1;
-	double	ypxl1;
+	double	ygap;
+	int		xpxl1;
+	int		ypxl1;
 	double	intery;
-	double	xpxl2;
-	double	ypxl2;
+	double	interx;
+	int		xpxl2;
+	int		ypxl2;
 }					t_var;
 
 typedef struct		s_files
@@ -578,7 +581,7 @@ void				plot_line(t_fdf *fdf, t_pt p0, t_pt p1);
 */
 
 void				plot_pixel(t_fdf *frame, int x, int y, int rgb);
-t_rgb				apply_depth(double z, t_rgb rgb, t_fdf *fdf);
+t_rgb				apply_depth(int z, t_rgb rgb, t_fdf *fdf);
 void				apply_brightness(t_rgb *rgb, int brightness);
 int					get_color(t_rgb s, t_rgb e, double curr, double bright);
 
@@ -590,14 +593,14 @@ int					ipart(double x);
 int					ft_round(double x);
 double				fpart(double x);
 double				rfpart(double x);
-double				curr_percent(double start, double curr, double end);
+double				curr_percent(int start, int curr, int end);
 
 /*
 ** point_generator.c
 */
 
 t_pt				get_point(t_pt p, t_fdf *fdf);
-t_pt				gen_point(double x, double y, t_fdf *fdf);
+t_pt				gen_point(int x, int y, t_fdf *fdf);
 int					draw(t_fdf *fdf, t_map *data);
 void				draw_multi_fdf(t_fdf *fdf, t_files *fdf_queue);
 
@@ -605,10 +608,10 @@ void				draw_multi_fdf(t_fdf *fdf, t_files *fdf_queue);
 ** rotation_magic.c
 */
 
-void				fdf_rot_x(double *y, int *z, double alpha);
-void				fdf_rot_y(double *x, int *z, double beta);
-void				fdf_rot_z(double *x, double *y, double eta);
-void				fdf_iso(double *x, double *y, int z);
+void				fdf_rot_x(int *y, int *z, double alpha);
+void				fdf_rot_y(int *x, int *z, double beta);
+void				fdf_rot_z(int *x, int *y, double eta);
+void				fdf_iso(int *x, int *y, int z);
 
 /*
 ** shell_animate_wrapper.c
