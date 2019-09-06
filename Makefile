@@ -6,7 +6,7 @@
 #    By: phtruong <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/08/29 19:54:02 by phtruong          #+#    #+#              #
-#    Updated: 2019/09/04 19:17:34 by phtruong         ###   ########.fr        #
+#    Updated: 2019/09/05 21:27:26 by phtruong         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 DEFAULT:=\033[39m
@@ -30,7 +30,7 @@ NC:=\033[0m
 
 CC := gcc
 NAME := fdf
-CFLAGS := -Werror -Wall -Wextra -O3
+CFLAGS := -Wall -Wextra -Werror -O3
 OPEN_GL := -framework OpenGl -framework Appkit
 SRC_DIR := src/
 OBJ_DIR := obj/
