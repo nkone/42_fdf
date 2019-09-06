@@ -100,7 +100,7 @@ Theme demo:
         + Update better gifs for matrix
         + Gifs are now collapsible
   
-    </details>
+   </details>
 </details>
 
   
