@@ -43,7 +43,7 @@ Theme demo:
 <p align="center">
   <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
-  <table border="0" cellpadding="50">
+  <table border="0" cellpadding="5">
   <tr>
     <td align="center" valign="center">
       <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel" hspace="100"/>
