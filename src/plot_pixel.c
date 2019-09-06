@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:17:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/05 17:48:00 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/06 15:21:21 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,15 @@ int		get_color(t_rgb start, t_rgb end, double percent, double brightness)
 {
 	t_rgb ret;
 
+	brightness += 0.2; // offset this so it's 20% brighter
 	(brightness > 1.0) && (brightness = 1.0);
-	ret.r = (((start.r * (1.0 - percent)) + (end.r * percent)) * brightness);
-	ret.g = (((start.g * (1.0 - percent)) + (end.g * percent)) * brightness);
-	ret.b = (((start.b * (1.0 - percent)) + (end.b * percent)) * brightness);
+//	printf("bright: %f\t percent: %f\t", brightness, percent);
+//	printf("rgb_start(%d,%d,%d)\t", start.r, start.g, start.b);
+//	printf("rgb_end(%d,%d,%d)\t", end.r, end.g, end.b);
+	ret.r = ((start.r * (1.0 - percent)) + (end.r * percent)) * brightness;
+	ret.g = ((start.g * (1.0 - percent)) + (end.g * percent)) * brightness;
+	ret.b = ((start.b * (1.0 - percent)) + (end.b * percent)) * brightness;
+//	printf("rgb_ret(%d, %d, %d)\n", ret.r, ret.g, ret.b);
 	ret.rgb = ret.r;
 	ret.rgb = (ret.rgb << 8) + ret.g;
 	ret.rgb = (ret.rgb << 8) + ret.b;
