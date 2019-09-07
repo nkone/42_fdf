@@ -43,8 +43,12 @@ Wireframe graphic
 ```
 make
 ./fdf [path to .fdf files]
-in shell mode type help to see list of available commands
 ```
+#### fdf_minishell
+Pressing S will enter shell mode, program will not resume until "resume" command is input
+<p align="center">
+  <img src="images/fdf_minishell.png">
+</p>
 
 ### Gradient
 ![](images/default_gradient_test.png)
