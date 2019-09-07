@@ -118,7 +118,8 @@ typedef struct		s_var
 ```
 The wikipedia does not declare variables type, so in the beginning all my variables are doubles. But after referencing the
 [rosettacode](https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C), I decide to change some doubles to int.\
-It is not hard to implement the wikipedia algorithm. However I run into issues with color and lightning (brightness).\
+It is not hard to implement the wikipedia algorithm. However I run into issues with color and lightning (brightness).
+
 ##### Color Issue
 ```C
 if (var->steep)
@@ -136,7 +137,7 @@ if (p0->x > p1->x)
 	ft_swap(&(p0->y), &(p1->y));
 }
 ```
-The points are being swapped around in the algorithm. Each of the points has a certain rgb value and having them swapped around causes all sort of problems for me when I implement color gradient. That is the main reason why I have to add boolean variables to keep track of what's being swapped so the program will draw correct color.\
+The points are being swapped around in the algorithm. Each of the points has a certain rgb value and having them swapped around causes all sort of problems for me when I implement color gradient. That is the main reason why I have to add boolean variables to keep track of what's being swapped so the program will draw correct color.
 
 ##### Brightness Issue
 ```txt
