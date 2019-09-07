@@ -107,6 +107,7 @@ When converting gif to bmp, you'd often see something like [prefix]-{0...x}.bmp.
 ```shell
 # replace PREFIX with name of your file without numbers at the end
 printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[PREFIX]%04d.fdf" $n`; done
+# Your files now have 0 paddings.
 ```
 6. Start fdf and run any fdf files
 7. Enter shell mode and use animate
@@ -148,6 +149,7 @@ printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[PREFIX]%04d.fdf
     + Added pictures for minishell
   + Extra
     + Update shell_help.txt
+    + Added explanation for gifs
     + Added explanation for how to run
  
 <b>09/05/2019</b><br>
