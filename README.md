@@ -80,7 +80,7 @@ int	get_next_line(const int fd, char **line);
 returns
 -1 if there's an error     0 if end of file     1 if successful
 ```
-After grabbing the line, I use **ft_strsplit()**, a function that I made in my first create-your-own-library project at 42, to split all the digits up using a space (' ') as a delimiter or 32 in ascii. After splitting them up, I use **ft_atoi()** similar to **atoi()** to convert them into integers. I also use ft_strsplit() with (',') as delimiter to extract the color behind the points. To convert the hex to integer, I make a simple **ft_atoi_base()** that allows me to convert the hex string into integer using base 16. I store the points in t_map struct.
+After grabbing the line, I use **ft_strsplit()**, a function that I made in my first [libft](https://github.com/nkone/42_fdf/tree/master/libft) project at 42, to split all the digits up using a space (' ') as a delimiter or 32 in ascii. After splitting them up, I use **ft_atoi()** similar to **atoi()** to convert them into integers. I also use ft_strsplit() with (',') as delimiter to extract the color behind the points. To convert the hex to integer, I make a simple **ft_atoi_base()** that allows me to convert the hex string into integer using base 16. I store the points in t_map struct.
 ```C
 typedef struct		s_map
 {
