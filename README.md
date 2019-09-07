@@ -43,6 +43,7 @@ Wireframe graphic
 ```
 make
 ./fdf [path to .fdf files]
+in shell mode type help to see list of available commands
 ```
 
 ### Gradient
