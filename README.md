@@ -100,13 +100,16 @@ void fdf_theme_custom(t_ramp **ramp)
 4. Run the the python script like so
 ```shell
 for f in [path to bmp folder]/*.bmp; do
-python3 pixel.py $f [output folder path]
+python3 pixel.py $f [output folder path]; done
 ```
-5. Rename the files
+5. Rename the files\
 When converting gif to bmp, you'd often see something like [prefix]-{0...x}.bmp. To read them in lexicographically order run
+Change the prefix as your filename
 ```shell
 printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[prefix]%04d.fdf" $n`; done
 ```
+0 will becomes 0000\
+1 -----------> 0001
 <details>
    <summary>Game</summary>
    <br>
