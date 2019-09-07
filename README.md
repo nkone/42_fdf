@@ -47,7 +47,7 @@ make
 #### fdf_minishell
 Pressing S will enter shell mode, program will not resume until "resume" command is input
 <p align="center">
-  <img src="images/fdf_minishell.png">
+  <img src="images/fdf_minishell.png" height="500" title="fdf_minishell">
 </p>
 
 ### Gradient
