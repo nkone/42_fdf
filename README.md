@@ -26,7 +26,7 @@ Many thanks to:
 - [Update Log](#update-log)
 
 ### Compatibility
-
+*(only tested on this machine)*
 **about this mac**\
 iMac (Retina 5K, 27-inch, Late 2015)\
 3.2 GHz Intel Core i5\
