@@ -18,7 +18,7 @@ Many thanks to:
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
 
-### Compatibility (only tested with school machine)
+### Compatibility
 
 **about this mac**\
 iMac (Retina 5K, 27-inch, Late 2015)\
