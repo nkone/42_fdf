@@ -1,6 +1,12 @@
 <h1 align="center">42 FDF</h1>
 <br>
 
+*This project is about creating a simplified 3D graphic representation of a relief landscape.*
+
+> In this project you will discover the basics of graphic programming, and in particular how
+to place points in space, how to join them with segments and most importantly how to
+observe the scene from a particular viewpoint. -pedago@42.fr
+
 Many thanks to:
 * [Mohammad](https://github.com/mohammadbutt) for helping me out with testing.
 * [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
