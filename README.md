@@ -18,7 +18,7 @@ Many thanks to:
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
 
-### Compatibility
+#### Compatibility
 
 **about this mac**\
 iMac (Retina 5K, 27-inch, Late 2015)\
@@ -35,7 +35,7 @@ GNU Make 3.81
 
 Wireframe graphic
 
-How to run
+#### How to run
 ```
 make
 ./fdf [path to .fdf files]
