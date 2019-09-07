@@ -58,11 +58,11 @@ The goal is to draw a line connecting each point and represent them all together
 
 ### fdf files
 There is no set limit of how big the fdf files should be. However, a valid file should have same amount of points on each line. Each line is ended with a newline. There are no extra empty lines between lines, at the end or at the beginning of the file. Value of the points must be within integer limit.\
-To further represent a landscape, an integer represent in hex can be added behind the points separated by a comma.
+To further represent a landscape, an integer represent in hex for color can be added behind the points separated by a comma.
 ```txt
 0,0xffffff 0,ffffff
 0,0xFFFFFF 0,FFFFFF
-# All are valid represenation of color white
+# All are valid representation of color white
 
 0,0xff 0,0x0000ff
 0,0xFF 0,0x0000FF
@@ -77,6 +77,19 @@ int	get_next_line(const int fd, char **line);
 returns
 -1 if there's an error     0 if end of file     1 if successful
 ```
+After grabbing the line, I use **ft_strsplit()**, a function that I made in my first create-your-own-library project at 42, to split all the digits up using a space (' ') as a delimiter or 32 in ascii. After splitting them up, I use **ft_atoi()** similar to **atoi()** to convert them into integers. I also use ft_strsplit() with (',') as delimiter to extract the color behind the points. To convert the hex to integer, I make a simple **ft_atoi_base()** that allows me to convert the hex string into integer using base 16. I store the points in t_map struct.
+```C
+typedef struct		s_map
+{
+	int		*map; // store points
+	int		*c_map; // store color
+	int		map_h; // height (how many lines in the file)
+	int		map_w; // width (how many points in a line)
+	int		map_size; // width x height
+	bool	map_color; // true if color mapping exist, false then use default color.
+}					t_map;
+```
+
 ### Compatibility
 *(only tested on this machine)*\
 **about this mac**\
