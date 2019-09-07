@@ -128,6 +128,10 @@ void fdf_theme_custom(t_ramp **ramp)
     + Fixed minor math issue and increase brightness by 20% for anti alias
   + Image assets
     + Added better resolution pictures for comparison between AA and normal
+    + Added pictures for minishell
+  + Extra
+    + Update shell_help.txt
+    + Added explanation for how to run
  
 <b>09/05/2019</b><br>
 
