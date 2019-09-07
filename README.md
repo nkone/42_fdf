@@ -46,20 +46,22 @@ Theme demo:
   <table border="0" cellpadding="5">
   <tr>
     <td align="center" valign="center">
-      <img src="images/map_parallel_normal.png" width="250" title="gulf of california ocean parallel" hspace="80"/>
+      <img src="images/map_parallel_normal.png" width="250" title="parallel without AA" hspace="80"/>
       <br>
-      Without anti alias
+      Without anti-aliasing
     </td>
     <td align="center" valign="center">
-      <img src="images/map_parallel_anti_alias.png" width="250" title="gulf of california ocean parallel with anti_alias" hspace="80"/>
+      <img src="images/map_parallel_anti_alias.png" width="250" title="parallel with AA" hspace="80"/>
       <br>
-      With anti alias
+      With anti-aliasing
     </td>
    </tr>
    </table>
-   
+</p>
+<p align="center">
   <b>Isometric view:</b><br><br>
-  <img src="images/map_iso_normal.png" width="500" title="gulf of califronia ocean iso"/>
+  <img src="images/map_iso_normal.png" width="500" title="iso without AA" />
+  <img src="images/map_iso_anti_alias.png" width="500" title="iso with AA" />
 </p>
 
 ### GIF demonstration
@@ -78,7 +80,7 @@ Theme demo:
   <p align ="center">
   <b>Matrix bullet dodging</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
-  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with anti-alias off @ 250 x 103"width="1000" />
+  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with AA off @ 250 x 103"width="1000" />
   </p>
 </details>
 <details>
