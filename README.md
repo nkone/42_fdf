@@ -97,12 +97,12 @@ Theme demo:
                                                  
 #### Update Log
 <details><summary>September</summary><br>
-  <bold>09/06/2019</bold><br>
+  <b>09/06/2019</b><br>
   
   + Code
     + Fixed minor math issue and increase brightness by 20% for anti alias
  
-<bold>09/05/2019</bold><br>
+<b>09/05/2019</b><br>
 
   + Code
     + Change algorithm to use int instead of doubles.
