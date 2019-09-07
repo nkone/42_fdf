@@ -18,7 +18,7 @@ Many thanks to:
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
 - [Gradient](#gradient)
-- [Demo](#demo)
+- [Preview](#preview)
 - [Gif](#gif)
 
 ### Compatibility
@@ -49,9 +49,8 @@ make
 Theme demo:
 ![](images/theme.png)
 
-### Demo
-<details>
-  <summary>Map demo</summary>
+### Preview
+
 <p align="center">
   <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
@@ -75,7 +74,6 @@ Theme demo:
   <img src="images/map_iso_normal.png" height="350" title="iso without AA" />
   <img src="images/map_iso_anti_alias.png" height="350" title="iso with AA" />
 </p>
-</details>
 
 ### GIF
 
