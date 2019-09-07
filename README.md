@@ -95,6 +95,8 @@ void fdf_theme_custom(t_ramp **ramp)
 
 #### How to make your own fdf gifs
 1. Convert a gif to bmp (make sure to give it an easy name before converting)
+I use this [site](https://image.online-convert.com/convert-to-bmp)\
+Normally I prefer width around 250 to 300, depending on your program. Just compile with -02 or -03 to make them run faster.
 2. Put all the bmp files into a folder and place the bmp folder into the fdf folder
 3. Create a new folder to store fdf files
 4. Run the the python script like so
