@@ -2,16 +2,27 @@ commands available:
 
 change			- set a variable to a value in the environment
 
-[variables] {map, z_zoom, brightness, after_image}
+[variables] {map, z_zoom, brightness, after_image, delay}
 
 -map			- changes map
+
 usage:			change map [path to map]
+
 -z_zoom			- changes z_zoom
+
 usage:			change z_zoom [integer]
+
 -brightness		- changes brightness
+
 usage:			change brightness [integer] (negative req. after_img)
+
 -after_image		- turn on/off (overrides all rgba values on map)
+
 usage:			change after_image [on/off]
+
+-delay			- changes frame delay between fdf cycles
+
+usage:			change delay [integer] (milliseconds)
 
 info			- print details info
 
@@ -22,8 +33,10 @@ resume			- exit minishell mode and resume visualizer
 animate			- animate mode (read in multiple fdf)
 
 fdf files are sorted using strcasecmp, name the .fdf files with numbers to get correct sequence
+path currently does not work with symlink, please provide real path :p
 
 usage:			animate [path to folder of .fdf files]
+Ex.			animate maps/animate/isopoly_fdf
 
 help			- print help menu
 
