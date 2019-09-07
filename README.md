@@ -17,7 +17,7 @@ Many thanks to:
 ## Table of Content
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
-  * [FDF_minishell](#fdf-minishell)
+  * [FDF minishell](#fdf-minishell)
 - [Gradient](#gradient)
 - [Preview](#preview)
 - [Gif](#gif)
@@ -45,7 +45,7 @@ Wireframe graphic
 make
 ./fdf [path to .fdf files]
 ```
-#### fdf_minishell
+#### fdf minishell
 Pressing S will enter shell mode, program will not resume until "resume" command is input
 <p align="center">
   <img src="images/fdf_minishell.png" height="500" title="fdf_minishell">
