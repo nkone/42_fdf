@@ -93,6 +93,20 @@ void fdf_theme_custom(t_ramp **ramp)
 
 ### GIF
 
+#### How to make your own fdf gifs
+1. Convert a gif to bmp (make sure to give it an easy name before converting)
+2. Put all the bmp files into a folder and place the bmp folder into the fdf folder
+3. Create a new folder to store fdf files
+4. Run the the python script like so
+```shell
+for f in [path to bmp folder]/*.bmp; do
+python3 pixel.py $f [output folder path]
+```
+5. Rename the files
+When converting gif to bmp, you'd often see something like [prefix]-{0...x}.bmp. To read them in lexicographically order run
+```shell
+printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[prefix]%04d.fdf" $n`; done
+```
 <details>
    <summary>Game</summary>
    <br>
