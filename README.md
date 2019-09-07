@@ -29,7 +29,10 @@ Many thanks to:
 
 ## Table of Content
 - [Project Overview](#project-overview)
-  - [fdf files](#fdf-files)
+  * [fdf files](#fdf-files)
+  * [Line Algorithm](#line-algorithm)
+   + [Color Issue](#color-issue)
+   + [Brightness Issue](#brightness-issue)
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
   * [FDF minishell](#fdf-minishell)
@@ -86,10 +89,77 @@ typedef struct		s_map
 	int		map_h; // height (how many lines in the file)
 	int		map_w; // width (how many points in a line)
 	int		map_size; // width x height
-	bool	map_color; // true if color mapping exist, false then use default color.
+	bool		map_color; // true if color mapping exist, false then use default color.
 }					t_map;
 ```
+#### Line Algorithm
+After seeing so many students at the school use the [Bresenham's line algorithm](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm) for their project, I decided to try to [Xiaolin Wu's algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm) instead.
+Since I cannot have more than 5 variables declared in a function, school rule, I have to use a struct to store them.
+```C
+typedef struct		s_var
+{
+	bool	steep;
+	bool	swap; // color swap
+	bool	swap_d; // color swap
+	double	dx;
+	double	dy;
+	double	gradient;
+	double	xend;
+	double	yend;
+	double	xgap;
+	double	ygap;
+	int	xpxl1;
+	int	ypxl1;
+	double	intery;
+	double	interx;
+	int	xpxl2;
+	int	ypxl2;
+}					t_var;
+```
+The wikipedia does not declare variables type, so in the beginning all my variables are doubles. But after referencing the
+[rosettacode](https://rosettacode.org/wiki/Xiaolin_Wu%27s_line_algorithm#C), I decide to change some doubles to int.\
+It is not hard to implement the wikipedia algorithm. However I run into issues with color and lightning (brightness).\
+##### Color Issue
+```C
+if (var->steep)
+{
+	var->swap = true;
+	ft_swap(&(p0->x), &(p0->y));
+	ft_swap(&(p1->x), &(p1->y));
+}
+if (p0->x > p1->x)
+{
+	if (!var->steep)
+		var->swap = true;
+	var->swap_d = true;
+	ft_swap(&(p0->x), &(p1->x));
+	ft_swap(&(p0->y), &(p1->y));
+}
+```
+The points are being swapped around in the algorithm. Each of the points has a certain rgb value and having them swapped around causes all sort of problems for me when I implement color gradient. That is the main reason why I have to add boolean variables to keep track of what's being swapped so the program will draw correct color.\
 
+##### Brightness Issue
+```txt
+# Debug mode
+...
+bright: 0.658824	 percent: 0.811765	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(55, 39, 23)
+bright: 0.882353	 percent: 0.823529	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(74, 53, 31)
+bright: 0.117647	 percent: 0.823529	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(9, 7, 4)
+bright: 0.423529	 percent: 0.835294	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(35, 25, 15)
+bright: 0.576471	 percent: 0.835294	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(48, 34, 20)
+bright: 0.964706	 percent: 0.847059	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(81, 58, 34)
+bright: 0.035294	 percent: 0.847059	rgb_start(87,63,38)	rgb_end(84,60,35)	rgb_ret(2, 2, 1)
+...
+ret.r = ((start.r * (1.0 - percent)) + (end.r * percent)) * brightness;
+```
+Looking at the value, you can see that the brightness never reaches 1.0 (maximum brightness). That means, the pixel I got out of the algorithm never reaches their true color. The colors return are much dimmer. To counter it, I just add 0.2 brightness to make them 20% brighter. To fully make it brightest possible, I modify my main loop like so.
+```C
+// before
+plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, rfpart(var.intery))); //anti-aliasing
+// after
+plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, 1.0)); // not anti-aliasing
+```
+By increasing the brightness to 1.0 for every pixel, the lines are no longer anti-aliasing. So, basically, I have "2" line algorithm inside the program. After the switch, I can see that the lines are twice as thick in parallel view. I make the anti-alias button for users to see the difference.
 ### Compatibility
 *(only tested on this machine)*\
 **about this mac**\
@@ -163,7 +233,7 @@ I use this [site](https://image.online-convert.com/convert-to-bmp)\
 Normally I prefer width around 250 to 300, depending on your program. Just compile with -02 or -03 to make them run faster.
 2. Put all the bmp files into a folder and place the bmp folder into the fdf folder
 3. Create a new folder to store fdf files
-4. Run the the python script like so
+4. Run the the [python script](https://github.com/nkone/42_fdf/blob/master/maps/script/pixel.py) like so (located in maps/script)
 ```shell
 for f in [BMP FOLDER PATH]/*.bmp; do
 python3 pixel.py $f [OUTPUT FOLDER PATH]; done
