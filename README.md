@@ -4,6 +4,7 @@
 Many thanks to:
 * [Mohammad](https://github.com/mohammadbutt) for helping me out with testing.
 * [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
+* [Jeff Senpai](https://github.com/JCTGY) for feedbacks.
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
 * [Mr Colour](https://github.com/mrcolour) for coding advices.
