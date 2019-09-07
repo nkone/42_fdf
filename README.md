@@ -140,7 +140,22 @@ You can get results like these:
   <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128" width="1000" />
   </p>
 </details>
-                                                 
+If you find run too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
+```c
+// Something like this
+void	delay(int milliseconds)
+{
+	unsigned long	pause;
+	clock_t			now;
+	clock_t			then;
+
+	pause = milliseconds * (CLOCKS_PER_SEC / 1000);
+	then = clock();
+	now = then;
+	while ((now - then) < pause)
+		now = clock();
+}
+```
 #### Update Log
 <details><summary>September</summary><br>
   <b>09/06/2019</b><br><br>
