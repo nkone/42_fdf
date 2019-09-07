@@ -99,17 +99,18 @@ void fdf_theme_custom(t_ramp **ramp)
 3. Create a new folder to store fdf files
 4. Run the the python script like so
 ```shell
-for f in [path to bmp folder]/*.bmp; do
-python3 pixel.py $f [output folder path]; done
+for f in [BMP FOLDER PATH]/*.bmp; do
+python3 pixel.py $f [OUTPUT FOLDER PATH]; done
 ```
 5. Rename the files\
 When converting gif to bmp, you'd often see something like [prefix]-{0...x}.bmp. To read them in lexicographically order run
-Change the prefix as your filename
 ```shell
-printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[prefix]%04d.fdf" $n`; done
+# replace PREFIX with name of your file without numbers at the end
+printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[PREFIX]%04d.fdf" $n`; done
 ```
-0 will becomes 0000\
-1 -----------> 0001
+6. Start fdf and run any fdf files
+7. Enter shell mode and use animate
+
 <details>
    <summary>Game</summary>
    <br>
