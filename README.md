@@ -20,6 +20,7 @@ Many thanks to:
 - [Gradient](#gradient)
 - [Preview](#preview)
 - [Gif](#gif)
+- [Update Log](#update-log)
 
 ### Compatibility
 
