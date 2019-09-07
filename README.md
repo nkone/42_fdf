@@ -1,7 +1,7 @@
 <h1 align="center">42 FDF</h1>
 <br>
 
-*This project is about creating a simplified 3D graphic representation of a relief landscape.*
+*This project is about creating a simplified 3D graphic representation of a relief landscape. (in C)*
 
 > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In this project you will discover the basics of graphic programming, and in particular how
 to place points in space, how to join them with segments and most importantly how to
@@ -29,6 +29,7 @@ Many thanks to:
 
 ## Table of Content
 - [Project Overview](#project-overview)
+  - [fdf files](#fdf-files)
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
   * [FDF minishell](#fdf-minishell)
@@ -38,7 +39,7 @@ Many thanks to:
 - [Update Log](#update-log)
 
 ### Project Overview
-Given a fdf file with this format
+Given a .fdf file with this format
 ```txt
 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
@@ -55,6 +56,27 @@ Given a fdf file with this format
 Each number represents a point with a height in integer.\
 The goal is to draw a line connecting each point and represent them all together as a landscape.
 
+### fdf files
+There is no set limit of how big the fdf files should be. However, a valid file should have same amount of points on each line. Each line is ended with a newline. There are no extra empty lines between lines, at the end or at the beginning of the file. Value of the points must be within integer limit.\
+To further represent a landscape, an integer represent in hex can be added behind the points separated by a comma.
+```txt
+0,0xffffff 0,ffffff
+0,0xFFFFFF 0,FFFFFF
+# All are valid represenation of color white
+
+0,0xff 0,0x0000ff
+0,0xFF 0,0x0000FF
+# Works with 0 paddings as well.
+```
+In order to read the files, students are only allowed to use **open()** and **read()**.\
+The 2nd project get_next_line() at 42 is the main key for me to parse the file and grab each line. It works similar to **getline()** function.
+```C
+prototype:
+
+int	get_next_line(const int fd, char **line);
+returns
+-1 if there's an error     0 if end of file     1 if successful
+```
 ### Compatibility
 *(only tested on this machine)*\
 **about this mac**\
@@ -196,7 +218,7 @@ void	delay(int milliseconds)
  + Extra
    + Added project overview
    
-<b>09/06/2019</b><br><br>
+<b>09/06/2019</b><br>
 
  + Code
    + Fixed minor math issue and increase brightness by 20% for anti alias
