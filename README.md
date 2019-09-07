@@ -141,6 +141,7 @@ You can get results like these:
   </p>
 </details>
 If you find run too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
+
 ```c
 // Something like this
 void	delay(int milliseconds)
@@ -156,6 +157,7 @@ void	delay(int milliseconds)
 		now = clock();
 }
 ```
+
 #### Update Log
 <details><summary>September</summary><br>
   <b>09/06/2019</b><br><br>
