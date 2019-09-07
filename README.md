@@ -7,6 +7,7 @@ Many thanks to:
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
 * [Mr Colour](https://github.com/mrcolour) for coding advices.
+* [Jean-Michel Gigault](https://github.com/jgigault) for his map generator.
 * And of course [42 Silicon Valley](https://www.42.us.org) for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
