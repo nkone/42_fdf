@@ -60,8 +60,8 @@ Theme demo:
 </p>
 <p align="center">
   <b>Isometric view:</b><br><br>
-  <img src="images/map_iso_normal.png" width="500" title="iso without AA" />
-  <img src="images/map_iso_anti_alias.png" width="500" title="iso with AA" />
+  <img src="images/map_iso_normal.png" width="350" title="iso without AA" />
+  <img src="images/map_iso_anti_alias.png" width="350" title="iso with AA" />
 </p>
 
 ### GIF demonstration
