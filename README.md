@@ -40,8 +40,6 @@ Thread model: posix
 **make --version**\
 GNU Make 3.81
 
-Wireframe graphic
-
 ### How to run
 ```
 make
