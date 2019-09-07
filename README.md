@@ -17,8 +17,11 @@ Many thanks to:
 ## Table of Content
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
+- [Gradient](#gradient)
+- [Demo](#demo)
+- [Gif](#gif)
 
-#### Compatibility
+### Compatibility
 
 **about this mac**\
 iMac (Retina 5K, 27-inch, Late 2015)\
@@ -35,7 +38,7 @@ GNU Make 3.81
 
 Wireframe graphic
 
-#### How to run
+### How to run
 ```
 make
 ./fdf [path to .fdf files]
@@ -46,6 +49,7 @@ make
 Theme demo:
 ![](images/theme.png)
 
+### Demo
 <details>
   <summary>Map demo</summary>
 <p align="center">
@@ -73,7 +77,7 @@ Theme demo:
 </p>
 </details>
 
-### GIF demonstration
+### GIF
 
 <details>
    <summary>Game</summary>
