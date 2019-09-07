@@ -98,6 +98,7 @@ Theme demo:
 #### Update Log
 <details>
   <summary>September</summary>
+  <p align="center">
   <details>
     <summary>September 6</summary>
     <br>
@@ -120,6 +121,7 @@ Theme demo:
         + Gifs are now collapsible
   
    </details>
+   </p>
 </details>
 
   
