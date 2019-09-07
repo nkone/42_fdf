@@ -114,6 +114,7 @@ printf '%s\n' *(n) | cat -n | while read n f; do mv $f `printf "[PREFIX]%04d.fdf
 6. Start fdf and run any fdf files
 7. Enter shell mode and use animate
 
+You can get results like these:
 <details>
    <summary>Game</summary>
    <br>
