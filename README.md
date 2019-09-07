@@ -72,7 +72,7 @@ To further represent a landscape, an integer represent in hex for color can be a
 # Works with 0 paddings as well.
 ```
 In order to read the files, students are only allowed to use **open()** and **read()**.\
-The 2nd project get_next_line() at 42 is the main key for me to parse the file and grab each line. It works similar to **getline()** function.
+The 2nd project [get_next_line()](https://github.com/nkone/get_next_line) at 42 is the main key for me to parse the file and grab each line. It works similar to **getline(3)** function.
 ```C
 prototype:
 
