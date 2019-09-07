@@ -7,7 +7,7 @@ Many thanks to:
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
 * [Mr Colour](https://github.com/mrcolour) for coding advices.
-* And of course 42 Silicon Valley for giving me this opportunity to work on this project.
+* And of course [42 Silicon Valley](https://www.42.us.org) for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
   <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
@@ -103,6 +103,8 @@ Theme demo:
   
   + Code
     + Fixed minor math issue and increase brightness by 20% for anti alias
+  + Image assets
+    + Added better resolution pictures for comparison between AA and normal
  
 <b>09/05/2019</b><br>
 
@@ -110,7 +112,7 @@ Theme demo:
     + Change algorithm to use int instead of doubles.
     + Added rosetta code algo for comparison.
     + Added functionality for alias.
-  + Gifs
+  + Image assets
     + Fix resolution after adding anti alias
     + Update better gifs for matrix
     + Gifs are now collapsible
