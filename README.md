@@ -102,7 +102,7 @@ Theme demo:
   + Code
     + Fixed minor math issue and increase brightness by 20% for anti alias
  
-<br>09/05/2019<br>
+09/05/2019<br>
 
   + Code
     + Change algorithm to use int instead of doubles.
