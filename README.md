@@ -1,18 +1,28 @@
-# 42_fdf
+<h1 align="center">42 FDF</h1>
+<br>
+
 Many thanks to:
 * [Mohammad](https://github.com/mohammadbutt) for helping me out with testing.
 * [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
 * [Mr Colour](https://github.com/mrcolour) for coding advices.
-* And of course 42 Silicon Valley for giving me this opportunity to work on this project.
+* And of course [42 Silicon Valley](https://www.42.us.org) for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
   <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
   <br><br>
 </p>
 
-## Compatibility (only tested with school machine):
+## Table of Content
+- [Compatibility](#compatibility)
+- [How to run](#how-to-run)
+- [Gradient](#gradient)
+- [Preview](#preview)
+- [Gif](#gif)
+- [Update Log](#update-log)
+
+### Compatibility
 
 **about this mac**\
 iMac (Retina 5K, 27-inch, Late 2015)\
@@ -29,7 +39,7 @@ GNU Make 3.81
 
 Wireframe graphic
 
-How to run
+### How to run
 ```
 make
 ./fdf [path to .fdf files]
@@ -40,16 +50,33 @@ make
 Theme demo:
 ![](images/theme.png)
 
+### Preview
+
 <p align="center">
   <b>Gulf of California Ocean</b><br><br>
   <b>Parallel view:</b><br><br>
-  <img src="images/map_parallel.png" width="500" title="gulf of california ocean parallel"/>
-  <br><br>
+  <table border="0" cellpadding="5">
+  <tr>
+    <td align="center" valign="center">
+      <img src="images/map_parallel_normal.png" width="250" title="parallel without AA" hspace="80"/>
+      <br>
+      Without anti-aliasing
+    </td>
+    <td align="center" valign="center">
+      <img src="images/map_parallel_anti_alias.png" width="250" title="parallel with AA" hspace="80"/>
+      <br>
+      With anti-aliasing
+    </td>
+   </tr>
+   </table>
+</p>
+<p align="center">
   <b>Isometric view:</b><br><br>
-  <img src="images/map_iso.png" width="500" title="gulf of califronia ocean iso"/>
+  <img src="images/map_iso_normal.png" height="350" title="iso without AA" />
+  <img src="images/map_iso_anti_alias.png" height="350" title="iso with AA" />
 </p>
 
-### GIF demonstration
+### GIF
 
 <details>
    <summary>Game</summary>
@@ -65,7 +92,7 @@ Theme demo:
   <p align ="center">
   <b>Matrix bullet dodging</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
-  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with anti-alias off @ 250 x 103"width="1000" />
+  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with AA off @ 250 x 103"width="1000" />
   </p>
 </details>
 <details>
@@ -78,30 +105,23 @@ Theme demo:
 </details>
                                                  
 #### Update Log
-<details>
-  <summary>September</summary>
-  <details>
-    <summary>September 6</summary>
-    <br>
+<details><summary>September</summary><br>
+  <b>09/06/2019</b><br><br>
   
-      + Code
-        + Fixed minor math issue and increase brightness by 20% for anti alias
-    
-   </details>
-   <details>
-      <summary>September 5</summary>
-      <br>
-  
-      + Code
-        + Change algorithm to use int instead of doubles.
-        + Added rosetta code algo for comparison.
-        + Added functionality for alias.
-      + Gifs
-        + Fix resolution after adding anti alias
-        + Update better gifs for matrix
-        + Gifs are now collapsible
-  
-   </details>
-</details>
+  + Code
+    + Fixed minor math issue and increase brightness by 20% for anti alias
+  + Image assets
+    + Added better resolution pictures for comparison between AA and normal
+ 
+<b>09/05/2019</b><br>
 
-  
+  + Code
+    + Change algorithm to use int instead of doubles.
+    + Added rosetta code algo for comparison.
+    + Added functionality for alias.
+  + Image assets
+    + Fix resolution after adding anti alias
+    + Update better gifs for matrix
+    + Gifs are now collapsible
+    
+</details>
