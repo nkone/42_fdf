@@ -99,17 +99,16 @@ Theme demo:
 <details>
   <summary>September</summary>
   <p align="center">
-  <details>
-    <summary>September 6</summary>
     <br>
-  
+    <b>09/06/2019</b>
+    <br>
+    
       + Code
         + Fixed minor math issue and increase brightness by 20% for anti alias
-    
-   </details>
-   <details>
-      <summary>September 5</summary>
-      <br>
+        
+    <br>
+    <b>09/05/2019</b>
+    <br>
   
       + Code
         + Change algorithm to use int instead of doubles.
@@ -119,8 +118,7 @@ Theme demo:
         + Fix resolution after adding anti alias
         + Update better gifs for matrix
         + Gifs are now collapsible
-  
-   </details>
+        
    </p>
 </details>
 
