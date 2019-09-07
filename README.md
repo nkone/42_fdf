@@ -102,8 +102,9 @@ Theme demo:
     <br>
     <b>09/06/2019</b>
     <br>
-      + Code
-        + Fixed minor math issue and increase brightness by 20% for anti alias
+    + Code
+     + Fixed minor math issue and increase brightness by 20% for anti alias
+        
     <br>
     <b>09/05/2019</b>
     <br>
