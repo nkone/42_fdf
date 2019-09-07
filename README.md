@@ -191,27 +191,32 @@ void	delay(int milliseconds)
 
 #### Update Log
 <details><summary>September</summary><br>
-	<b>09/07/2019</b>
-  	<b>09/06/2019</b><br><br>
-	+ Code
-  		+ Fixed minor math issue and increase brightness by 20% for anti alias
-  + Image assets
-    + Added better resolution pictures for comparison between AA and normal
-    + Added pictures for minishell
-  + Extra
-    + Update shell_help.txt
-    + Added explanation for gifs
-    + Added explanation for how to run
+<b>09/07/2019</b><br><br>
+	
+ + Extra
+   + Added project overview
+   
+<b>09/06/2019</b><br><br>
+
+ + Code
+   + Fixed minor math issue and increase brightness by 20% for anti alias
+ + Image assets
+   + Added better resolution pictures for comparison between AA and normal
+   + Added pictures for minishell
+ + Extra
+   + Update shell_help.txt
+   + Added explanation for gifs
+   + Added explanation for how to run
  
 <b>09/05/2019</b><br>
 
-  + Code
-    + Change algorithm to use int instead of doubles.
-    + Added rosetta code algo for comparison.
-    + Added functionality for alias.
-  + Image assets
-    + Fix resolution after adding anti alias
-    + Update better gifs for matrix
-    + Gifs are now collapsible
+ + Code
+   + Change algorithm to use int instead of doubles.
+   + Added rosetta code algo for comparison.
+   + Added functionality for alias.
+ + Image assets
+   + Fix resolution after adding anti alias
+   + Update better gifs for matrix
+   + Gifs are now collapsible
     
 </details>
