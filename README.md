@@ -17,7 +17,7 @@ Many thanks to:
 ## Table of Content
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
-  -[FDF_minishell](#fdf-minishell)
+  * [FDF_minishell](#fdf-minishell)
 - [Gradient](#gradient)
 - [Preview](#preview)
 - [Gif](#gif)
