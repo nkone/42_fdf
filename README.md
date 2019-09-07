@@ -14,7 +14,7 @@ with events linked to this window: keyboard and mouse. This project introduces y
 
 Many thanks to:
 * [Mohammad](https://github.com/mohammadbutt) for helping me out with testing.
-* [Vasu aka Jimmy](https://github.com/Zeroays) for helping me make the python script.
+* [Jimmy](https://github.com/Zeroays) for helping me make the python script.
 * [Jeff Senpai](https://github.com/JCTGY) for feedbacks.
 * [Vladyslav Brazhnik](https://github.com/VBrazhnik) for his FDF cook book.
 * [Tigran Katolikyan](https://github.com/katolikyan) for the depth effect.
@@ -28,6 +28,7 @@ Many thanks to:
 </p>
 
 ## Table of Content
+- [Project Overview](#project-overview)
 - [Compatibility](#compatibility)
 - [How to run](#how-to-run)
   * [FDF minishell](#fdf-minishell)
@@ -35,6 +36,24 @@ Many thanks to:
 - [Preview](#preview)
 - [Gif](#gif)
 - [Update Log](#update-log)
+
+### Project Overview
+Given a fdf file with this format
+```txt
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0 10 10  0  0 10 10  0  0  0 10 10 10 10 10  0  0  0
+0  0 10 10  0  0 10 10  0  0  0  0  0  0  0 10 10  0  0
+0  0 10 10  0  0 10 10  0  0  0  0  0  0  0 10 10  0  0
+0  0 10 10 10 10 10 10  0  0  0  0 10 10 10 10  0  0  0
+0  0  0 10 10 10 10 10  0  0  0 10 10  0  0  0  0  0  0
+0  0  0  0  0  0 10 10  0  0  0 10 10  0  0  0  0  0  0
+0  0  0  0  0  0 10 10  0  0  0 10 10 10 10 10 10  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+```
+Each number represents a point with a height in integer.\
+The goal is to draw a line connecting each point and represent them all together as a landscape.
 
 ### Compatibility
 *(only tested on this machine)*\
