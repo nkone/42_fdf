@@ -15,8 +15,8 @@ Many thanks to:
 </p>
 
 ## Table of Content
-- [Compatibility](#Compatibility)
-- [How to run](#How to run)
+- [Compatibility](#compatibility)
+- [How to run](#how-to-run)
 
 ### Compatibility (only tested with school machine)
 
