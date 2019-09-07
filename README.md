@@ -191,10 +191,10 @@ void	delay(int milliseconds)
 
 #### Update Log
 <details><summary>September</summary><br>
-  <b>09/06/2019</b><br><br>
-  
-  + Code
-    + Fixed minor math issue and increase brightness by 20% for anti alias
+	<b>09/07/2019</b>
+  	<b>09/06/2019</b><br><br>
+	+ Code
+  		+ Fixed minor math issue and increase brightness by 20% for anti alias
   + Image assets
     + Added better resolution pictures for comparison between AA and normal
     + Added pictures for minishell
