@@ -140,7 +140,7 @@ You can get results like these:
   <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128" width="1000" />
   </p>
 </details>
-If you find run too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
+If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
 
 ```c
 // Something like this
