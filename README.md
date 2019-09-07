@@ -97,11 +97,13 @@ Theme demo:
                                                  
 #### Update Log
 <details><summary>September</summary><br>
-<b>09/06/2019</b><br>
+09/06/2019<br>
+  
   + Code
     + Fixed minor math issue and increase brightness by 20% for anti alias
-<br>
-<b>09/05/2019</b><br>
+ 
+09/05/2019<br>
+
   + Code
     + Change algorithm to use int instead of doubles.
     + Added rosetta code algo for comparison.
@@ -110,4 +112,5 @@ Theme demo:
     + Fix resolution after adding anti alias
     + Update better gifs for matrix
     + Gifs are now collapsible
+    
 </details>
