@@ -257,6 +257,7 @@ You can get results like these:
      <b>Fighting Climax Ignition: Shana</b><br><br>
      <img src="images/shana_combo.gif" width="400" /><br>
      <img src="images/shana_combo_demo.gif" title="shana demo 250 x 141"width="1000" />
+	   <i>path: maps/animate/shana_combo_fdf</i>
    </p>
 </details>
 <details>
@@ -264,7 +265,8 @@ You can get results like these:
   <p align ="center">
   <b>Matrix bullet dodging</b><br><br>
   <img src="images/matrix_bullet.gif" width="400" /><br>
-  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with AA off @ 250 x 103"width="1000" />
+  <img src="images/matrix_bullet_demo.gif" title ="matrix demo with AA off @ 250 x 103"width="1000" /><br>
+	  <i>path: maps/animate/matrix_bullet_fdf</i>
   </p>
 </details>
 <details>
@@ -273,7 +275,7 @@ You can get results like these:
   <b>Isopoly for "3D"</b><br><br>
   <img src="images/isopoly.gif" width="400" /><br>
   <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128" width="1000" /><br>
-	<i>folder location: maps/animate/isopoly_fdf</i>
+	<i>path: maps/animate/isopoly_fdf</i>
   </p>
 </details>
 If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
@@ -302,6 +304,7 @@ void	delay(int milliseconds)
 	
  + Extra
    + Added project overview
+   + Added path for fdf gifs
    
 <b>09/06/2019</b><br>
 
