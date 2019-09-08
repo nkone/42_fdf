@@ -363,7 +363,7 @@ change delay [integer] (milliseconds)
 
 <details><summary>September</summary><br>
 	
-<b>09/08/2019</b><br><br>
+<b>09/08/2019</b><br>
 	
  + Code
    + Added more color macros
