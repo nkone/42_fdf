@@ -23,7 +23,7 @@ Many thanks to:
 * And of course [42 Silicon Valley](https://www.42.us.org) for giving me this opportunity to work on this project.
 <p float ="left">
   <img src="images/fdf_miku_dance.gif" width="350" alt="original gif" title="Miku dance" hspace="50"/>
-  <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/>
+  <img src="images/miku_dance_demo.gif" width="350" alt="fdf miku" title="Miku dance in fdf"/><br>
 	<i>[left]: Original gif</i>
   <br><br>
 </p>
