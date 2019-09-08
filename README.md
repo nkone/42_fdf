@@ -169,7 +169,7 @@ By increasing the brightness to 1.0 for every pixel, the lines are no longer ant
 	<img src="images/square_normal.png" width="350" title="with 20% increased brightness" hspace="50">
 	<img src="images/square_modified.png" width="350" title="with 100% brightness">
 </p>
-<pre> 	Anti-aliasing with 20% increased				With 100% brightness</pre>
+<pre> 	Anti-aliasing with 20% increased			  With 100% brightness</pre>
 	
 ### Compatibility
 *(only tested on this machine)*\
