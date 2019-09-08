@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/08 16:20:35 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/08 16:38:50 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,6 +215,30 @@
 # define FDF_KHAKI					0xF0E68C
 # define FDF_DARK_KHAKI				0xBDB76B
 # define FDF_GOLD					0xFFD700
+
+/*
+** Purple, Violet, and Magenta Colors
+** Proof read check: [✓]
+*/
+
+# define FDF_LAVENDER				0xE6E6FA
+# define FDF_THISTLE				0xD8BFD8
+# define FDF_PLUM					0xDDA0DD
+# define FDF_VIOLET					0xEE82EE
+# define FDF_ORCHID					0xDA70D6
+# define FDF_FUCHSIA				0xFF00FF
+# define FDF_MAGENTA				0xFF00FF
+# define FDF_MEDIUM_ORCHID			0xBA55D3
+# define FDF_MEDIUM_PURPLE			0x9370DB
+# define FDF_BLUE_VIOLET			0x8A2BE2
+# define FDF_DARK_VIOLET			0x9400D3
+# define FDF_DARK_ORCHID			0x9932CC
+# define FDF_DARK_MAGENTA			0x8B008B
+# define FDF_PURPLE					0x800080
+# define FDF_INDIGO					0x4B0082
+# define FDF_DARK_SLATE_BLUE		0x483D8B
+# define FDF_SLATE_BLUE				0x6A5ACD
+# define FDF_MEDIUM_SLATE_BLUE		0x7B68EE
 
 /*
 ** White Colors
