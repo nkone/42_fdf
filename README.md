@@ -163,8 +163,8 @@ plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, 1.0)); 
 By increasing the brightness to 1.0 for every pixel, the lines are no longer anti-aliasing. So, basically, I have "2" line algorithm inside the program. After the switch, I can see that the lines are twice as thick in parallel view. I make the anti-alias button for users to see the difference.
 
 <p>
-	<img src="images/square_normal.png" title="with 20% increased brightness">
-	<img src="images/square_modified.png" title="with 100% brightness">
+	<img src="images/square_normal.png" width="350" title="with 20% increased brightness">
+	<img src="images/square_modified.png" width="350" title="with 100% brightness">
 </p>
 	
 ### Compatibility
