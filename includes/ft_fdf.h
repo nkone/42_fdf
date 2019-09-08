@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/05 18:15:41 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/08 16:20:35 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,24 @@
 # define FDF_FOREST_GREEN			0x228B22
 # define FDF_GREEN					0x008000
 # define FDF_DARK_GREEN				0x006400
+
+/*
+** Cyan colors
+** Proof read check: [✓]
+*/
+
+# define FDF_AQUA					0x00FFFF
+# define FDF_CYAN					0x00FFFF
+# define FDF_LIGHT_CYAN				0xE0FFFF
+# define FDF_PALE_TURQUOISE			0xAFEEEE
+# define FDF_AQUAMARINE				0x7FFFD4
+# define FDF_TURQUOISE				0x40E0D0
+# define FDF_MEDIUM_TURQUOISE		0x48D1CC
+# define FDF_DARK_TURQUOISE			0x00CED1
+# define FDF_LIGHT_SEA_GREEN		0x20B2AA
+# define FDF_CADET_BLUE				0x5F9EA0
+# define FDF_DARK_CYAN				0x008B8B
+# define FDF_TEAL					0x008080
 
 /*
 ** Blue Colors
