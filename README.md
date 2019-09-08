@@ -272,7 +272,8 @@ You can get results like these:
   <p align ="center">
   <b>Isopoly for "3D"</b><br><br>
   <img src="images/isopoly.gif" width="400" /><br>
-  <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128" width="1000" />
+  <img src="images/isopoly_demo.gif" title ="isopoly demo @ 128 x 128" width="1000" /><br>
+	<i>folder location: maps/animate/isopoly_fdf</i>
   </p>
 </details>
 If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
