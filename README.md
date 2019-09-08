@@ -337,6 +337,7 @@ change delay [integer] (milliseconds)
  + Extra
    + Added project overview
    + Added path for fdf gifs
+   + Added explanation for fdf_minishell
  + Images
    + Added images for project overview
    
