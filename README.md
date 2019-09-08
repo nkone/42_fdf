@@ -281,7 +281,7 @@ You can get results like these:
 If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
 <details><summary>spoiler</summary><br>
 	
-```c
+```C
 // Something like this
 void	delay(int milliseconds)
 {
@@ -295,6 +295,10 @@ void	delay(int milliseconds)
 	while ((now - then) < pause)
 		now = clock();
 }
+```
+```Shell
+in fdf_minishell use
+change delay [integer] (milliseconds)
 ```
 </details>
 
