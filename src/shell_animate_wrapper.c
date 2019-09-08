@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 15:37:03 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/02 21:14:41 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/07 18:45:09 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	free_fdf_queue(t_files *queue)
 	head = queue;
 	if (queue)
 	{
+		queue = queue->next;
 		while (queue != head)
 		{
 			tmp = queue->next;
@@ -27,8 +28,16 @@ static void	free_fdf_queue(t_files *queue)
 			free(queue->path);
 			free(queue);
 			queue = tmp;
+		//	puts("free");
 		}
+		free(head->name);
+		free(head->path);
+		free(head);
 	}
+//	free(head->name);
+//	free(head->path);
+//	free(head);
+	//puts("end free");
 	queue = NULL;
 }
 
