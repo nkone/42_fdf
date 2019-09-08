@@ -61,6 +61,7 @@ Given a .fdf file with this format
 ```
 Each number represents a point with a height in integer.\
 The goal is to draw a line connecting each point and represent them all together as a landscape.
+<img src="images/42_demo.png" width="500" title="map in parallel view">
 
 ### fdf files
 There is no set limit of how big the fdf files should be. However, a valid file should have same amount of points on each line. Each line is ended with a newline. There are no extra empty lines between lines, at the end or at the beginning of the file. Value of the points must be within integer limit.\
