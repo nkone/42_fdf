@@ -199,7 +199,9 @@ Pressing S will enter shell mode.
 <p align="center">
   <img src="images/fdf_minishell.png" height="500" title="fdf_minishell">
 </p>
-You can modify fdf maps while the progam is running by using built in fdf_shell command\
+
+You can modify fdf maps while the progam is running by using built in fdf_shell command
+
 ```txt
 #for example
 
@@ -210,6 +212,7 @@ change brightness 100 // change brightness to 100
 animate maps/animate/matrix_bullet_fdf // enter animation mode and read multiple fdf files
 
 ```
+
 Use the **resume** command to resume the program.
 
 ### Gradient
