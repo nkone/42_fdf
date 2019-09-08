@@ -195,10 +195,22 @@ make
 ./fdf [path to .fdf files]
 ```
 #### fdf minishell
-Pressing S will enter shell mode, program will not resume until "resume" command is input
+Pressing S will enter shell mode.
 <p align="center">
   <img src="images/fdf_minishell.png" height="500" title="fdf_minishell">
 </p>
+You can modify fdf maps while the progam is running by using built in fdf_shell command\
+```txt
+#for example
+
+change maps maps/t1.fdf // change maps to t1.fdf
+
+change brightness 100 // change brightness to 100
+
+animate maps/animate/matrix_bullet_fdf // enter animation mode and read multiple fdf files
+
+```
+Use the **resume** command to resume the program.
 
 ### Gradient
 ![](images/default_gradient_test.png)
@@ -291,7 +303,7 @@ You can get results like these:
 	<i>path: maps/animate/isopoly_fdf</i>
   </p>
 </details>
-If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or add in a delay function.
+If you find program runs too fast, you can increase the resolution of the bmp(make new ones) or change the delay per frame.
 <details><summary>spoiler</summary><br>
 	
 ```C
@@ -322,6 +334,8 @@ change delay [integer] (milliseconds)
  + Extra
    + Added project overview
    + Added path for fdf gifs
+ + Images
+   + Added images for project overview
    
 <b>09/06/2019</b><br>
 
