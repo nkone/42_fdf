@@ -97,7 +97,7 @@ typedef struct		s_map
 ```
 #### Line Algorithm
 After seeing so many students at the school use the [Bresenham's line algorithm](https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm) for their project, I decided to try to [Xiaolin Wu's algorithm](https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm) instead.
-Since I cannot have more than 5 variables declared in a function, school rule, I have to use a struct to store them.
+Since I cannot have more than 5 variables declared in a function, as stated by school rule, I have to use a struct to store them.
 ```C
 typedef struct		s_var
 {
@@ -163,12 +163,13 @@ plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, rfpart(
 // after
 plot_pixel(fdf, var.xpxl1, ipart(var.intery), get_color(p0, p1, percent, 1.0)); // not anti-aliasing
 ```
-By increasing the brightness to 1.0 for every pixel, the lines are no longer anti-aliasing. So, basically, I have "2" line algorithm inside the program. After the switch, I can see that the lines are twice as thick in parallel view. I make the anti-alias button for users to see the difference.
+By increasing the brightness to 1.0 for every pixel, the lines are no longer anti-aliasing. So basically I have "2" line algorithm inside the program. After the switch, I can see that the lines are twice as thick in parallel view. I make the anti-alias button for users to see the difference.
 
 <p>
 	<img src="images/square_normal.png" width="350" title="with 20% increased brightness" hspace="50">
 	<img src="images/square_modified.png" width="350" title="with 100% brightness">
 </p>
+<pre> 	Anti-aliasing with 20% increased				With 100% brightness</pre>
 	
 ### Compatibility
 *(only tested on this machine)*\
