@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:38:43 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/01 16:27:41 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 11:59:30 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	draw_help_button(int fd, t_fdf *fdf)
 
 	line = NULL;
 	y = WIN_H / 3;
-	while (y <= (WIN_H / 3 + (20 * 13)) && get_next_line(fd, &line) == 1)
+	while (y <= (WIN_H / 3 + (20 * 14)) && get_next_line(fd, &line) == 1)
 	{
 		mlx_string_put(fdf->mlx, fdf->win, WIN_W / 2, y, FDF_WHITE, line);
 		free(line);
