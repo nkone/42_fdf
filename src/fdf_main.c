@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/30 13:14:52 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/02 20:10:47 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 11:45:35 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int			main(int argc, char *argv[])
 	mlx_hook(fdf->win, 4, 0, mouse_press, fdf);
 	mlx_hook(fdf->win, 5, 0, mouse_release, fdf);
 	mlx_hook(fdf->win, 6, 0, mouse_move, fdf);
+	mlx_loop_hook(fdf->mlx, mlx_while, fdf);
 	mlx_loop(fdf->mlx);
 	return (0);
 }
