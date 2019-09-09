@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 20:38:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/05 16:39:23 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 12:14:25 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ t_fdf	*fdf_init(void)
 	frame->mouse = mouse_init();
 	frame->help = false;
 	frame->multi_fdf = false;
+	frame->multi_fdf_con = false;
 	frame->multi_delay = 0;
 	frame->fdf_queue = NULL;
 	return (frame);
