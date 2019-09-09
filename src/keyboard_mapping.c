@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:04:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/09 12:14:08 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 12:27:42 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int			mlx_while(t_fdf *fdf)
 {
 	if (fdf->multi_fdf_con == true)
 	{
+		delay(fdf->multi_delay);
 		if (fdf->multi_fdf && fdf->fdf_queue->next)
 			fdf->fdf_queue = fdf->fdf_queue->next;
 		else
