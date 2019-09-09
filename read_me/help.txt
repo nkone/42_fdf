@@ -63,6 +63,7 @@ KEYBOARD
 ESC       -Exit program
 Q         -Prev fdf
 W         -Next fdf
+E         -Auto forward gif (on/off)
 S         -Start fdf shell input mode (pauses program)
 I         -Zoom in
 K         -Zoom out
