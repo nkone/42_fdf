@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 19:04:13 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 19:28:44 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 12:14:08 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,19 @@ static void	handle_multi_fdf(int key, t_fdf *fdf)
 	}
 }
 
+int			mlx_while(t_fdf *fdf)
+{
+	if (fdf->multi_fdf_con == true)
+	{
+		if (fdf->multi_fdf && fdf->fdf_queue->next)
+			fdf->fdf_queue = fdf->fdf_queue->next;
+		else
+			return (0);
+		draw_multi_fdf(fdf, fdf->fdf_queue);
+	}
+	return (0);
+}
+
 int			key_control(int key, t_fdf *fdf)
 {
 	if (key == KEY_ESC)
@@ -75,6 +88,10 @@ int			key_control(int key, t_fdf *fdf)
 		shell_in(fdf);
 	else if ((key == KEY_W || key == KEY_Q) && fdf->multi_fdf)
 		handle_multi_fdf(key, fdf);
+	else if (key == KEY_E && fdf->multi_fdf_con == false)
+		fdf->multi_fdf_con = true;
+	else if (key == KEY_E && fdf->multi_fdf_con == true)
+		fdf->multi_fdf_con = false;
 	else
 		fdf->help = false;
 	if (!fdf->multi_fdf)
