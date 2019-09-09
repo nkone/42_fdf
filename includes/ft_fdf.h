@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 14:27:18 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/08 16:38:50 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/09/09 12:13:48 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,6 +312,7 @@ typedef struct		s_pt
 
 typedef struct		s_cam
 {
+	t_projection	projection;
 	double			zoom;
 	double			zoom_accel;
 	double			z_zoom;
@@ -321,12 +322,11 @@ typedef struct		s_cam
 	double			beta;
 	double			eta;
 	int				brightness;
+	int				x_offset;
+	int				y_offset;
 	bool			depth;
 	bool			after_img;
 	bool			anti_alias;
-	int				x_offset;
-	int				y_offset;
-	t_projection	projection;
 }					t_cam;
 
 typedef struct		s_mouse
@@ -359,9 +359,6 @@ typedef struct		s_map
 
 typedef struct		s_var
 {
-	bool	steep;
-	bool	swap;
-	bool	swap_d;
 	double	dx;
 	double	dy;
 	double	gradient;
@@ -369,12 +366,15 @@ typedef struct		s_var
 	double	yend;
 	double	xgap;
 	double	ygap;
-	int		xpxl1;
-	int		ypxl1;
 	double	intery;
 	double	interx;
+	int		xpxl1;
+	int		ypxl1;
 	int		xpxl2;
 	int		ypxl2;
+	bool	steep;
+	bool	swap;
+	bool	swap_d;
 }					t_var;
 
 typedef struct		s_files
@@ -387,30 +387,31 @@ typedef struct		s_files
 
 typedef struct		s_fdf
 {
-	t_rgb		color;
-	t_cam		cam;
-	t_pt		pt;
-	t_map		*data;
+	void		**ramp;
 	t_ramp		*ramp_list;
+	t_map		*data;
+	t_files		*fdf_queue;
 	void		*mlx;
 	void		*win;
 	void		*img;
 	char		*data_addr;
-	void		**ramp;
+	t_rgb		color;
+	t_cam		cam;
+	t_pt		pt;
+	t_theme		theme;
+	t_mouse		mouse;
+	double		coef_m;
+	double		coef_b;
 	int			ramp_size;
 	int			bits_per_pix;
 	int			size_line;
 	int			endian;
-	double		coef_m;
-	double		coef_b;
 	int			min;
 	int			max;
-	t_theme		theme;
-	t_mouse		mouse;
+	int			multi_delay;
 	bool		help;
 	bool		multi_fdf;
-	int			multi_delay;
-	t_files		*fdf_queue;
+	bool		multi_fdf_con;
 }					t_fdf;
 
 typedef struct		s_read
@@ -577,6 +578,7 @@ void				delay(int milliseconds);
 */
 
 int					key_control(int key, t_fdf *fdf);
+int					mlx_while(t_fdf *fdf);
 
 /*
 ** map_fdf.c
