@@ -6,11 +6,17 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 21:27:36 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/03 20:03:21 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/10/19 17:16:02 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_fdf.h"
+
+/* Functions that would help create a minishell for the visualizer
+ * Takes in user input and split up into sections by a space delimiter.
+ * First string is command follow by a key value then a number.
+ * Depending on what the command is, the shell will direct to that wrapper.
+*/
 
 void	shell_in(t_fdf *fdf)
 {
