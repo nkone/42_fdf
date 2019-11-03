@@ -6,7 +6,7 @@
 /*   By: phtruong <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/29 18:51:47 by phtruong          #+#    #+#             */
-/*   Updated: 2019/09/04 19:31:13 by phtruong         ###   ########.fr       */
+/*   Updated: 2019/11/02 18:42:28 by phtruong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,52 @@ static void	shell_change_delay(char *delay, t_fdf *fdf)
 	fdf->multi_delay = n;
 }
 
+static void shell_change_zoom(char *zoom, t_fdf *fdf)
+{
+	int n;
+
+	n = ft_atoi(zoom);
+	ft_printf(P_YELLOW"zoom set to: %d\n", n);
+	fdf->cam.zoom = n;
+}
+
+typedef void shell_func(char *str, t_fdf *fdf);
+
+static shell_func *shell_arr[6] = {
+	shell_change_map,
+	shell_change_z_zoom,
+	shell_change_brightness,
+	shell_change_after_image,
+	shell_change_delay,
+	shell_change_zoom
+};
+
+static const char* shell_commands[6] = {
+	"map",
+	"z_zoom",
+	"brightness",
+	"after_image",
+	"delay",
+	"zoom"
+};
+
 void		shell_change_wrapper(char **input, t_fdf *fdf)
 {
 	int no;
 
 	no = count_arr_width(input);
 	if (no > 3 || no < 3)
+	{
 		ft_printf("change [variable] [value]\n");
-	else if (ft_strcasecmp(input[1], "map") == 0)
-		shell_change_map(input[2], fdf);
-	else if (ft_strcasecmp(input[1], "z_zoom") == 0)
-		shell_change_z_zoom(input[2], fdf);
-	else if (ft_strcasecmp(input[1], "brightness") == 0)
-		shell_change_brightness(input[2], fdf);
-	else if (ft_strcasecmp(input[1], "after_image") == 0)
-		shell_change_after_image(input[2], fdf);
-	else if (ft_strcasecmp(input[1], "delay") == 0)
-		shell_change_delay(input[2], fdf);
+	}
+	else
+	{
+		for (int i = 0; i < 6; i++)
+			if (ft_strcasecmp(input[1], shell_commands[i]) == 0)
+			{
+				shell_arr[i](input[2], fdf);
+				break;
+			}
+	}
 	free_input(input);
 }
